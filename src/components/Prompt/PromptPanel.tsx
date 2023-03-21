@@ -113,21 +113,10 @@ export const PromptPanel = () => {
               </div>
             </form>
             <div className="mr-1 p-2">
-              {isPromptResponsing ? <Loader variant="dots" size="sm" /> : null}
-              {answerContent && (
-                <div className="flex items-center">
-                  <IconBrandOpenai
-                    className="rounded p-1 bg-green-600 text-white"
-                    size={20}
-                  />
-                  <div className="text-sm ml-2 font-semibold text-gray-700">
-                    ChatGPT
-                  </div>
-                </div>
-              )}
               <div className="text-sm">
                 <Markdown text={answerContent} />
               </div>
+              {isPromptResponsing ? <Loader variant="dots" size="sm" /> : null}
             </div>
           </div>
         )}
