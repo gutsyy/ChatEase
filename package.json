@@ -1,9 +1,10 @@
 {
   "name": "chatease",
   "productName": "ChatEase",
-  "version": "v0.0.1-alpha",
+  "version": "0.0.1-alpha",
   "main": ".webpack/main",
   "licenses": "GPL-3.0",
+  "description": "ChatEase Desktop App",
   "scripts": {
     "start": "electron-forge start",
     "tailwindcss": "tailwindcss -i ./src/index.css -o ./src/tailwind.css --watch",

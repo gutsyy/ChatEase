@@ -38,7 +38,7 @@ export const App = () => {
 
     document.getElementsByTagName("title")[0].innerText = `${
       document.getElementsByTagName("title")[0].innerText
-    } ${window.electronAPI.othersIpcRenderer.getAppVersion()}`;
+    } v${window.electronAPI.othersIpcRenderer.getAppVersion()}`;
 
     document.addEventListener("click", (e) => {
       if (e.target instanceof HTMLAnchorElement) {
