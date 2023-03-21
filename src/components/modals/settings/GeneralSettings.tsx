@@ -8,7 +8,7 @@ import TooltipSetStyles from "./TooltipSetStyles";
 
 const settings: SettingItemProps[] = [
   {
-    label: "openai_api_key",
+    label: "OpenAI API Keys",
     questionInfo: "OpenAI API Keys",
     input: () => (
       <InputSetStyles
@@ -26,8 +26,9 @@ const settings: SettingItemProps[] = [
     ),
   },
   {
-    label: "max_prompt_messages_num",
-    questionInfo: "Prompt中可存在的最消息条数，若为0则根据max_tokens自动计算",
+    label: "Maximum number of conversations in prompt",
+    questionInfo:
+      "If the value is 0, it will be automatically calculated based on the maximum limit of tokens.",
     input: () => (
       <NumberInputSetStyles
         defaultValue={
@@ -41,8 +42,8 @@ const settings: SettingItemProps[] = [
     ),
   },
   {
-    label: "openai_api_url",
-    questionInfo: "设置api请求地址，可用于设置反向代理",
+    label: "OpenAI API Host",
+    questionInfo: "Can be used for reverse proxy.",
     input: () => {
       const [origin, setOrigin] = useState(
         window.electronAPI.storeIpcRenderer.get("openai_api_origin") as string
@@ -59,7 +60,7 @@ const settings: SettingItemProps[] = [
             setOrigin(event.currentTarget.value);
           }}
           rightSection={
-            <TooltipSetStyles label="重置">
+            <TooltipSetStyles label="reset">
               <IconRotateClockwise
                 className="hover:cursor-pointer text-gray-400"
                 size={14}
@@ -81,7 +82,7 @@ const settings: SettingItemProps[] = [
     },
     moreinfo: (
       <>
-        如何设置反向代理？
+        {"How to set up reverse proxy?  "}
         <a href="https://github.com/noobnooc/noobnooc/discussions/9">
           https://github.com/noobnooc/noobnooc/discussions/9
         </a>
@@ -89,9 +90,7 @@ const settings: SettingItemProps[] = [
     ),
   },
   {
-    label: "max_tokens",
-    questionInfo:
-      "Prompt最大tokens数，当prompts中的tokens等于max_tokens，ChatGPT回答最大tokens数为（4096 - max_tokens）",
+    label: "Maximum limit of tokens",
     input: () => (
       <NumberInputSetStyles
         max={4000}
@@ -106,8 +105,7 @@ const settings: SettingItemProps[] = [
     ),
   },
   {
-    label: "stream_mode",
-    questionInfo: "是否开启回答stream模式，默认开启",
+    label: "ChatGPT stream response mode",
     input: () => (
       <Switch
         onLabel="ON"

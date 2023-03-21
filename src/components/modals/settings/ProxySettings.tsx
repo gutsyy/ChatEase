@@ -8,7 +8,7 @@ import SettingItem, { SettingItemProps } from "./SettingItem";
 
 const settings: SettingItemProps[] = [
   {
-    label: "服务器",
+    label: "Host",
     input: () => (
       <InputSetStyles
         width="120px"
@@ -25,7 +25,7 @@ const settings: SettingItemProps[] = [
     ),
   },
   {
-    label: "端口",
+    label: "Port",
     input: () => (
       <NumberInputSetStyles
         width="120px"
@@ -39,7 +39,7 @@ const settings: SettingItemProps[] = [
     ),
   },
   {
-    label: "用户名（可选）",
+    label: "Username (optional)",
     input: () => (
       <InputSetStyles
         width="140px"
@@ -58,7 +58,7 @@ const settings: SettingItemProps[] = [
     ),
   },
   {
-    label: "密码（可选）",
+    label: "Password (optional)",
     input: () => (
       <PasswordInputSetStyles
         width="140px"
@@ -130,8 +130,8 @@ const ProxySettings = () => {
         </div>
       </div> */}
       <div className="flex items-center">
-        <div className="mr-3" style={{ fontSize: "0.9rem", fontWeight: 300 }}>
-          HTTP 代理
+        <div className="mr-3" style={{ fontSize: "0.9rem", fontWeight: 500 }}>
+          HTTP Proxy
         </div>
         <Switch
           checked={httpProxySetting.enable as boolean}

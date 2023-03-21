@@ -12,7 +12,7 @@ const NumberInputSetStyles = (props: NumberInputProps) => {
           paddingRight: "6px",
           letterSpacing: "0.3px",
           lineHeight: "calc(1.5rem - 0.125rem)",
-          backgroundColor: "#f9f9f9",
+          backgroundColor: "#E5E5E5",
           width: width && width,
         },
       }}

@@ -18,13 +18,13 @@ const setIcon = (Component: (props: TablerIconsProps) => JSX.Element) => {
 const Settings = () => {
   const settings: SettingItem[] = [
     {
-      name: "通用设置",
+      name: "General settings",
       onClick: () => null,
       icon: IconKey,
       panel: <GeneralSettings />,
     },
     {
-      name: "代理设置",
+      name: "Proxy settings",
       onClick: () => null,
       icon: IconNetwork,
       panel: <ProxySettings />,
@@ -78,7 +78,7 @@ const Settings = () => {
 
 export const openSettingsModal = () => {
   modals.open({
-    title: "设置",
+    title: "Settings",
     styles: {
       header: {
         padding: "0.5rem",
