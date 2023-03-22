@@ -16,6 +16,7 @@ import { SpotlightAction, SpotlightProvider } from "@mantine/spotlight";
 import { IconPrompt, IconSearch } from "@tabler/icons-react";
 import { setSelectedMode } from "./reducers/app";
 import { setSelectedPromptId } from "./reducers/promptSlice";
+import { openApiKeysSetupModal } from "./components/modals/openApiKeysSetUpModal";
 
 declare global {
   interface Window {
@@ -46,6 +47,12 @@ export const App = () => {
         window.electronAPI.othersIpcRenderer.openLink(e.target.href);
       }
     });
+  }, []);
+
+  useEffect(() => {
+    if (!window.electronAPI.storeIpcRenderer.get("open_api_key")) {
+      openApiKeysSetupModal();
+    }
   }, []);
 
   // const dispatch = useAppDispatch();

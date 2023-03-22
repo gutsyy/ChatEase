@@ -48,10 +48,11 @@ const PromptForm = (initialValues: Prompt) => {
         label="Action Name"
         variant="filled"
         required
-        placeholder="请输入操作名称"
+        placeholder="Please enter the action name"
         {...form.getInputProps("name")}
       />
       <TextInput
+        placeholder="Please enter the action description"
         size="xs"
         className="mt-2"
         label="Action Description"
@@ -64,10 +65,10 @@ const PromptForm = (initialValues: Prompt) => {
         variant="filled"
         className="mt-2"
         label="Action Prompt"
-        minRows={4}
-        maxRows={8}
+        minRows={12}
+        maxRows={12}
         required
-        placeholder="请输入操作Prompt语句"
+        placeholder="Please enter the action prompt"
         {...form.getInputProps("prompt")}
       />
       <div

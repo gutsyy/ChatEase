@@ -1,5 +1,5 @@
-import { Tooltip, TextInput, ActionIcon, Text, Button } from "@mantine/core";
-import { closeAllModals, openConfirmModal, openModal } from "@mantine/modals";
+import { Tooltip, TextInput, ActionIcon, Button } from "@mantine/core";
+import { closeAllModals, openModal } from "@mantine/modals";
 import { IconPencilMinus, IconTrash } from "@tabler/icons-react";
 import { memo } from "react";
 import { Chat } from "../../database/models/Chat";
