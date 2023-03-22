@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Textarea, ActionIcon, ScrollArea } from "@mantine/core";
+import { Textarea, ActionIcon } from "@mantine/core";
 import {
   IconMessageCircle,
   IconSend,
@@ -23,6 +23,19 @@ import { dateToTimestamp } from "../../services/utils/DateTimestamp";
 import { RenderStopGenerationButton } from "./StopGenerationButton";
 
 let isComposing = false;
+
+function getFirstSentence(text: string) {
+  let firstSentence = "";
+  if (text) {
+    const sentences = text.match(/^.+[\n,，.。?？]/g);
+    if (sentences) {
+      firstSentence = sentences[0].trim().slice(0, sentences[0].length - 1);
+    } else {
+      return text;
+    }
+  }
+  return firstSentence;
+}
 
 const Chat = () => {
   const dispatch = useAppDispatch();
@@ -56,8 +69,7 @@ const Chat = () => {
 
     if (_chatId === -1) {
       _chatId = window.electronAPI.databaseIpcRenderer.createChat({
-        // TODO: 截取前两个句子
-        name: message.slice(0, Math.min(65, message.length - 1)),
+        name: getFirstSentence(message),
         timestamp: dateToTimestamp(new Date()),
       });
       // 创建会话
