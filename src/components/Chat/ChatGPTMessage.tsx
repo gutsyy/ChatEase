@@ -17,7 +17,16 @@ const ChatGPTMessage = ({ msg, index }: { msg: Message; index: number }) => {
         <MessageBar msg={msg} index={index} />
       </div>
       <Text size="sm" className="ml-4">
-        <Markdown text={msg.text} />
+        <Markdown
+          text={msg.text}
+          codeScope={(
+            window.electronAPI.storeIpcRenderer.get(
+              "markdown_code_scope"
+            ) as string
+          )
+            .split(",")
+            .map((language) => language.trim())}
+        />
       </Text>
     </div>
   );

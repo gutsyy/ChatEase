@@ -10,7 +10,8 @@ export type SettingsKey =
   | "max_messages_num"
   | "openai_api_origin"
   | "max_tokens"
-  | "stream_enable";
+  | "stream_enable"
+  | "markdown_code_scope";
 
 const defaultSettings = {
   v2ray: false,
@@ -25,6 +26,7 @@ const defaultSettings = {
   openai_api_origin: "https://api.openai.com/v1/chat/completions",
   max_tokens: 4000,
   stream_enable: true,
+  markdown_code_scope: "JavaScript,TypeScript,HTML,CSS,JSON,Python,Markdown",
 };
 
 export { defaultSettings };

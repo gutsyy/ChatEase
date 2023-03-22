@@ -43,14 +43,16 @@ export const PromptListItem = (prompt: Prompt) => {
         <div>{prompt.name}</div>
       </div>
       <div className="flex">
-        <ActionIcon size="sm" radius="lg" color="gray">
-          <IconSettings
-            onClick={(e) => {
-              e.stopPropagation();
-              openPromptFormModal(prompt);
-            }}
-            size={12}
-          />
+        <ActionIcon
+          size="sm"
+          radius="lg"
+          color="gray"
+          onClick={(e) => {
+            e.stopPropagation();
+            openPromptFormModal(prompt);
+          }}
+        >
+          <IconSettings size={12} />
         </ActionIcon>
         <ActionIcon
           size="sm"

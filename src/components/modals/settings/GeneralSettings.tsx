@@ -4,6 +4,7 @@ import { useState } from "react";
 import InputSetStyles from "./InputSetStyles";
 import NumberInputSetStyles from "./NumberInputSetStyles";
 import SettingItem, { SettingItemProps } from "./SettingItem";
+import TextareaSetStyles from "./TextareaSetStyles";
 import TooltipSetStyles from "./TooltipSetStyles";
 
 const settings: SettingItemProps[] = [
@@ -82,9 +83,11 @@ const settings: SettingItemProps[] = [
     },
     moreinfo: (
       <>
-        {"How to set up reverse proxy?  "}
-        <a href="https://github.com/noobnooc/noobnooc/discussions/9">
-          https://github.com/noobnooc/noobnooc/discussions/9
+        <a
+          className="ml-1"
+          href="https://github.com/noobnooc/noobnooc/discussions/9"
+        >
+          How to set up reverse proxy?
         </a>
       </>
     ),
@@ -122,6 +125,34 @@ const settings: SettingItemProps[] = [
           )
         }
       ></Switch>
+    ),
+  },
+  {
+    label: "Scope of languages in Markdown",
+    input: () => (
+      <TextareaSetStyles
+        w={350}
+        minRows={3}
+        maxRows={3}
+        defaultValue={
+          window.electronAPI.storeIpcRenderer.get(
+            "markdown_code_scope"
+          ) as string
+        }
+        onChange={(event) =>
+          window.electronAPI.storeIpcRenderer.set(
+            "markdown_code_scope",
+            event.currentTarget.value
+          )
+        }
+      ></TextareaSetStyles>
+    ),
+    moreinfo: (
+      <>
+        <a href="https://github.com/highlightjs/highlight.js/blob/main/SUPPORTED_LANGUAGES.md">
+          Supported Languages
+        </a>
+      </>
     ),
   },
 ];

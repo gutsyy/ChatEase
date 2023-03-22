@@ -1,10 +1,4 @@
-import {
-  useMantineTheme,
-  TextInput,
-  Button,
-  Textarea,
-  Text,
-} from "@mantine/core";
+import { useMantineTheme, TextInput, Button, Textarea } from "@mantine/core";
 import { closeAllModals, modals } from "@mantine/modals";
 import { FormEvent } from "react";
 import { createPrompt, getAllPrompts } from "../../../reducers/promptSlice";

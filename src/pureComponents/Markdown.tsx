@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import { CodeProps } from "react-markdown/lib/ast-to-react";
 import hljs from "highlight.js";
 import "highlight.js/styles/atom-one-dark-reasonable.css";
+import { handleNotis } from "../services/utils/notis";
 
 const CodeToolbar = ({ type, code }: { type: string; code: string }) => {
   const [state, setState] = React.useState(false);
@@ -59,42 +60,56 @@ const CodeToolbar = ({ type, code }: { type: string; code: string }) => {
   );
 };
 
-export const Markdown = memo(({ text }: { text: string }) => {
-  return (
-    <ReactMarkdown
-      children={text}
-      components={{
-        code({
-          node,
-          inline,
-          className,
-          children,
-          style,
-          ...props
-        }: CodeProps) {
-          //   const match = /language-(\w+)/.exec(className || "");
-          const highlightedCode = hljs.highlightAuto(children.join(""));
-          return !inline ? (
-            <div>
-              <CodeToolbar
-                type={highlightedCode.language}
-                code={children && children.length > 0 ? children.join("") : ""}
-              />
-              <div
-                className="overflow-scroll py-3 px-2 text-white"
-                style={{
-                  background: "#282C34",
-                  borderBottomRightRadius: "0.5rem",
-                  borderBottomLeftRadius: "0.5rem",
-                }}
-              >
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: highlightedCode.value,
-                  }}
+export const Markdown = memo(
+  ({ text, codeScope }: { text: string; codeScope: string[] }) => {
+    return (
+      <ReactMarkdown
+        children={text}
+        components={{
+          code({
+            node,
+            inline,
+            className,
+            children,
+            style,
+            ...props
+          }: CodeProps) {
+            //   const match = /language-(\w+)/.exec(className || "");
+            try {
+              hljs.configure({
+                languages: codeScope,
+              });
+            } catch (e) {
+              handleNotis({
+                title: "Settings Error",
+                type: "error",
+                message: `Incorrectly configuring "Scope of languages in Markdown" in general settings.`,
+              });
+            }
+            const highlightedCode = hljs.highlightAuto(children.join(""));
+            return !inline ? (
+              <div>
+                <CodeToolbar
+                  type={highlightedCode.language}
+                  code={
+                    children && children.length > 0 ? children.join("") : ""
+                  }
                 />
-              </div>
-              {/* <SyntaxHighlighter
+                <div
+                  className="overflow-scroll py-3 px-2 text-white"
+                  style={{
+                    background: "#282C34",
+                    borderBottomRightRadius: "0.5rem",
+                    borderBottomLeftRadius: "0.5rem",
+                  }}
+                >
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: highlightedCode.value,
+                    }}
+                  />
+                </div>
+                {/* <SyntaxHighlighter
                 style={nightOwl}
                 customStyle={{
                   marginTop: 0,
@@ -106,14 +121,15 @@ export const Markdown = memo(({ text }: { text: string }) => {
                 PreTag="div"
                 {...props}
               /> */}
-            </div>
-          ) : (
-            <code className={className} {...props}>
-              {children}
-            </code>
-          );
-        },
-      }}
-    />
-  );
-});
+              </div>
+            ) : (
+              <code className={className} {...props}>
+                {children}
+              </code>
+            );
+          },
+        }}
+      />
+    );
+  }
+);

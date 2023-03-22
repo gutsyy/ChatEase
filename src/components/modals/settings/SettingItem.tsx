@@ -40,7 +40,7 @@ const SettingItem = ({
       </div>
 
       <div
-        className="text-gray-500 ml-1"
+        className="text-gray-500 mt-1 flex justify-end mr-1"
         style={{
           fontSize: "12px",
         }}
