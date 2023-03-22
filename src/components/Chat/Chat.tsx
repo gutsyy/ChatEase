@@ -122,18 +122,6 @@ const Chat = () => {
 
   const chatsContainer = useRef<HTMLDivElement>(null);
 
-  // 当流回答时，滚动到底部
-  // useEffect(() => {
-  //   if (chatsContainer.current) {
-  //     if (isResponsing || isWaitingRes) {
-  //       chatsContainer.current.scrollTo({
-  //         top: chatsContainer.current.scrollHeight,
-  //         behavior: "smooth",
-  //       });
-  //     }
-  //   }
-  // }, [isResponsing, isWaitingRes, () => chatsContainer.current?.scrollHeight]);
-
   return (
     <div className="h-full flex flex-col overflow-hidden flex-1">
       <div

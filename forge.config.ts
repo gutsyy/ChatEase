@@ -12,6 +12,18 @@ const config: ForgeConfig = {
   // packagerConfig: {
   //   extraResource: path.join(__dirname, "proxy"),
   // },
+  publishers: [
+    {
+      name: "@electron-forge/publisher-github",
+      config: {
+        repository: {
+          owner: "gyuannn",
+          name: "ChatEase",
+        },
+      },
+    },
+  ],
+
   packagerConfig: {
     icon: "./build/icon.icns",
   },
