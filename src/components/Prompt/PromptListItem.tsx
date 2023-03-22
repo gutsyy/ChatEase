@@ -6,6 +6,7 @@ import { useAppSelector } from "../../hooks/redux";
 import { Prompt } from "../../database/models/Prompt";
 import { getAllPrompts, setSelectedPromptId } from "../../reducers/promptSlice";
 import { openPromptFormModal } from "./modals/promptFormModal";
+import { openDeleteConfirmModal } from "../modals/customModals";
 
 export const PromptListItem = (prompt: Prompt) => {
   const selectedPromptId = useAppSelector(
@@ -14,19 +15,16 @@ export const PromptListItem = (prompt: Prompt) => {
   const dispatch = useDispatch();
 
   const onDelete = () => {
-    openConfirmModal({
-      title: "删除Prompt",
-      labels: { confirm: "确认删除", cancel: "返回" },
-      onConfirm: () => {
-        window.electronAPI.databaseIpcRenderer.deletePrompt(prompt.id);
-        dispatch(getAllPrompts());
+    openDeleteConfirmModal(
+      {
+        title: "Delete Prompt",
+        onConfirm: () => {
+          window.electronAPI.databaseIpcRenderer.deletePrompt(prompt.id);
+          dispatch(getAllPrompts());
+        },
       },
-      children: (
-        <Text size="sm">
-          确认要删除 <span className="text-red-500">{prompt.name}</span> 吗？
-        </Text>
-      ),
-    });
+      prompt.name
+    );
   };
 
   return (
@@ -54,14 +52,16 @@ export const PromptListItem = (prompt: Prompt) => {
             size={12}
           />
         </ActionIcon>
-        <ActionIcon size="sm" radius="lg" color="red">
-          <IconTrash
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete();
-            }}
-            size={12}
-          />
+        <ActionIcon
+          size="sm"
+          radius="lg"
+          color="red"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete();
+          }}
+        >
+          <IconTrash size={12} />
         </ActionIcon>
       </div>
     </div>

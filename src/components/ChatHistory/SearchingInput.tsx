@@ -20,7 +20,13 @@ const SearchingInput = () => {
     <form className="mt-2" onSubmit={onSearching}>
       <TextInput
         size="xs"
-        placeholder="搜索历史会话"
+        variant="filled"
+        styles={{
+          input: {
+            background: "white",
+          },
+        }}
+        placeholder="Searching..."
         rightSection={
           <ActionIcon type="submit" radius="lg">
             <IconSearch size={16} />

@@ -35,7 +35,7 @@ export const ChatHistory = () => {
           leftIcon={<IconPlus size={18} />}
           onClick={() => onNewChat()}
         >
-          新建会话
+          New Chat
         </Button>
         <SearchingInput />
         <div

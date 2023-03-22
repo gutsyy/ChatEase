@@ -51,7 +51,7 @@ const PromptForm = (initialValues: Prompt) => {
     <form onSubmit={handleSubmit}>
       <TextInput
         size="xs"
-        label="名称"
+        label="Action Name"
         variant="filled"
         required
         placeholder="请输入操作名称"
@@ -59,7 +59,8 @@ const PromptForm = (initialValues: Prompt) => {
       />
       <TextInput
         size="xs"
-        label="描述"
+        className="mt-2"
+        label="Action Description"
         variant="filled"
         required
         {...form.getInputProps("declare")}
@@ -68,7 +69,7 @@ const PromptForm = (initialValues: Prompt) => {
         size="xs"
         variant="filled"
         className="mt-2"
-        label="Prompt 语句"
+        label="Action Prompt"
         minRows={4}
         maxRows={6}
         required
@@ -83,7 +84,7 @@ const PromptForm = (initialValues: Prompt) => {
         }}
       >
         <Button size="xs" type="submit">
-          {initialValues.id ? "更新" : "创建"}
+          {initialValues.id ? "Update" : "Create"}
         </Button>
       </div>
     </form>
@@ -99,7 +100,7 @@ export const openPromptFormModal = (initialValues?: Prompt) => {
     };
   }
   modals.open({
-    title: <Text className="font-medium">创建新的Prompt</Text>,
+    title: initialValues ? "Edit Action" : "Create Action",
     styles: {
       header: {
         padding: "0.5rem",

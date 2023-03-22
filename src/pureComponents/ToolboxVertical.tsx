@@ -15,7 +15,13 @@ const iconSetProps = (Component: (props: TablerIconsProps) => JSX.Element) => {
 
 const SettedTooltip = (props: TooltipProps) => {
   return (
-    <Tooltip color="gray" offset={10} position="right" {...props}></Tooltip>
+    <Tooltip
+      withArrow
+      offset={10}
+      position="right"
+      {...props}
+      openDelay={300}
+    ></Tooltip>
   );
 };
 

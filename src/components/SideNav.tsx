@@ -18,7 +18,7 @@ export const SideNav = () => {
 
   const topItems: ToolboxVerticalItem[] = [
     {
-      name: "chat",
+      name: "Have chats with GPT3.5",
       tooltip: "Chatting with ChatGPT",
       icon: IconMessageCircle2,
       onClick: () => {
@@ -26,7 +26,7 @@ export const SideNav = () => {
       },
     },
     {
-      name: "prompt",
+      name: "Prompt Action Library",
       tooltip: "Get answers with prompt",
       icon: IconPrompt,
       onClick: () => {

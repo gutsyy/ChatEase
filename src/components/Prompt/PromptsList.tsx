@@ -25,7 +25,7 @@ export const PromptsList = () => {
         leftIcon={<IconPlus size={18} />}
         onClick={() => openPromptFormModal()}
       >
-        新建 Prompt
+        New Action
       </Button>
       <div className="flex-1" ref={listContainterRef}>
         {listContainterRef.current && (

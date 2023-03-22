@@ -17,7 +17,7 @@ const SettingItem = ({
   const MoreInfo = () => moreinfo;
 
   return (
-    <div className="my-1">
+    <div className="mt-1">
       <div className="flex w-full justify-between items-center px-1 my-1">
         <div className="flex items-center">
           <div className="text-xs">{label}</div>
