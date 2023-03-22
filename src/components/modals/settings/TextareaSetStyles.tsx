@@ -8,7 +8,6 @@ const TextareaSetStyles = (props: TextareaProps) => {
           paddingLeft: "6px",
           paddingRight: "6px",
           letterSpacing: "0.3px",
-          backgroundColor: "#E5E5E5",
         },
       }}
       variant="filled"

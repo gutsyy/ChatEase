@@ -65,7 +65,7 @@ const PromptForm = (initialValues: Prompt) => {
         className="mt-2"
         label="Action Prompt"
         minRows={4}
-        maxRows={6}
+        maxRows={8}
         required
         placeholder="请输入操作Prompt语句"
         {...form.getInputProps("prompt")}
