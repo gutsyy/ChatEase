@@ -1,12 +1,13 @@
-import { ActionIcon, Textarea, Loader, ScrollArea } from "@mantine/core";
-import { IconBrandOpenai, IconBrandTelegram } from "@tabler/icons-react";
+import { ActionIcon, Textarea, Loader, Button } from "@mantine/core";
+import { IconBrandTelegram } from "@tabler/icons-react";
 import { Markdown } from "../../pureComponents";
-import { useAppSelector } from "../../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import {
   ChatGPTMessageType,
   requestPromptApi,
 } from "../../services/openAI/apiConfig";
+import { setPromptIsResponsing } from "../../reducers/promptSlice";
 
 let isComposing = false;
 
@@ -27,6 +28,7 @@ const calGPTMessages = (
 };
 
 export const PromptPanel = () => {
+  const dispatch = useAppDispatch();
   const selectedPromptId = useAppSelector(
     (state) => state.prompt.selectedPromptId
   );
@@ -69,67 +71,77 @@ export const PromptPanel = () => {
 
   return (
     <>
-      <ScrollArea type="scroll" scrollbarSize={6} className="flex-1 h-full">
-        {selectedPrompt && (
-          <div className="flex flex-1 flex-col p-2 px-4">
-            <div className="w-full text-center font-semibold text-lg">
-              {selectedPrompt.name}
-            </div>
-            <div className="w-full text-center text-xs text-gray-500">
-              {selectedPrompt.declare}
-            </div>
-            <form onSubmit={onSend}>
-              <Textarea
-                ref={textAreaInputRef}
-                autoFocus
-                autosize
-                radius="md"
-                value={inputContent}
-                size="sm"
-                className="mt-2"
-                variant="filled"
-                onKeyDown={handleKeyDown}
-                onCompositionStart={() => {
-                  isComposing = true;
-                }}
-                onCompositionEnd={() => {
-                  isComposing = false;
-                }}
-                minRows={6}
-                maxRows={20}
-                onChange={(event) => setInputContent(event.currentTarget.value)}
-              ></Textarea>
-              <div className="w-full flex mt-1 justify-end">
-                <div className="flex items-center justify-end">
-                  <div className="text-sm text-gray-500 mr-2">
-                    {`${window.electronAPI.othersIpcRenderer.calMessagesTokens(
-                      calGPTMessages(selectedPrompt.prompt, inputContent)
-                    )} tokens`}
-                  </div>
-                  <ActionIcon type="submit">
-                    <IconBrandTelegram className="text-blue-500" size={18} />
-                  </ActionIcon>
-                </div>
-              </div>
-            </form>
-            <div className="mr-1 p-2">
-              <div className="text-sm">
-                <Markdown
-                  text={answerContent}
-                  codeScope={(
-                    window.electronAPI.storeIpcRenderer.get(
-                      "markdown_code_scope"
-                    ) as string
-                  )
-                    .split(",")
-                    .map((language) => language.trim())}
-                />
-              </div>
-              {isPromptResponsing ? <Loader variant="dots" size="sm" /> : null}
-            </div>
+      {selectedPrompt && (
+        <div className="flex flex-1 flex-col p-2 px-4 overflow-y-scroll chat-messages-view overflow-x-hidden relative h-full">
+          <div className="w-full text-center font-semibold text-lg">
+            {selectedPrompt.name}
           </div>
-        )}
-      </ScrollArea>
+          <div className="w-full text-center text-xs text-gray-500">
+            {selectedPrompt.declare}
+          </div>
+          <form onSubmit={onSend}>
+            <Textarea
+              ref={textAreaInputRef}
+              autoFocus
+              autosize
+              radius="md"
+              value={inputContent}
+              size="sm"
+              className="mt-2"
+              variant="filled"
+              onKeyDown={handleKeyDown}
+              onCompositionStart={() => {
+                isComposing = true;
+              }}
+              onCompositionEnd={() => {
+                isComposing = false;
+              }}
+              minRows={6}
+              maxRows={20}
+              onChange={(event) => setInputContent(event.currentTarget.value)}
+            ></Textarea>
+            <div className="w-full flex mt-1 justify-end">
+              <div className="flex items-center justify-end">
+                <div className="text-sm text-gray-500 mr-2">
+                  {`${window.electronAPI.othersIpcRenderer.calMessagesTokens(
+                    calGPTMessages(selectedPrompt.prompt, inputContent)
+                  )} tokens`}
+                </div>
+                <ActionIcon type="submit">
+                  <IconBrandTelegram className="text-blue-500" size={18} />
+                </ActionIcon>
+              </div>
+            </div>
+          </form>
+          <div className="p-2 flex-1">
+            <div className="text-sm">
+              <Markdown
+                text={answerContent}
+                codeScope={(
+                  window.electronAPI.storeIpcRenderer.get(
+                    "markdown_code_scope"
+                  ) as string
+                )
+                  .split(",")
+                  .map((language) => language.trim())}
+              />
+            </div>
+            {isPromptResponsing ? <Loader variant="dots" size="sm" /> : null}
+          </div>
+          {isPromptResponsing && (
+            <div
+              className="sticky bottom-0 z-10 bg-transparent flex justify-center"
+              onClick={() => {
+                dispatch(setPromptIsResponsing(false));
+              }}
+            >
+              <Button radius="lg" size="xs" color="red">
+                Stop Generation
+              </Button>
+            </div>
+          )}
+        </div>
+      )}
     </>
   );
 };

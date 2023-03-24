@@ -37,7 +37,7 @@ export const RenderStopGenerationButton = () => {
           leftIcon={<IconCircleX size={14} />}
           onClick={() => dispatch(setIsResponsing(false))}
         >
-          停止回答
+          Stop Generation
         </Button>
       </div>
     );
