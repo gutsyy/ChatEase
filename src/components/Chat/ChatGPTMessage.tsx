@@ -6,7 +6,7 @@ import { Text } from "@mantine/core";
 
 const ChatGPTMessage = ({ msg, index }: { msg: Message; index: number }) => {
   return (
-    <div className="px-3 my-6 border-solid border-0 border-l-2 border-blue-300">
+    <div className="p-3 my-6 bg-slate-100 rounded-lg shadow">
       <div className="flex justify-start items-center mb-1 w-full">
         <div className="flex justify-start items-center">
           <IconBrandOpenai className="text-blue-500 mr-1" size={12} />

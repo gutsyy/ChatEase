@@ -1,3 +1,4 @@
+import { ScrollArea } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconNetwork, IconKey, TablerIconsProps } from "@tabler/icons-react";
 import { useState } from "react";
@@ -45,7 +46,7 @@ const Settings = () => {
 
   return (
     <div className="flex" style={{ height: "500px" }}>
-      <div className="flex flex-col w-36 h-full bg-gray-50 p-1 rounded">
+      <div className="flex flex-col w-36 bg-gray-50 p-1 rounded">
         {settings.map((item, i) => (
           <div
             key={i}
@@ -69,9 +70,7 @@ const Settings = () => {
           </div>
         ))}
       </div>
-      <div className="h-full w-full px-2 flex flex-1">
-        {settings[selected].panel}
-      </div>
+      <div className="w-full px-2 flex flex-1">{settings[selected].panel}</div>
     </div>
   );
 };

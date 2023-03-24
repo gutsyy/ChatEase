@@ -20,12 +20,13 @@ const config: ForgeConfig = {
           owner: "gyuannn",
           name: "ChatEase",
         },
+        draft: false,
       },
     },
   ],
 
   packagerConfig: {
-    icon: "./build/icon.icns",
+    icon: "./appIcon/icon.icns",
   },
 
   rebuildConfig: {},

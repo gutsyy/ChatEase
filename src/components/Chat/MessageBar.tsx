@@ -67,7 +67,7 @@ const MessageBar = ({ msg, index }: { msg: Message; index: number }) => {
   const renderTokensCount = (
     <>
       {msg.inPrompts ? (
-        <div className="text-xs text-white px-1 ml-2 rounded bg-orange-300 mr-1">{`${window.electronAPI.othersIpcRenderer.calMessagesTokens(
+        <div className="text-xs text-white px-1 ml-2 rounded bg-green-500 mr-1">{`${window.electronAPI.othersIpcRenderer.calMessagesTokens(
           [
             {
               role: msg.sender,
@@ -91,8 +91,8 @@ const MessageBar = ({ msg, index }: { msg: Message; index: number }) => {
   );
 
   return (
-    <div className="flex-1 flex justify-between">
-      <div className="flex">
+    <div className="flex-1 flex justify-between items-center">
+      <div className="flex items-center">
         <>{renderTime}</>
         <>{renderTokensCount}</>
       </div>

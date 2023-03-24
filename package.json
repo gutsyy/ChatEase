@@ -5,6 +5,7 @@
   "main": ".webpack/main",
   "licenses": "GPL-3.0",
   "description": "ChatEase Desktop App",
+  "repository": "https://github.com/gyuannn/ChatEase",
   "scripts": {
     "start": "electron-forge start",
     "tailwindcss": "tailwindcss -i ./src/index.css -o ./src/tailwind.css --watch",

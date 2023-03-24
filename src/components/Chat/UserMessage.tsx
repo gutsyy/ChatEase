@@ -5,7 +5,7 @@ import { Text } from "@mantine/core";
 
 const UserMessage = ({ msg, index }: { msg: Message; index: number }) => {
   return (
-    <div className="mt-2 bg-white px-3 py-3 rounded-lg">
+    <div className="mt-2 bg-white px-3 py-3 rounded-lg shadow">
       <div className="flex justify-start mb-3">
         <div className="flex justify-center items-center w-full">
           <div className="flex justify-start items-center">

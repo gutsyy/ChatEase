@@ -114,7 +114,16 @@ export const PromptPanel = () => {
             </form>
             <div className="mr-1 p-2">
               <div className="text-sm">
-                <Markdown text={answerContent} />
+                <Markdown
+                  text={answerContent}
+                  codeScope={(
+                    window.electronAPI.storeIpcRenderer.get(
+                      "markdown_code_scope"
+                    ) as string
+                  )
+                    .split(",")
+                    .map((language) => language.trim())}
+                />
               </div>
               {isPromptResponsing ? <Loader variant="dots" size="sm" /> : null}
             </div>
