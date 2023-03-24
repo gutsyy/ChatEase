@@ -55,6 +55,13 @@ export const App = () => {
     }
   }, []);
 
+  useEffect(() => {
+    window.addEventListener("contextmenu", (event) => {
+      event.preventDefault();
+      window.electronAPI.othersIpcRenderer.showContextMenu();
+    });
+  }, []);
+
   // const dispatch = useAppDispatch();
 
   const searchProviderActions: SpotlightAction[] =

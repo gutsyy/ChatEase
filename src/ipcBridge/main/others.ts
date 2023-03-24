@@ -1,9 +1,16 @@
-import { app, ipcMain, shell } from "electron";
+import {
+  app,
+  BrowserWindow,
+  ipcMain,
+  Menu,
+  MenuItemConstructorOptions,
+  shell,
+} from "electron";
 import { encode } from "gpt-3-encoder";
 import { ChatGPTMessageType } from "../../services/openAI/apiConfig";
 import { num_tokens_from_messages } from "../../services/openAI/numTokensFromMessages";
 
-export const othersIpcMain = () => {
+export const othersIpcMain = (window: BrowserWindow) => {
   ipcMain.on("cal-tokens", (event, str: string) => {
     event.returnValue = encode(str).length;
   });
@@ -22,5 +29,25 @@ export const othersIpcMain = () => {
 
   ipcMain.on("get-app-version", (event) => {
     event.returnValue = app.getVersion();
+  });
+
+  ipcMain.handle("show-context-menu", () => {
+    const template: MenuItemConstructorOptions[] = [
+      { label: "Cut", role: "cut" },
+      {
+        label: "Copy",
+        role: "copy",
+      },
+      {
+        label: "Paste",
+        role: "paste",
+      },
+      {
+        label: "Undo",
+        role: "undo",
+      },
+    ];
+    const menu = Menu.buildFromTemplate(template);
+    menu.popup({ window: window });
   });
 };

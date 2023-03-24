@@ -32,7 +32,7 @@ const createBridage = (window: BrowserWindow) => {
   axiosIpcMain(window);
   storeIpcMain();
   v2rayIpcMain();
-  othersIpcMain();
+  othersIpcMain(window);
 
   // database
   dbInit();

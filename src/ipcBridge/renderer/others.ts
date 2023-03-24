@@ -1,4 +1,4 @@
-import { IpcMainEvent, ipcRenderer } from "electron";
+import { ipcRenderer } from "electron";
 import { ChatGPTMessageType } from "../../services/openAI/apiConfig";
 
 export interface OthersIpcRenderer {
@@ -10,6 +10,7 @@ export interface OthersIpcRenderer {
   openLink: (url: string) => void;
   getAppVersion: () => string;
   removeAllListeners: (channel: string) => void;
+  showContextMenu: () => void;
 }
 
 export const othersIpcRenderer: OthersIpcRenderer = {
@@ -31,5 +32,8 @@ export const othersIpcRenderer: OthersIpcRenderer = {
   },
   removeAllListeners: (channel) => {
     ipcRenderer.removeAllListeners(channel);
+  },
+  showContextMenu: () => {
+    ipcRenderer.invoke("show-context-menu");
   },
 };
