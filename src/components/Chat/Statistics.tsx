@@ -39,7 +39,7 @@ const Statistics = ({ messages }: { messages: Message[] }) => {
     "italic bg-white text-gray-900 px-3 py-1 rounded-full shadow-lg outline outline-2 outline-red-500 bg-red-300 px-4 overflow-hidden";
 
   return (
-    <div className="sticky bg-transparent flex justify-center top-0 z-50">
+    <div className="sticky bg-transparent flex justify-center bottom-0 z-50">
       <div
         className={warningState ? classWarningStyles : classDefaultStyles}
         style={{

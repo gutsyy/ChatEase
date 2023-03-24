@@ -4,14 +4,22 @@ import { Message } from "../../database/models/Message";
 import { useAppDispatch } from "../../hooks/redux";
 import { updateMessages, toggleMessagePrompt } from "../../reducers/app";
 
-const MessageBar = ({ msg, index }: { msg: Message; index: number }) => {
+const MessageBar = ({
+  msg,
+  index,
+  onDelete,
+}: {
+  msg: Message;
+  index: number;
+  onDelete: () => void;
+}) => {
   const dispatch = useAppDispatch();
 
   // 删除会话
-  const onDelete = () => {
-    window.electronAPI.databaseIpcRenderer.deleteMessage(msg.id);
-    dispatch(updateMessages(msg.chatId));
-  };
+  // const onDelete = () => {
+  //   window.electronAPI.databaseIpcRenderer.deleteMessage(msg.id);
+  //   dispatch(updateMessages(msg.chatId));
+  // };
 
   const renderTime = (
     <div

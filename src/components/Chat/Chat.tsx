@@ -128,7 +128,6 @@ const Chat = () => {
         className="bg-gray-50 flex-1 px-4 py-2 overflow-auto relative chat-messages-view flex flex-col"
         ref={chatsContainer}
       >
-        <Statistics messages={messages}></Statistics>
         {messages.length === 0 && (
           <div
             className="w-full flex justify-center items-center"
@@ -164,7 +163,11 @@ const Chat = () => {
             )}
           </div>
         </div>
-        <RenderStopGenerationButton />
+        {isWaitingRes || isResponsing ? (
+          <RenderStopGenerationButton />
+        ) : (
+          <Statistics messages={messages}></Statistics>
+        )}
       </div>
       <div className="bg-gray-100 p-4 flex items-center">
         <IconMessageCircle size={20} className="mr-2" />
