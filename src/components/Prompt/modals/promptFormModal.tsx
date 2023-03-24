@@ -9,12 +9,6 @@ import { Prompt } from "../../../database/models/Prompt";
 const PromptForm = (initialValues: Prompt) => {
   const theme = useMantineTheme();
 
-  // const initialValues: Prompt = {
-  //   name: "",
-  //   prompt: "",
-  //   declare: "",
-  // };
-
   const form = useForm({
     initialValues,
   });
@@ -58,7 +52,7 @@ const PromptForm = (initialValues: Prompt) => {
         label="Action Description"
         variant="filled"
         required
-        {...form.getInputProps("declare")}
+        {...form.getInputProps("description")}
       />
       <Textarea
         size="xs"
@@ -91,7 +85,7 @@ export const openPromptFormModal = (initialValues?: Prompt) => {
     initialValues = {
       name: "",
       prompt: "",
-      declare: "",
+      description: "",
     };
   }
   modals.open({

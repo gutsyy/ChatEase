@@ -13,7 +13,7 @@ import { StoreIpcRenderer } from "./ipcBridge/renderer/store";
 import { DatabaseIpcRenderer } from "./ipcBridge/renderer/database";
 import { OthersIpcRenderer } from "./ipcBridge/renderer/others";
 import { SpotlightAction, SpotlightProvider } from "@mantine/spotlight";
-import { IconPrompt, IconSearch } from "@tabler/icons-react";
+import { IconSearch } from "@tabler/icons-react";
 import { setSelectedMode } from "./reducers/app";
 import { setSelectedPromptId } from "./reducers/promptSlice";
 import { openApiKeysSetupModal } from "./components/modals/openApiKeysSetUpModal";
@@ -67,12 +67,12 @@ export const App = () => {
   const searchProviderActions: SpotlightAction[] =
     window.electronAPI.databaseIpcRenderer.getAllPrompts().map((prompt) => ({
       title: prompt.name,
-      describe: prompt.declare,
+      description: prompt.description,
       onTrigger: () => {
         store.dispatch(setSelectedMode("prompt"));
         store.dispatch(setSelectedPromptId(prompt.id));
       },
-      icon: <IconPrompt size={16} />,
+      // icon: <IconPrompt size={16} className="text-green-500" />,
     }));
 
   // const selectedMode = useAppSelector((state) => state.app.selectedMode);
@@ -80,9 +80,10 @@ export const App = () => {
   return (
     <Provider store={store}>
       <SpotlightProvider
+        radius="md"
         actions={searchProviderActions}
         searchIcon={<IconSearch size="1.2rem" />}
-        searchPlaceholder="搜索Prompt..."
+        searchPlaceholder="Searching Prompt Action..."
         shortcut="mod + K"
         nothingFoundMessage="Nothing found..."
       >
@@ -93,8 +94,6 @@ export const App = () => {
               <SideNav />
               <SideExtend />
               <MainPanel />
-              {/* {selectedMode === "chat" ? <Chat /> : <PromptPanel />} */}
-              {/* <Chat /> */}
             </div>
           </ModalsProvider>
         </MantineProvider>

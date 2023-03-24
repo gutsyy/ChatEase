@@ -77,7 +77,7 @@ export const PromptPanel = () => {
             {selectedPrompt.name}
           </div>
           <div className="w-full text-center text-xs text-gray-500">
-            {selectedPrompt.declare}
+            {selectedPrompt.description}
           </div>
           <form onSubmit={onSend}>
             <Textarea

@@ -24,6 +24,8 @@ if (require("electron-squirrel-startup")) {
   app.quit();
 }
 
+console.log(app.getPath("userData"));
+
 const createBridage = (window: BrowserWindow) => {
   // electron-store
   Store.initRenderer();

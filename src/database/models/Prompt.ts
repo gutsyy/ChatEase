@@ -4,7 +4,7 @@ export interface Prompt {
   id?: number;
   name: string;
   prompt: string;
-  declare: string;
+  description: string;
 }
 
 const PromptDefine = {
@@ -18,7 +18,7 @@ const PromptDefine = {
       type: DataTypes.BIGINT,
       allowNull: false,
     },
-    declare: {
+    description: {
       type: DataTypes.STRING,
       allowNull: false,
     },

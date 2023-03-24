@@ -81,7 +81,7 @@ const HistoryItem = memo(({ name, id }: Chat) => {
           }
           onClick={() => dispatch(selectedChatChange(id))}
         >
-          <div className="w-full h-full flex items-center pl-2 whitespace-nowrap">
+          <div className="w-full h-full flex items-center justify-between pr-1 pl-2 whitespace-nowrap">
             <div
               className="text-xs text-gray-700 flex-1 text-ellipsis overflow-hidden"
               style={{ maxWidth: "170px", marginRight: "5px" }}

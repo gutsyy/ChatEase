@@ -1,4 +1,4 @@
-import { Tooltip } from "@mantine/core";
+import { clsx, Tooltip } from "@mantine/core";
 import { IconCloud, IconCloudOff, IconTrash } from "@tabler/icons-react";
 import { Message } from "../../database/models/Message";
 import { useAppDispatch } from "../../hooks/redux";
@@ -14,7 +14,13 @@ const MessageBar = ({ msg, index }: { msg: Message; index: number }) => {
   };
 
   const renderTime = (
-    <div className="text-gray-500 text-xs">
+    <div
+      className={clsx(
+        "text-xs",
+        msg.inPrompts && "text-gray-500",
+        !msg.inPrompts && "text-gray-300"
+      )}
+    >
       {new Date(msg.timestamp * 1000).toLocaleTimeString()}
     </div>
   );

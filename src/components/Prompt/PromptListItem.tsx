@@ -39,7 +39,7 @@ export const PromptListItem = (prompt: Prompt) => {
         dispatch(setSelectedPromptId(prompt.id));
       }}
     >
-      <div className="flex-1 flex items-center text-xs text-gray-500">
+      <div className="flex-1 flex items-center text-xs text-gray-500 whitespace-nowrap text-ellipsis overflow-hidden">
         <div>{prompt.name}</div>
       </div>
       <div className="flex">
