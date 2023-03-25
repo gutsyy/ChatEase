@@ -1,4 +1,10 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  AnyAction,
+  createSlice,
+  PayloadAction,
+  ThunkAction,
+} from "@reduxjs/toolkit";
+import { RootState } from "../store";
 import { Prompt } from "../database/models/Prompt";
 
 interface PromptState {
@@ -21,14 +27,14 @@ const PromptSlice = createSlice({
   name: "prompt",
   initialState,
   reducers: {
-    createPrompt: (state, action: PayloadAction<number>) => {
-      state.selectedPromptId = action.payload;
-      state.prompts = window.electronAPI.databaseIpcRenderer.getAllPrompts();
+    setPrompts: (state, action: PayloadAction<Prompt[]>) => {
+      state.prompts = action.payload;
     },
-    getAllPrompts: (state) => {
-      state.prompts = window.electronAPI.databaseIpcRenderer.getAllPrompts();
+
+    refreshPanel: (state) => {
       state.refreshPanel = !state.refreshPanel;
     },
+
     // set prompt id
     setSelectedPromptId: (state, action: PayloadAction<number>) => {
       if (action.payload === state.selectedPromptId) {
@@ -61,12 +67,37 @@ const PromptSlice = createSlice({
 });
 
 export const {
-  createPrompt,
-  getAllPrompts,
+  setPrompts,
   setSelectedPromptId,
   setAnswerContent,
   clearAnswerContent,
   setPromptIsResponsing,
+  refreshPanel,
 } = PromptSlice.actions;
+
+export const createPrompt = (
+  promptId: number
+): ThunkAction<void, RootState, unknown, AnyAction> => {
+  return async (dispatch) => {
+    setSelectedPromptId(promptId);
+    window.electronAPI.databaseIpcRenderer
+      .getAllPrompts()
+      .then((prompts) => dispatch(setPrompts(prompts)));
+  };
+};
+
+export const getAllPrompts = (): ThunkAction<
+  void,
+  RootState,
+  unknown,
+  AnyAction
+> => {
+  return async (dispatch) => {
+    window.electronAPI.databaseIpcRenderer.getAllPrompts().then((prompts) => {
+      dispatch(setPrompts(prompts));
+      dispatch(refreshPanel());
+    });
+  };
+};
 
 export default PromptSlice.reducer;

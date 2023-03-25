@@ -2,7 +2,7 @@ import { clsx, Tooltip } from "@mantine/core";
 import { IconCloud, IconCloudOff, IconTrash } from "@tabler/icons-react";
 import { Message } from "../../database/models/Message";
 import { useAppDispatch } from "../../hooks/redux";
-import { updateMessages, toggleMessagePrompt } from "../../reducers/app";
+import { updateMessages, toggleMessagePrompt } from "../../reducers/chatSlice";
 
 const MessageBar = ({
   msg,

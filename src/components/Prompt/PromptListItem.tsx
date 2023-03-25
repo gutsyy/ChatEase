@@ -1,7 +1,6 @@
 import { ActionIcon } from "@mantine/core";
 import { IconSettings, IconTrash } from "@tabler/icons-react";
-import { useDispatch } from "react-redux";
-import { useAppSelector } from "../../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { Prompt } from "../../database/models/Prompt";
 import { getAllPrompts, setSelectedPromptId } from "../../reducers/promptSlice";
 import { openPromptFormModal } from "./modals/promptFormModal";
@@ -11,7 +10,7 @@ export const PromptListItem = (prompt: Prompt) => {
   const selectedPromptId = useAppSelector(
     (state) => state.prompt.selectedPromptId
   );
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const onDelete = () => {
     openDeleteConfirmModal(

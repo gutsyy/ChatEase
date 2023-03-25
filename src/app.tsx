@@ -1,7 +1,7 @@
 import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { MainPanel, SideExtend, SideNav } from "./components";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { handleNotis } from "./services/utils/notis";
 import { Provider } from "react-redux";
 import store from "./store";
@@ -14,7 +14,7 @@ import { DatabaseIpcRenderer } from "./ipcBridge/renderer/database";
 import { OthersIpcRenderer } from "./ipcBridge/renderer/others";
 import { SpotlightAction, SpotlightProvider } from "@mantine/spotlight";
 import { IconSearch } from "@tabler/icons-react";
-import { setSelectedMode } from "./reducers/app";
+import { setMode } from "./reducers/appSlice";
 import { setSelectedPromptId } from "./reducers/promptSlice";
 import { openApiKeysSetupModal } from "./components/modals/openApiKeysSetUpModal";
 
@@ -64,16 +64,24 @@ export const App = () => {
 
   // const dispatch = useAppDispatch();
 
-  const searchProviderActions: SpotlightAction[] =
-    window.electronAPI.databaseIpcRenderer.getAllPrompts().map((prompt) => ({
-      title: prompt.name,
-      description: prompt.description,
-      onTrigger: () => {
-        store.dispatch(setSelectedMode("prompt"));
-        store.dispatch(setSelectedPromptId(prompt.id));
-      },
-      // icon: <IconPrompt size={16} className="text-green-500" />,
-    }));
+  const [searchProviderActions, setSearchProviderActions] = useState<
+    SpotlightAction[]
+  >([]);
+
+  useEffect(() => {
+    window.electronAPI.databaseIpcRenderer.getAllPrompts().then((prompts) => {
+      setSearchProviderActions(
+        prompts.map((prompt) => ({
+          title: prompt.name,
+          description: prompt.description,
+          onTrigger: () => {
+            store.dispatch(setMode("action"));
+            store.dispatch(setSelectedPromptId(prompt.id));
+          },
+        }))
+      );
+    });
+  }, []);
 
   // const selectedMode = useAppSelector((state) => state.app.selectedMode);
 

@@ -1,15 +1,15 @@
 import { Button } from "@mantine/core";
 import { IconCircleX } from "@tabler/icons-react";
-import { setIsResponsing, setNotiGenerate } from "../../reducers/app";
+import { setIsResponsing, setNotiGenerate } from "../../reducers/chatSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { useEffect } from "react";
 
 export const RenderStopGenerationButton = () => {
   const dispatch = useAppDispatch();
-  const isWaitingRes = useAppSelector((state) => state.app.isWaitingRes);
-  const isResponsing = useAppSelector((state) => state.app.isResponsing);
+  const isWaitingRes = useAppSelector((state) => state.chat.isWaitingRes);
+  const isResponsing = useAppSelector((state) => state.chat.isResponsing);
   const notiStopGenerate = useAppSelector(
-    (state) => state.app.notiStopGenerate
+    (state) => state.chat.notiStopGenerate
   );
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export const RenderStopGenerationButton = () => {
 
   if (isWaitingRes || isResponsing) {
     return (
-      <div className="sticky w-32 z-50 bottom-0 -translate-x-1/2 left-1/2 bg-transparent">
+      <div className="sticky w-40 z-50 bottom-0 -translate-x-1/2 left-1/2 bg-transparent">
         <Button
           className={
             notiStopGenerate

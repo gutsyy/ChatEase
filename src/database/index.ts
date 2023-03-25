@@ -32,125 +32,172 @@ const dbInit = async () => {
 
   // ipcMain
   // Create message
-  ipcMain.on("create-message", async (event, message: Message) => {
-    const result = await MessageIns.create({ ...message });
-    event.returnValue = result.dataValues.id;
+  ipcMain.handle("create-message", async (event, message: Message) => {
+    try {
+      const result = await MessageIns.create({ ...message });
+      return result.dataValues.id;
+    } catch (err) {
+      throw new Error("failed");
+    }
   });
 
   // Find messages by chatId
-  ipcMain.on("get-messages", (event, chatId: number) => {
-    MessageIns.findAll({ where: { chatId: chatId } }).then((messages) => {
-      event.returnValue = messages.map((message) => message.dataValues);
-    });
+  ipcMain.handle("get-messages", async (event, chatId: number) => {
+    try {
+      const messages = await MessageIns.findAll({ where: { chatId: chatId } });
+      return messages.map((message) => message.dataValues);
+    } catch (err) {
+      throw new Error("failed");
+    }
   });
 
   // Create chat
-  ipcMain.on("create-chat", async (event, chat: Chat) => {
-    const result = await ChatIns.create({ ...chat });
-    event.returnValue = result.dataValues.id;
+  ipcMain.handle("create-chat", async (event, chat: Chat) => {
+    try {
+      const result = await ChatIns.create({ ...chat });
+      return result.dataValues.id;
+    } catch (err) {
+      throw new Error("failed");
+    }
   });
 
   // Get all chats sory by timestamp, recent date first
-  ipcMain.on("get-all-chats", (event) => {
-    ChatIns.findAll({ order: [["timestamp", "DESC"]] }).then((chats) => {
-      event.returnValue = chats.map((chat) => chat.dataValues);
-    });
+  ipcMain.handle("get-all-chats", async (event) => {
+    try {
+      const chats = await ChatIns.findAll({ order: [["timestamp", "DESC"]] });
+      return chats.map((chat) => chat.dataValues);
+    } catch (err) {
+      throw new Error("failed");
+    }
   });
 
   // Change chat.name by chat.id
-  ipcMain.on("update-chat-name", (event, id: number, name: string) => {
-    ChatIns.update({ name: name }, { where: { id: id } }).then((result) => {
-      event.returnValue = result;
-    });
-  });
+  ipcMain.handle(
+    "update-chat-name",
+    async (event, id: number, name: string) => {
+      try {
+        const result = await ChatIns.update(
+          { name: name },
+          { where: { id: id } }
+        );
+        return result;
+      } catch (err) {
+        throw new Error("failed");
+      }
+    }
+  );
 
   // Delete chat by chat.id
-  ipcMain.on("delete-chat", (event, id: number) => {
-    if (!id) {
-      event.returnValue = null;
-      return;
+  ipcMain.handle("delete-chat", async (event, id: number) => {
+    try {
+      const result = await ChatIns.destroy({ where: { id: id } });
+      return result;
+    } catch (err) {
+      throw new Error("failed");
     }
-    ChatIns.destroy({ where: { id: id } }).then((result) => {
-      event.returnValue = result;
-    });
   });
 
   // Delete all chats
-  ipcMain.on("delete-all-chats", (event) => {
-    ChatIns.destroy({ where: {} }).then((result) => {
-      event.returnValue = result;
-    });
+  ipcMain.handle("delete-all-chats", async (event) => {
+    try {
+      const result = await ChatIns.destroy({ where: {} });
+      return result;
+    } catch (err) {
+      throw new Error("failed");
+    }
   });
 
   // Delete message by message.id
-  ipcMain.on("delete-message", (event, id: number) => {
+  ipcMain.handle("delete-message", async (event, id: number) => {
     if (!id) {
-      event.returnValue = null;
-      return;
+      return null;
     }
     try {
-      MessageIns.destroy({ where: { id: id } }).then((result) => {
-        event.returnValue = result;
-      });
-    } catch (error) {
-      console.log(error.message);
-      event.returnValue = null;
+      const result = await MessageIns.destroy({ where: { id: id } });
+      return result;
+    } catch (err) {
+      throw new Error("failed");
     }
   });
 
   // Search chats by name like
-  ipcMain.on("search-chats", (event, name: string) => {
-    ChatIns.findAll({
-      where: {
-        name: {
-          [Op.like]: "%" + name + "%",
+  ipcMain.handle("search-chats", async (event, name: string) => {
+    try {
+      const chats = await ChatIns.findAll({
+        where: {
+          name: {
+            [Op.like]: "%" + name + "%",
+          },
         },
-      },
-      order: [["timestamp", "DESC"]],
-    }).then((chats) => {
-      event.returnValue = chats.map((chat) => chat.dataValues);
-    });
+        order: [["timestamp", "DESC"]],
+      });
+      return chats.map((chat) => chat.dataValues);
+    } catch (err) {
+      throw new Error("failed");
+    }
   });
   // Create a prompt
-  ipcMain.on("create-prompt", async (event, prompt: Prompt) => {
-    const result = await PromptIns.create({ ...prompt });
-    event.returnValue = result.dataValues.id;
+  ipcMain.handle("create-prompt", async (event, prompt: Prompt) => {
+    try {
+      const result = await PromptIns.create({ ...prompt });
+      return result.dataValues.id;
+    } catch (err) {
+      throw new Error("failed");
+    }
   });
   // Get all prompts
-  ipcMain.on("get-all-prompts", (event) => {
-    PromptIns.findAll().then((prompts) => {
-      event.returnValue = prompts.map((prompt) => prompt.dataValues);
-    });
+  ipcMain.handle("get-all-prompts", async (event) => {
+    try {
+      const prompts = await PromptIns.findAll();
+      return prompts.map((prompt) => prompt.dataValues);
+    } catch (err) {
+      throw new Error("failed");
+    }
   });
   // Delete prompt by prompt.id
-  ipcMain.on("delete-prompt", (event, id: number) => {
-    PromptIns.destroy({ where: { id: id } }).then((result) => {
-      event.returnValue = result;
-    });
+  ipcMain.handle("delete-prompt", async (event, id: number) => {
+    try {
+      const result = await PromptIns.destroy({ where: { id: id } });
+      return result;
+    } catch (err) {
+      throw new Error("failed");
+    }
   });
   // Update prompt by prompt.id
-  ipcMain.on("update-prompt", (event, id: number, prompt: Prompt) => {
-    PromptIns.update({ ...prompt }, { where: { id: id } }).then((result) => {
-      event.returnValue = result;
-    });
+  ipcMain.handle("update-prompt", async (event, id: number, prompt: Prompt) => {
+    try {
+      const result = await PromptIns.update(
+        { ...prompt },
+        { where: { id: id } }
+      );
+      return result;
+    } catch (err) {
+      throw new Error("failed");
+    }
   });
   // Search prompts by name like
-  ipcMain.on("search-prompts", (event, name: string) => {
-    PromptIns.findAll({
-      where: {
-        name: {
-          [Op.like]: "%" + name + "%",
+  ipcMain.handle("search-prompts", async (event, name: string) => {
+    try {
+      const prompts = await PromptIns.findAll({
+        where: {
+          name: {
+            [Op.like]: "%" + name + "%",
+          },
         },
-      },
-    }).then((prompts) => {
-      event.returnValue = prompts.map((prompt) => prompt.dataValues);
-    });
+      });
+      return prompts.map((prompt) => prompt.dataValues);
+    } catch (err) {
+      throw new Error("failed");
+    }
   });
   // Get prompt by id
-  ipcMain.on("get-prompt", (event, id: number) => {
-    PromptIns.findByPk(id).then((prompt) => {
-      event.returnValue = prompt.dataValues;
-    });
+  ipcMain.handle("get-prompt", async (event, id: number) => {
+    try {
+      const prompt = await PromptIns.findByPk(id);
+      return prompt.dataValues;
+    } catch (err) {
+      throw new Error("failed");
+    }
   });
 };
 

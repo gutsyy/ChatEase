@@ -1,5 +1,6 @@
 import { Message } from "../../database/models/Message";
 
+/** Calculate the Message.inPrompts attribute for each message based on the limitations on tokens and the number of messages. */
 export const isMessageInPrompts = (
   messages: Message[],
   maxMessageLengthInPrompts = 0

@@ -10,7 +10,7 @@ import {
   setStreamGPTMessage,
   setStreamGPTMessageDone,
   setStreamGPTMessageStart,
-} from "../../reducers/app";
+} from "../../reducers/chatSlice";
 import { v4 as UUIDV4 } from "uuid";
 import {
   setAnswerContent,
@@ -97,7 +97,7 @@ export const requestApi = (chatId: number, messages: Message[]) => {
     if (id !== requestId) {
       return;
     }
-    const isResponsing = store.getState().app.isResponsing;
+    const isResponsing = store.getState().chat.isResponsing;
     if (data === "DONE" || !isResponsing) {
       store.dispatch(setStreamGPTMessageDone());
       // remove Listener
@@ -135,7 +135,7 @@ export const requestApi = (chatId: number, messages: Message[]) => {
       streamEnable
     )
     .then((res) => {
-      if (!store.getState().app.isWaitingRes) {
+      if (!store.getState().chat.isWaitingRes) {
         return;
       }
       store.dispatch(setIsWaitingRes(false));

@@ -2,18 +2,18 @@ import { useAppSelector } from "../hooks/redux";
 import { ChatHistory } from "./ChatHistory/ChatHistory";
 import { PromptsList } from "./Prompt/PromptsList";
 
-const renderBoxByMode = (selectedMode: string) => {
+const renderBoxByModuleSelected = (selectedMode: string) => {
   if (selectedMode === "chat") {
     return <ChatHistory />;
   }
 
-  if (selectedMode === "prompt") {
+  if (selectedMode === "action") {
     return <PromptsList />;
   }
 };
 
 export const SideExtend = () => {
-  const selectedMode = useAppSelector((state) => state.app.selectedMode);
+  const selectedMode = useAppSelector((state) => state.app.selectedAppModule);
 
   const sideNavExpanded = useAppSelector((state) => state.app.sideNavExpanded);
 
@@ -27,7 +27,7 @@ export const SideExtend = () => {
         opacity: sideNavExpanded ? "1" : "0",
       }}
     >
-      {renderBoxByMode(selectedMode)}
+      {renderBoxByModuleSelected(selectedMode)}
     </div>
   );
 };

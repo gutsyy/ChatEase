@@ -1,39 +1,46 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  AnyAction,
+  createSlice,
+  Dispatch,
+  PayloadAction,
+  ThunkAction,
+} from "@reduxjs/toolkit";
 import { isMessageInPrompts } from "../services/openAI/isMessageInPrompts";
 import { Chat } from "../database/models/Chat";
 import { Message } from "../database/models/Message";
+import { RootState } from "../store";
 
-interface appState {
-  selectedMode: string;
-  openModalId: string;
+interface ChatModuleState {
   selectedChatId: number;
   messages: Message[];
   chats: Chat[];
   tokensBoxWarningState: "" | "tokens_limit" | "messages_limit";
-  promptTokens: number;
-  messageTokens: number;
+  // All messages tokens in prompt
+  totalPromptTokens: number;
+  // Input box tokens
+  inputBoxTokens: number;
   sideNavExpanded: boolean;
   isWaitingRes: boolean;
   isResponsing: boolean;
   notiStopGenerate: boolean;
 }
 
-const initialState: appState = {
-  selectedMode: "chat",
-  openModalId: "",
+const initialState: ChatModuleState = {
+  // openModalId: "",
   selectedChatId: -1,
   messages: [],
   chats: [],
   tokensBoxWarningState: "",
-  promptTokens: 0,
-  messageTokens: 0,
+  totalPromptTokens: 0,
+  inputBoxTokens: 0,
   sideNavExpanded: true,
   isWaitingRes: false,
   isResponsing: false,
   notiStopGenerate: false,
 };
 
-const calPromptTokens = (messages: Message[]) => {
+/** Caclulate prompt tokens from Messages */
+const calPromptTokensByMessages = (messages: Message[]) => {
   return window.electronAPI.othersIpcRenderer.calMessagesTokens(
     messages
       .filter((msg) => msg.inPrompts)
@@ -46,8 +53,8 @@ const calPromptTokens = (messages: Message[]) => {
   );
 };
 
-export const appSlice = createSlice({
-  name: "app",
+export const ChatSlice = createSlice({
+  name: "chat",
   initialState,
   reducers: {
     setNotiGenerate: (state, action: PayloadAction<boolean>) => {
@@ -62,47 +69,47 @@ export const appSlice = createSlice({
     },
 
     setPromptTokens: (state, action: PayloadAction<number>) => {
-      state.promptTokens = action.payload;
+      state.totalPromptTokens = action.payload;
     },
 
+    // Caculater single Message Tokens
     setMessageTokens: (state, action: PayloadAction<string>) => {
       if (action.payload) {
-        state.messageTokens =
+        state.inputBoxTokens =
           window.electronAPI.othersIpcRenderer.calMessagesTokens(
             [{ role: "user", content: action.payload }],
             true
           );
       } else {
-        state.messageTokens = 0;
+        state.inputBoxTokens = 0;
       }
     },
 
-    setSelectedMode: (state, action: PayloadAction<string>) => {
-      state.selectedMode = action.payload;
-    },
-    setOpenModalId: (state, action: PayloadAction<string>) => {
-      state.openModalId = action.payload;
-    },
     setSelectedChatId: (state, action: PayloadAction<number>) => {
       state.selectedChatId = action.payload;
     },
+
+    // Recalculate message tokens
     setMessages: (state, action: PayloadAction<Message[]>) => {
       state.messages = isMessageInPrompts([...action.payload]);
-      state.promptTokens = calPromptTokens([...action.payload]);
+      state.totalPromptTokens = calPromptTokensByMessages([...action.payload]);
     },
+
     clearMessages: (state) => {
       state.messages = [];
     },
 
     setNewGPTMessage: (state, action: PayloadAction<Message>) => {
       state.messages = isMessageInPrompts([...state.messages, action.payload]);
-      state.promptTokens = calPromptTokens([...state.messages]);
+      state.totalPromptTokens = calPromptTokensByMessages([...state.messages]);
     },
 
+    /** Add a new message when starting the stream. */
     setStreamGPTMessageStart: (state, action: PayloadAction<Message>) => {
       state.messages = [...state.messages, action.payload];
     },
 
+    /** Continuous update of Message.text while Stream is in progress. */
     setStreamGPTMessage: (
       state,
       action: PayloadAction<{ chatId: number; text: string }>
@@ -115,55 +122,35 @@ export const appSlice = createSlice({
       }
     },
 
+    /** Complete the stream, store the message, and recalculate the limitations. */
     setStreamGPTMessageDone: (state) => {
       state.isResponsing = false;
-      // 回答完成，计算tokens
-      state.messages = isMessageInPrompts([...state.messages]);
       window.electronAPI.databaseIpcRenderer.createMessage(
-        state.messages[state.messages.length - 1]
+        Object.assign({}, state.messages[state.messages.length - 1])
       );
-      state.promptTokens = calPromptTokens([...state.messages]);
+      state.messages = isMessageInPrompts([...state.messages]);
+      state.totalPromptTokens = calPromptTokensByMessages([...state.messages]);
     },
 
     setNewUserMessage: (state, action: PayloadAction<Message>) => {
       state.messages = isMessageInPrompts([...state.messages, action.payload]);
-      state.promptTokens = calPromptTokens([...state.messages]);
-      state.messageTokens = 0;
+      state.totalPromptTokens = calPromptTokensByMessages([...state.messages]);
+      state.inputBoxTokens = 0;
     },
 
     setChats: (state, action: PayloadAction<Chat[]>) => {
       state.chats = [...action.payload];
     },
 
-    // 新建会话
+    /** Create a new chat session */
     newChat: (state) => {
       if (state.isResponsing) {
         return;
       }
       state.selectedChatId = -1;
       state.messages = [];
-      state.promptTokens = 2;
-      state.messageTokens = 0;
-    },
-
-    createChat: (state, action: PayloadAction<number>) => {
-      state.selectedChatId = action.payload;
-      // 刷新会话历史
-      state.chats = window.electronAPI.databaseIpcRenderer.getAllChats();
-    },
-
-    // 聊天记录切换
-    selectedChatChange: (state, action: PayloadAction<number>) => {
-      if (state.isResponsing || state.isWaitingRes) {
-        state.notiStopGenerate = true;
-        return;
-      }
-      state.selectedChatId = action.payload;
-      const messages = window.electronAPI.databaseIpcRenderer.getMessages(
-        action.payload
-      );
-      state.messages = isMessageInPrompts(messages);
-      state.promptTokens = calPromptTokens(state.messages);
+      state.totalPromptTokens = 2;
+      state.inputBoxTokens = 0;
     },
 
     setIsResponsing: (state, action: PayloadAction<boolean>) => {
@@ -173,52 +160,31 @@ export const appSlice = createSlice({
       }
     },
 
-    // update messages
-    updateMessages: (state, action: PayloadAction<number>) => {
-      state.messages = isMessageInPrompts(
-        window.electronAPI.databaseIpcRenderer.getMessages(action.payload)
-      );
-      state.promptTokens = calPromptTokens(state.messages);
-    },
-
-    // toggle message.inPrompts
+    /** Caculate limitation and Toggle message.inPrompts */
     toggleMessagePrompt: (state, action: PayloadAction<number>) => {
       const messages: Message[] = JSON.parse(JSON.stringify(state.messages));
       messages[action.payload].inPrompts = !messages[action.payload].inPrompts;
-      // limit settings
-      const messages_limit_num = window.electronAPI.storeIpcRenderer.get(
+      // limitation settings
+      const MessagesLimit = window.electronAPI.storeIpcRenderer.get(
         "max_messages_num"
       ) as number;
-      const tokens_limit = window.electronAPI.storeIpcRenderer.get(
+      const tokensLimit = window.electronAPI.storeIpcRenderer.get(
         "max_tokens"
       ) as number;
+
       // current tokens in limitation
       const messagesInPrompts = messages.filter((msg) => msg.inPrompts);
+      const tokensInPrompts = calPromptTokensByMessages(messages);
 
-      const tokensInPrompts =
-        window.electronAPI.othersIpcRenderer.calMessagesTokens(
-          messages
-            .filter((msg) => msg.inPrompts)
-            .map((msg) => {
-              return {
-                role: msg.sender,
-                content: msg.text,
-              };
-            })
-        );
-
-      // 判断
-      if (
-        messages_limit_num !== 0 &&
-        messagesInPrompts.length > messages_limit_num
-      ) {
+      // Judge limitation
+      if (MessagesLimit !== 0 && messagesInPrompts.length > MessagesLimit) {
         state.tokensBoxWarningState = "messages_limit";
-      } else if (tokensInPrompts > tokens_limit) {
+      } else if (tokensInPrompts > tokensLimit) {
         state.tokensBoxWarningState = "tokens_limit";
       } else {
         state.tokensBoxWarningState = "";
         state.messages = [...messages];
-        state.promptTokens = tokensInPrompts;
+        state.totalPromptTokens = tokensInPrompts;
       }
     },
 
@@ -233,10 +199,6 @@ export const appSlice = createSlice({
       state.tokensBoxWarningState = action.payload;
     },
 
-    toggleSideNav: (state) => {
-      state.sideNavExpanded = !state.sideNavExpanded;
-    },
-
     setIsWaitingRes: (state, action: PayloadAction<boolean>) => {
       state.isWaitingRes = action.payload;
     },
@@ -244,8 +206,6 @@ export const appSlice = createSlice({
 });
 
 export const {
-  setSelectedMode,
-  setOpenModalId,
   setSelectedChatId,
   setMessages,
   clearMessages,
@@ -253,22 +213,63 @@ export const {
   setChats,
   newChat,
   setNewUserMessage,
-  selectedChatChange,
-  updateMessages,
   setTokensBoxWarningState,
   toggleMessagePrompt,
   setTokensBoxWarningStateToFalse,
   setPromptTokens,
   setMessageTokens,
   setTokensBoxWarningStateTo,
-  createChat,
-  toggleSideNav,
   setStreamGPTMessage,
   setStreamGPTMessageDone,
   setStreamGPTMessageStart,
   setIsResponsing,
   setIsWaitingRes,
   setNotiGenerate,
-} = appSlice.actions;
+} = ChatSlice.actions;
 
-export default appSlice.reducer;
+/** Update chats history after created a new chat */
+export const updateChatsAfterCreated = (
+  chatId: number
+): ThunkAction<void, RootState, unknown, AnyAction> => {
+  return async (dispatch) => {
+    dispatch(setSelectedChatId(chatId));
+    return window.electronAPI.databaseIpcRenderer
+      .getAllChats()
+      .then((chats) => {
+        dispatch(setChats(chats));
+      });
+  };
+};
+
+/** Switching chat session */
+export const switchingChatSession = (
+  chatId: number
+): ThunkAction<void, RootState, unknown, AnyAction> => {
+  return async (dispatch: Dispatch<AnyAction>, getState) => {
+    if (getState().chat.isResponsing || getState().chat.isWaitingRes) {
+      dispatch(setNotiGenerate(true));
+      return;
+    }
+    dispatch(setSelectedChatId(chatId));
+    return window.electronAPI.databaseIpcRenderer
+      .getMessages(chatId)
+      .then((messages) => {
+        dispatch(setMessages(messages));
+      });
+  };
+};
+
+/** Update Messages */
+export const updateMessages = (
+  chatId: number
+): ThunkAction<void, RootState, unknown, AnyAction> => {
+  return async (dispatch) => {
+    return window.electronAPI.databaseIpcRenderer
+      .getMessages(chatId)
+      .then((messages) => {
+        dispatch(setMessages(messages));
+      });
+  };
+};
+
+export default ChatSlice.reducer;

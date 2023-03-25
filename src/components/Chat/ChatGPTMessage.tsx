@@ -5,18 +5,17 @@ import MessageBar from "./MessageBar";
 import { clsx, Text } from "@mantine/core";
 import { useRef } from "react";
 import { useAppDispatch } from "../../hooks/redux";
-import { updateMessages } from "../../reducers/app";
+import { updateMessages } from "../../reducers/chatSlice";
 
 const ChatGPTMessage = ({ msg, index }: { msg: Message; index: number }) => {
   const dispatch = useAppDispatch();
-
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
   const onDelete = () => {
     if (containerRef.current && contentRef.current) {
       containerRef.current.style.maxHeight = `${
-        contentRef.current.clientHeight + 32
+        contentRef.current.clientHeight + 16
       }px`;
       containerRef.current.style.opacity = "1";
     }
@@ -36,7 +35,7 @@ const ChatGPTMessage = ({ msg, index }: { msg: Message; index: number }) => {
 
   return (
     <div ref={containerRef} style={{ overflow: "hidden" }}>
-      <div className="p-3 my-4 bg-gray-100 rounded-lg" ref={contentRef}>
+      <div className="p-3 mb-4 bg-gray-100 rounded-lg" ref={contentRef}>
         <div className="flex justify-start items-center mb-1 w-full">
           <div className="flex justify-start items-center">
             <IconBrandOpenai

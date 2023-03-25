@@ -4,10 +4,15 @@ import { IconPencilMinus, IconTrash } from "@tabler/icons-react";
 import { memo } from "react";
 import { Chat } from "../../database/models/Chat";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { selectedChatChange, setChats, newChat } from "../../reducers/app";
+import {
+  setChats,
+  newChat,
+  switchingChatSession,
+} from "../../reducers/chatSlice";
 import { renderDate } from "./renderDate";
 import { useForm } from "@mantine/form";
 import { openDeleteConfirmModal } from "../modals/customModals";
+import { AnyAction } from "@reduxjs/toolkit";
 
 const ChatNameEditForm = (chat: Chat) => {
   const dispatch = useAppDispatch();
@@ -28,9 +33,11 @@ const ChatNameEditForm = (chat: Chat) => {
           chat.id,
           values.name
         );
-        dispatch(
-          setChats(window.electronAPI.databaseIpcRenderer.getAllChats())
-        );
+
+        window.electronAPI.databaseIpcRenderer.getAllChats().then((chats) => {
+          dispatch(setChats(chats));
+        });
+
         renderDate.date = "";
         closeAllModals();
       })}
@@ -57,7 +64,7 @@ const ChatNameEditForm = (chat: Chat) => {
 const HistoryItem = memo(({ name, id }: Chat) => {
   const dispatch = useAppDispatch();
 
-  const selectedChatId = useAppSelector((state) => state.app.selectedChatId);
+  const selectedChatId = useAppSelector((state) => state.chat.selectedChatId);
 
   return (
     <>
@@ -79,7 +86,7 @@ const HistoryItem = memo(({ name, id }: Chat) => {
             "w-full py-2 rounded-md hover:cursor-pointer " +
             (id === selectedChatId && "shadow text-white bg-white")
           }
-          onClick={() => dispatch(selectedChatChange(id))}
+          onClick={() => dispatch(switchingChatSession(id))}
         >
           <div className="w-full h-full flex items-center justify-between pr-1 pl-2 whitespace-nowrap">
             <div
@@ -117,11 +124,12 @@ const HistoryItem = memo(({ name, id }: Chat) => {
                         if (id === selectedChatId) {
                           dispatch(newChat());
                         }
-                        dispatch(
-                          setChats(
-                            window.electronAPI.databaseIpcRenderer.getAllChats()
-                          )
-                        );
+
+                        window.electronAPI.databaseIpcRenderer
+                          .getAllChats()
+                          .then((chats) => {
+                            dispatch(setChats(chats));
+                          });
                       },
                     },
                     name

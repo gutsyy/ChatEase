@@ -1,7 +1,7 @@
 import { Button, Text } from "@mantine/core";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
 import { useEffect, useRef } from "react";
-import { newChat, setChats } from "../../reducers/app";
+import { newChat, setChats } from "../../reducers/chatSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { closeAllModals, openConfirmModal } from "@mantine/modals";
 import SearchingInput from "./SearchingInput";
@@ -13,14 +13,16 @@ import { timestampToDate } from "../../services/utils/DateTimestamp";
 
 export const ChatHistory = () => {
   const dispatch = useAppDispatch();
-  const chats = useAppSelector((state) => state.app.chats);
+  const chats = useAppSelector((state) => state.chat.chats);
 
   const onNewChat = () => {
     dispatch(newChat());
   };
 
   useEffect(() => {
-    dispatch(setChats(window.electronAPI.databaseIpcRenderer.getAllChats()));
+    window.electronAPI.databaseIpcRenderer.getAllChats().then((chats) => {
+      dispatch(setChats(chats));
+    });
   }, []);
 
   const historyContainerRef = useRef<HTMLDivElement>(null);
@@ -83,11 +85,11 @@ export const ChatHistory = () => {
                 onCancel: () => closeAllModals(),
                 onConfirm: () => {
                   window.electronAPI.databaseIpcRenderer.deleteAllChats();
-                  dispatch(
-                    setChats(
-                      window.electronAPI.databaseIpcRenderer.getAllChats()
-                    )
-                  );
+                  window.electronAPI.databaseIpcRenderer
+                    .getAllChats()
+                    .then((chats) => {
+                      dispatch(setChats(chats));
+                    });
                   dispatch(newChat());
                 },
               });

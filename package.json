@@ -1,7 +1,7 @@
 {
   "name": "chatease",
   "productName": "ChatEase",
-  "version": "0.0.2-alpha",
+  "version": "0.0.3-alpha",
   "main": ".webpack/main",
   "licenses": "GPL-3.0",
   "description": "ChatEase Desktop App",
@@ -83,6 +83,7 @@
     "react-markdown": "^8.0.5",
     "react-redux": "^8.0.5",
     "react-syntax-highlighter": "^15.5.0",
+    "redux-thunk": "^2.4.2",
     "sequelize": "^6.29.1",
     "tunnel": "^0.0.6",
     "update-electron-app": "^2.0.1",

@@ -5,7 +5,7 @@ import {
   IconPrompt,
   IconSettings,
 } from "@tabler/icons-react";
-import { setSelectedMode, toggleSideNav } from "../reducers/app";
+import { setMode, toggleSideNavExpanded } from "../reducers/appSlice";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import {
   ToolboxVertical,
@@ -22,7 +22,7 @@ export const SideNav = () => {
       tooltip: "Chatting with ChatGPT",
       icon: IconMessageCircle2,
       onClick: () => {
-        dispatch(setSelectedMode("chat"));
+        dispatch(setMode("chat"));
       },
     },
     {
@@ -30,7 +30,7 @@ export const SideNav = () => {
       tooltip: "Get answers with prompt",
       icon: IconPrompt,
       onClick: () => {
-        dispatch(setSelectedMode("prompt"));
+        dispatch(setMode("action"));
       },
     },
   ];
@@ -49,7 +49,7 @@ export const SideNav = () => {
       icon: sideNavExpanded
         ? IconLayoutSidebarLeftCollapse
         : IconLayoutSidebarLeftExpand,
-      onClick: () => dispatch(toggleSideNav()),
+      onClick: () => dispatch(toggleSideNavExpanded()),
       tooltip: sideNavExpanded ? "收起" : "展开",
     },
   ];

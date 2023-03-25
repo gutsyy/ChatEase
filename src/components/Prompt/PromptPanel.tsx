@@ -8,6 +8,7 @@ import {
   requestPromptApi,
 } from "../../services/openAI/apiConfig";
 import { setPromptIsResponsing } from "../../reducers/promptSlice";
+import type { Prompt } from "../../database/models/Prompt";
 
 let isComposing = false;
 
@@ -47,10 +48,19 @@ export const PromptPanel = () => {
     }
   }, [selectedPromptId]);
 
-  const selectedPrompt =
-    selectedPromptId === -1
-      ? null
-      : window.electronAPI.databaseIpcRenderer.getPromptById(selectedPromptId);
+  const [selectedPrompt, setSelectedPrompt] = useState<Prompt>(null);
+
+  useEffect(() => {
+    if (selectedPromptId === -1) {
+      setSelectedPrompt(null);
+    } else {
+      window.electronAPI.databaseIpcRenderer
+        .getPromptById(selectedPromptId)
+        .then((prompt) => {
+          setSelectedPrompt(prompt);
+        });
+    }
+  }, [selectedPromptId]);
 
   const onSend = (event: FormEvent) => {
     event.preventDefault();

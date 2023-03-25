@@ -4,39 +4,38 @@ import { Chat } from "../../database/models/Chat";
 import { Prompt } from "../../database/models/Prompt";
 
 export interface DatabaseIpcRenderer {
-  createChat: (chat: Chat) => number;
-  createMessage: (msg: Message) => number;
-  getAllChats: () => Chat[];
-  getMessages: (chatId: number) => Message[];
-  updateChatName: (id: number, name: string) => void;
-  deleteChat: (id: number) => void;
-  deleteMessage: (id: number) => void;
-  deleteAllChats: () => void;
-  searchChats: (keyword: string) => Chat[];
-  createPrompt: (prompt: Prompt) => number;
-  getAllPrompts: () => Prompt[];
-  deletePrompt: (id: number) => void;
-  updatePrompt: (id: number, prompt: Prompt) => void;
-  searchPrompt: (name: string) => Prompt[];
-  getPromptById: (id: number) => Prompt;
+  createChat: (chat: Chat) => Promise<number>;
+  createMessage: (msg: Message) => Promise<number>;
+  getAllChats: () => Promise<Chat[]>;
+  getMessages: (chatId: number) => Promise<Message[]>;
+  updateChatName: (id: number, name: string) => Promise<void>;
+  deleteChat: (id: number) => Promise<void>;
+  deleteMessage: (id: number) => Promise<void>;
+  deleteAllChats: () => Promise<void>;
+  searchChats: (keyword: string) => Promise<Chat[]>;
+  createPrompt: (prompt: Prompt) => Promise<number>;
+  getAllPrompts: () => Promise<Prompt[]>;
+  deletePrompt: (id: number) => Promise<void>;
+  updatePrompt: (id: number, prompt: Prompt) => Promise<void>;
+  searchPrompt: (name: string) => Promise<Prompt[]>;
+  getPromptById: (id: number) => Promise<Prompt>;
 }
 
 export const databaseIpcRenderer: DatabaseIpcRenderer = {
-  createChat: (chat: Chat) => ipcRenderer.sendSync("create-chat", chat),
-  createMessage: (msg) => ipcRenderer.sendSync("create-message", msg),
-  getAllChats: () => ipcRenderer.sendSync("get-all-chats"),
-  getMessages: (chatId) => ipcRenderer.sendSync("get-messages", chatId),
+  createChat: (chat: Chat) => ipcRenderer.invoke("create-chat", chat),
+  createMessage: (msg) => ipcRenderer.invoke("create-message", msg),
+  getAllChats: () => ipcRenderer.invoke("get-all-chats"),
+  getMessages: (chatId) => ipcRenderer.invoke("get-messages", chatId),
   updateChatName: (id, name) =>
-    ipcRenderer.sendSync("update-chat-name", id, name),
-  deleteChat: (id) => ipcRenderer.sendSync("delete-chat", id),
-  deleteMessage: (id) => ipcRenderer.sendSync("delete-message", id),
-  deleteAllChats: () => ipcRenderer.sendSync("delete-all-chats"),
-  searchChats: (keyword) => ipcRenderer.sendSync("search-chats", keyword),
-  createPrompt: (prompt) => ipcRenderer.sendSync("create-prompt", prompt),
-  getAllPrompts: () => ipcRenderer.sendSync("get-all-prompts"),
-  deletePrompt: (id) => ipcRenderer.sendSync("delete-prompt", id),
-  updatePrompt: (id, prompt) =>
-    ipcRenderer.sendSync("update-prompt", id, prompt),
-  searchPrompt: (name) => ipcRenderer.sendSync("search-prompts", name),
-  getPromptById: (id) => ipcRenderer.sendSync("get-prompt", id),
+    ipcRenderer.invoke("update-chat-name", id, name),
+  deleteChat: (id) => ipcRenderer.invoke("delete-chat", id),
+  deleteMessage: (id) => ipcRenderer.invoke("delete-message", id),
+  deleteAllChats: () => ipcRenderer.invoke("delete-all-chats"),
+  searchChats: (keyword) => ipcRenderer.invoke("search-chats", keyword),
+  createPrompt: (prompt) => ipcRenderer.invoke("create-prompt", prompt),
+  getAllPrompts: () => ipcRenderer.invoke("get-all-prompts"),
+  deletePrompt: (id) => ipcRenderer.invoke("delete-prompt", id),
+  updatePrompt: (id, prompt) => ipcRenderer.invoke("update-prompt", id, prompt),
+  searchPrompt: (name) => ipcRenderer.invoke("search-prompts", name),
+  getPromptById: (id) => ipcRenderer.invoke("get-prompt", id),
 };

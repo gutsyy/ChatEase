@@ -2,20 +2,19 @@ import { IconAlien } from "@tabler/icons-react";
 import { Message } from "../../database/models/Message";
 import MessageBar from "./MessageBar";
 import { clsx, Text } from "@mantine/core";
-import { useAppDispatch } from "../../hooks/redux";
-import { updateMessages } from "../../reducers/app";
+import { updateMessages } from "../../reducers/chatSlice";
 import { useRef } from "react";
+import { useAppDispatch } from "../../hooks/redux";
 
 const UserMessage = ({ msg, index }: { msg: Message; index: number }) => {
   const dispatch = useAppDispatch();
-
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
   const onDelete = () => {
     if (containerRef.current && contentRef.current) {
       containerRef.current.style.maxHeight = `${
-        contentRef.current.clientHeight + 8
+        contentRef.current.clientHeight + 16
       }px`;
       containerRef.current.style.opacity = "1";
     }
@@ -35,7 +34,7 @@ const UserMessage = ({ msg, index }: { msg: Message; index: number }) => {
 
   return (
     <div ref={containerRef} style={{ overflow: "hidden" }}>
-      <div className="mt-2 bg-white px-3 py-3 rounded-lg" ref={contentRef}>
+      <div className="bg-white px-3 py-3 rounded-lg mb-4" ref={contentRef}>
         <div className="flex justify-start mb-3">
           <div className="flex justify-center items-center w-full">
             <div className="flex justify-start items-center">

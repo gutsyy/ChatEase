@@ -7,7 +7,7 @@ import { SideNav } from "./SideNav";
 export { Chat, SideExtend, SideNav };
 
 export const MainPanel = () => {
-  const selectedMode = useAppSelector((state) => state.app.selectedMode);
+  const selectedMode = useAppSelector((state) => state.app.selectedAppModule);
 
   if (selectedMode === "chat") {
     return <Chat />;

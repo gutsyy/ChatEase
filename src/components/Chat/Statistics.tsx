@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import { Message } from "../../database/models/Message";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { setTokensBoxWarningStateToFalse } from "../../reducers/app";
+import { setTokensBoxWarningStateToFalse } from "../../reducers/chatSlice";
 import { Text } from "@mantine/core";
 
 const Statistics = ({ messages }: { messages: Message[] }) => {
   const dispatch = useAppDispatch();
 
   const warningState = useAppSelector(
-    (state) => state.app.tokensBoxWarningState
+    (state) => state.chat.tokensBoxWarningState
   );
 
   useEffect(() => {
@@ -19,9 +19,9 @@ const Statistics = ({ messages }: { messages: Message[] }) => {
     }
   }, [warningState]);
 
-  const messageTokens = useAppSelector((state) => state.app.messageTokens);
+  const messageTokens = useAppSelector((state) => state.chat.inputBoxTokens);
 
-  const promptTokens = useAppSelector((state) => state.app.promptTokens);
+  const promptTokens = useAppSelector((state) => state.chat.totalPromptTokens);
 
   const messages_limit =
     window.electronAPI.storeIpcRenderer.get("max_messages_num");

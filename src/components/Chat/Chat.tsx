@@ -12,9 +12,9 @@ import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import {
   setMessageTokens,
   setTokensBoxWarningStateTo,
-  createChat,
+  updateChatsAfterCreated,
   setNewUserMessage,
-} from "../../reducers/app";
+} from "../../reducers/chatSlice";
 import ChatGPTMessage from "./ChatGPTMessage";
 import UserMessage from "./UserMessage";
 import WaitingResponse from "./WaitingResponse";
@@ -41,16 +41,15 @@ const Chat = () => {
   const dispatch = useAppDispatch();
 
   const [message, setMessage] = React.useState("");
-  const messages = useAppSelector((state) => state.app.messages);
-  const chatId = useAppSelector((state) => state.app.selectedChatId);
-  // const [loading, setLoading] = React.useState<boolean>(false);
-  const isWaitingRes = useAppSelector((state) => state.app.isWaitingRes);
-  const isResponsing = useAppSelector((state) => state.app.isResponsing);
+  const messages = useAppSelector((state) => state.chat.messages);
+  const chatId = useAppSelector((state) => state.chat.selectedChatId);
+  const isWaitingRes = useAppSelector((state) => state.chat.isWaitingRes);
+  const isResponsing = useAppSelector((state) => state.chat.isResponsing);
   const promptTokens = useAppSelector(
-    (state) => state.app.promptTokens + state.app.messageTokens
+    (state) => state.chat.totalPromptTokens + state.chat.inputBoxTokens
   );
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // 已发送信息和空字串不处理
@@ -68,12 +67,12 @@ const Chat = () => {
     let _chatId: number = chatId;
 
     if (_chatId === -1) {
-      _chatId = window.electronAPI.databaseIpcRenderer.createChat({
+      _chatId = await window.electronAPI.databaseIpcRenderer.createChat({
         name: getFirstSentence(message),
         timestamp: dateToTimestamp(new Date()),
       });
       // 创建会话
-      dispatch(createChat(_chatId));
+      dispatch(updateChatsAfterCreated(_chatId));
     }
 
     // create a new message

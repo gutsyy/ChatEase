@@ -2,7 +2,7 @@ import { TextInput, ActionIcon } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
 import { useState, FormEvent } from "react";
 import { useAppDispatch } from "../../hooks/redux";
-import { setChats } from "../../reducers/app";
+import { setChats } from "../../reducers/chatSlice";
 
 const SearchingInput = () => {
   const dispatch = useAppDispatch();
