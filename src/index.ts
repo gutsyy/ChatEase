@@ -44,6 +44,7 @@ const createWindow = (): BrowserWindow => {
     },
   });
 
+  // only work on windows
   mainWindow.setMenuBarVisibility(false);
 
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
