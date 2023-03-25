@@ -29,6 +29,12 @@ export const ChatHistory = () => {
     <div className="w-full h-full flex justify-center p-1">
       <div className="flex flex-col justify-between w-full h-full">
         <Button
+          styles={{
+            root: {
+              fontFamily: "Greycliff CF, sans serif",
+              fontWeight: 900,
+            },
+          }}
           className="w-full shadow"
           variant="gradient"
           gradient={{ from: "#ed6ea0", to: "#ec8c69", deg: 35 }}

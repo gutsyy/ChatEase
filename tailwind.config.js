@@ -5,6 +5,9 @@ module.exports = {
   },
   content: ["./src/**/*.{html,js,tsx}"],
   theme: {
+    fontFamily: {
+      greycliff: ["Greycliff CF", "sans-serif"],
+    },
     extend: {},
   },
   plugins: [],

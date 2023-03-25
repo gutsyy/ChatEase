@@ -19,6 +19,12 @@ export const PromptsList = () => {
   return (
     <div className="w-full h-full flex flex-col p-1">
       <Button
+        styles={{
+          root: {
+            fontFamily: "Greycliff CF, sans serif",
+            fontWeight: 900,
+          },
+        }}
         className="w-full"
         variant="gradient"
         gradient={{ from: "indigo", to: "cyan" }}

@@ -1,5 +1,4 @@
-import { ActionIcon, Text } from "@mantine/core";
-import { openConfirmModal } from "@mantine/modals";
+import { ActionIcon } from "@mantine/core";
 import { IconSettings, IconTrash } from "@tabler/icons-react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../hooks/redux";
@@ -40,7 +39,11 @@ export const PromptListItem = (prompt: Prompt) => {
       }}
     >
       <div className="flex-1 flex items-center text-xs text-gray-500 whitespace-nowrap text-ellipsis overflow-hidden">
-        <div>{prompt.name}</div>
+        <div
+          style={{ fontFamily: "Greycliff CF, sans serif", fontWeight: 400 }}
+        >
+          {prompt.name}
+        </div>
       </div>
       <div className="flex">
         <ActionIcon

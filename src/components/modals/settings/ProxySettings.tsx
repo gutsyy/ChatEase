@@ -130,7 +130,14 @@ const ProxySettings = () => {
         </div>
       </div> */}
       <div className="flex items-center">
-        <div className="mr-3" style={{ fontSize: "0.9rem", fontWeight: 500 }}>
+        <div
+          className="mr-3 text-gray-800 font-greycliff"
+          style={{
+            fontSize: "0.9rem",
+            fontWeight: 600,
+            fontFamily: "Greycliff CF, sans serif",
+          }}
+        >
           HTTP Proxy
         </div>
         <Switch

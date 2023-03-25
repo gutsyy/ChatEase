@@ -73,7 +73,7 @@ export const PromptPanel = () => {
     <>
       {selectedPrompt && (
         <div className="flex flex-1 flex-col p-2 px-4 overflow-y-scroll chat-messages-view overflow-x-hidden relative h-full">
-          <div className="w-full text-center font-semibold text-lg">
+          <div className="w-full text-center font-bold font-greycliff text-lg text-gray-900">
             {selectedPrompt.name}
           </div>
           <div className="w-full text-center text-xs text-gray-500">

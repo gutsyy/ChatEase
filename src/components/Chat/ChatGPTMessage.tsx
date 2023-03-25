@@ -50,7 +50,10 @@ const ChatGPTMessage = ({ msg, index }: { msg: Message; index: number }) => {
             <Text
               size="xs"
               weight={700}
-              className={clsx("mr-2", !msg.inPrompts && "text-gray-300")}
+              className={clsx(
+                "mr-2 font-greycliff tracking-wide",
+                !msg.inPrompts && "text-gray-300"
+              )}
             >
               ChatGPT
             </Text>

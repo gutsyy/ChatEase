@@ -2,6 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Greycliff CF"; /* 字体家族名称 */
+  src: url("./fonts/GreycliffCF-Bold.woff2") format("woff2"); /* 字体文件路径及格式 */
+  font-weight: 700; /* 字体粗细 */
+  font-style: normal; /* 字体样式 */
+}
+
+@font-face {
+  font-family: "Greycliff CF"; /* 字体家族名称 */
+  src: url("./fonts/GreycliffCF-Regular.woff2") format("woff2"); /* 字体文件路径及格式 */
+  font-weight: 400; /* 字体粗细 */
+  font-style: normal; /* 字体样式 */
+}
+
+@font-face {
+  font-family: "Greycliff CF"; /* 字体家族名称 */
+  src: url("./fonts/GreycliffCF-Heavy.woff2") format("woff2"); /* 字体文件路径及格式 */
+  font-weight: 900; /* 字体粗细 */
+  font-style: normal; /* 字体样式 */
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif;

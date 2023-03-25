@@ -92,40 +92,6 @@
   --tw-backdrop-sepia:  ;
 }
 
-.container {
-  width: 100%;
-}
-
-@media (min-width: 640px) {
-  .container {
-    max-width: 640px;
-  }
-}
-
-@media (min-width: 768px) {
-  .container {
-    max-width: 768px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .container {
-    max-width: 1024px;
-  }
-}
-
-@media (min-width: 1280px) {
-  .container {
-    max-width: 1280px;
-  }
-}
-
-@media (min-width: 1536px) {
-  .container {
-    max-width: 1536px;
-  }
-}
-
 .relative {
   position: relative;
 }
@@ -431,11 +397,6 @@
   background-color: rgb(252 165 165 / var(--tw-bg-opacity));
 }
 
-.bg-slate-100 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
-}
-
 .bg-transparent {
   background-color: transparent;
 }
@@ -443,31 +404,6 @@
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-}
-
-.bg-slate-200 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(226 232 240 / var(--tw-bg-opacity));
-}
-
-.bg-sky-300 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(125 211 252 / var(--tw-bg-opacity));
-}
-
-.bg-sky-200 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(186 230 253 / var(--tw-bg-opacity));
-}
-
-.bg-purple-200 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(233 213 255 / var(--tw-bg-opacity));
-}
-
-.bg-pink-200 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(251 207 232 / var(--tw-bg-opacity));
 }
 
 .p-1 {
@@ -541,6 +477,10 @@
   text-align: center;
 }
 
+.font-greycliff {
+  font-family: Greycliff CF, sans-serif;
+}
+
 .text-lg {
   font-size: 1.125rem;
   line-height: 1.75rem;
@@ -566,6 +506,14 @@
 
 .italic {
   font-style: italic;
+}
+
+.tracking-wide {
+  letter-spacing: 0.025em;
+}
+
+.tracking-wider {
+  letter-spacing: 0.05em;
 }
 
 .text-blue-500 {
@@ -596,6 +544,11 @@
 .text-gray-700 {
   --tw-text-opacity: 1;
   color: rgb(55 65 81 / var(--tw-text-opacity));
+}
+
+.text-gray-800 {
+  --tw-text-opacity: 1;
+  color: rgb(31 41 55 / var(--tw-text-opacity));
 }
 
 .text-gray-900 {
@@ -681,24 +634,66 @@
   transition-duration: 300ms;
 }
 
-.duration-200 {
-  transition-duration: 200ms;
-}
-
-.duration-500 {
-  transition-duration: 500ms;
-}
-
 .ease-in-out {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.ease-linear {
-  transition-timing-function: linear;
-}
-
 .ease-out {
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+}
+
+@font-face {
+  font-family: "Greycliff CF";
+
+  /* 字体家族名称 */
+
+  src: url("./fonts/GreycliffCF-Bold.woff2") format("woff2");
+
+  /* 字体文件路径及格式 */
+
+  font-weight: 700;
+
+  /* 字体粗细 */
+
+  font-style: normal;
+
+  /* 字体样式 */
+}
+
+@font-face {
+  font-family: "Greycliff CF";
+
+  /* 字体家族名称 */
+
+  src: url("./fonts/GreycliffCF-Regular.woff2") format("woff2");
+
+  /* 字体文件路径及格式 */
+
+  font-weight: 400;
+
+  /* 字体粗细 */
+
+  font-style: normal;
+
+  /* 字体样式 */
+}
+
+@font-face {
+  font-family: "Greycliff CF";
+
+  /* 字体家族名称 */
+
+  src: url("./fonts/GreycliffCF-Heavy.woff2") format("woff2");
+
+  /* 字体文件路径及格式 */
+
+  font-weight: 900;
+
+  /* 字体粗细 */
+
+  font-style: normal;
+
+  /* 字体样式 */
 }
 
 body {
