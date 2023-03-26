@@ -92,7 +92,7 @@ export const ChatSlice = createSlice({
     // Recalculate message tokens
     setMessages: (state, action: PayloadAction<Message[]>) => {
       state.messages = isMessageInPrompts([...action.payload]);
-      state.totalPromptTokens = calPromptTokensByMessages([...action.payload]);
+      state.totalPromptTokens = calPromptTokensByMessages(state.messages);
     },
 
     clearMessages: (state) => {

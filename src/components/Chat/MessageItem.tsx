@@ -1,0 +1,126 @@
+import { IconAlien, IconBrandOpenai } from "@tabler/icons-react";
+import { Markdown } from "../../pureComponents/Markdown";
+import { Message } from "../../database/models/Message";
+import MessageItemBar from "./MessageItemBar";
+import { clsx, Collapse, Text } from "@mantine/core";
+import { useRef } from "react";
+import { useAppDispatch } from "../../hooks/redux";
+import { updateMessages } from "../../reducers/chatSlice";
+import { useDisclosure, useMergedRef } from "@mantine/hooks";
+
+const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
+  const dispatch = useAppDispatch();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  const [opened, { toggle }] = useDisclosure(true);
+
+  const onDelete = () => {
+    if (containerRef.current && contentRef.current) {
+      containerRef.current.style.maxHeight = `${
+        contentRef.current.clientHeight + 16
+      }px`;
+      containerRef.current.style.opacity = "1";
+    }
+
+    containerRef.current.className = "transition-all ease-out duration-300";
+
+    setTimeout(() => {
+      containerRef.current.style.maxHeight = "0px";
+      containerRef.current.style.opacity = "0";
+      setTimeout(() => {
+        window.electronAPI.databaseIpcRenderer.deleteMessage(msg.id);
+        dispatch(updateMessages(msg.chatId));
+      }, 310);
+    });
+  };
+
+  return (
+    <div ref={containerRef} style={{ overflow: "hidden" }}>
+      <div
+        className={clsx(
+          "p-3 mb-4 rounded-lg",
+          msg.sender === "user" && "bg-white",
+          msg.sender === "assistant" && "bg-gray-100"
+        )}
+        ref={contentRef}
+      >
+        <div className="flex justify-start items-center mb-1 w-full">
+          <div className="flex justify-start items-center">
+            {msg.sender === "assistant" ? (
+              <IconBrandOpenai
+                className={clsx(
+                  "mr-1",
+                  !msg.inPrompts && "text-gray-300",
+                  msg.inPrompts && "text-blue-500"
+                )}
+                size={12}
+              />
+            ) : (
+              <IconAlien
+                size={12}
+                className={clsx(
+                  "mr-1",
+                  msg.inPrompts && "text-gray-400",
+                  !msg.inPrompts && "text-gray-300"
+                )}
+              />
+            )}
+            <Text
+              size="xs"
+              weight={700}
+              className={clsx(
+                "mr-2 font-greycliff tracking-wide",
+                !msg.inPrompts && "text-gray-300"
+              )}
+              style={{
+                transform: "translateY(0.8px)",
+              }}
+            >
+              <span>{msg.sender === "user" ? "You" : "ChatGPT"}</span>
+            </Text>
+          </div>
+          <MessageItemBar
+            msg={msg}
+            index={index}
+            onDelete={onDelete}
+            expanded={opened}
+            onToggleExpanded={toggle}
+          />
+        </div>
+        <Collapse
+          in={opened}
+          transitionDuration={300}
+          transitionTimingFunction="linear"
+        >
+          <Text
+            size="sm"
+            className={clsx(
+              "ml-4 mr-2",
+              msg.inPrompts && "text-gray-900",
+              !msg.inPrompts && "text-gray-400",
+              msg.sender === "user" && "whitespace-pre-wrap"
+            )}
+          >
+            {msg.sender === "assistant" ? (
+              <Markdown
+                text={msg.text}
+                codeScope={(
+                  window.electronAPI.storeIpcRenderer.get(
+                    "markdown_code_scope"
+                  ) as string
+                )
+                  .split(",")
+                  .map((language) => language.trim())}
+              />
+            ) : (
+              <p>{msg.text}</p>
+            )}
+          </Text>
+        </Collapse>
+      </div>
+    </div>
+  );
+};
+
+export default MessageItem;

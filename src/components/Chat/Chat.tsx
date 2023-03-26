@@ -15,12 +15,11 @@ import {
   updateChatsAfterCreated,
   setNewUserMessage,
 } from "../../reducers/chatSlice";
-import ChatGPTMessage from "./ChatGPTMessage";
-import UserMessage from "./UserMessage";
 import WaitingResponse from "./WaitingResponse";
 import Statistics from "./Statistics";
 import { dateToTimestamp } from "../../services/utils/DateTimestamp";
 import { RenderStopGenerationButton } from "./StopGenerationButton";
+import MessageItem from "./MessageItem";
 
 let isComposing = false;
 
@@ -146,12 +145,8 @@ const Chat = () => {
         )}
         <div className="pb-2 flex-1">
           {messages.map((message, i) => (
-            <div key={i}>
-              {message.sender === "user" ? (
-                <UserMessage msg={message} index={i} />
-              ) : (
-                <ChatGPTMessage msg={message} index={i} />
-              )}
+            <div key={message.id}>
+              <MessageItem msg={message} index={i} />
             </div>
           ))}
           <div>
