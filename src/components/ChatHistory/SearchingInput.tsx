@@ -11,9 +11,11 @@ const SearchingInput = () => {
 
   const onSearching = (e: FormEvent) => {
     e.preventDefault();
-    dispatch(
-      setChats(window.electronAPI.databaseIpcRenderer.searchChats(keywords))
-    );
+    window.electronAPI.databaseIpcRenderer
+      .searchChats(keywords)
+      .then((chats) => {
+        dispatch(setChats(chats));
+      });
   };
 
   return (

@@ -29,8 +29,11 @@ const PromptForm = (initialValues: Prompt) => {
       return;
     }
 
-    const id = window.electronAPI.databaseIpcRenderer.createPrompt(form.values);
-    dispatch(createPrompt(id));
+    window.electronAPI.databaseIpcRenderer
+      .createPrompt(form.values)
+      .then((id) => {
+        dispatch(createPrompt(id));
+      });
 
     closeAllModals();
   };
