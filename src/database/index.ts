@@ -35,7 +35,7 @@ const dbInit = async () => {
   ipcMain.handle("create-message", async (event, message: Message) => {
     try {
       const result = await MessageIns.create({ ...message });
-      return result.dataValues.id;
+      return result.dataValues;
     } catch (err) {
       throw new Error("failed");
     }
@@ -196,6 +196,20 @@ const dbInit = async () => {
       const prompt = await PromptIns.findByPk(id);
       return prompt.dataValues;
     } catch (err) {
+      throw new Error("failed");
+    }
+  });
+
+  // Get Prompts by ids
+  ipcMain.handle("get-prompts-by-ids", async (event, ids: number[]) => {
+    try {
+      const prompts = await PromptIns.findAll({
+        where: {
+          id: ids,
+        },
+      });
+      return prompts.map((prompt) => prompt.dataValues);
+    } catch {
       throw new Error("failed");
     }
   });

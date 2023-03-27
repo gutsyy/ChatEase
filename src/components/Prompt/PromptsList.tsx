@@ -22,7 +22,7 @@ export const PromptsList = () => {
         styles={{
           root: {
             fontFamily: "Greycliff CF, sans serif",
-            fontWeight: 900,
+            fontWeight: 700,
           },
         }}
         className="w-full"

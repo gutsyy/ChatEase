@@ -1,9 +1,15 @@
-import { ScrollArea } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { IconNetwork, IconKey, TablerIconsProps } from "@tabler/icons-react";
+import {
+  IconNetwork,
+  IconKey,
+  TablerIconsProps,
+  IconTools,
+} from "@tabler/icons-react";
 import { useState } from "react";
 import GeneralSettings from "./GeneralSettings";
 import ProxySettings from "./ProxySettings";
+import { ChatToolbarSettings } from "./ChatToolbarSettings";
+import { MessageToolbarSettings } from "./MessageToolbarSettings";
 
 type SettingItem = {
   name: string;
@@ -30,12 +36,18 @@ const Settings = () => {
       icon: IconNetwork,
       panel: <ProxySettings />,
     },
-    // {
-    //   name: "语言",
-    //   onClick: () => null,
-    //   icon: IconLanguage,
-    //   panel: null,
-    // },
+    {
+      name: "Chat toolbar",
+      onClick: () => null,
+      icon: IconTools,
+      panel: <ChatToolbarSettings />,
+    },
+    {
+      name: "Message toolbar",
+      onClick: () => null,
+      icon: IconTools,
+      panel: <MessageToolbarSettings />,
+    },
   ];
   const [selected, setSelected] = useState<number>(0);
 
@@ -70,7 +82,7 @@ const Settings = () => {
           </div>
         ))}
       </div>
-      <div className="w-full px-2 flex flex-1">{settings[selected].panel}</div>
+      <div className="px-2 flex flex-1">{settings[selected].panel}</div>
     </div>
   );
 };

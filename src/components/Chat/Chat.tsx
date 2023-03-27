@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Textarea, ActionIcon } from "@mantine/core";
+import { Textarea, ActionIcon, Button, clsx } from "@mantine/core";
 import {
   IconMessageCircle,
   IconSend,
   IconBrandOpenai,
+  IconArrowBackUp,
+  IconX,
 } from "@tabler/icons-react";
 
-import { requestApi } from "../../services/openAI/apiConfig";
+import { requestApi, requestPromptApi } from "../../services/openAI/apiConfig";
 import type { Message } from "../../database/models/Message";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import {
@@ -20,6 +22,10 @@ import Statistics from "./Statistics";
 import { dateToTimestamp } from "../../services/utils/DateTimestamp";
 import { RenderStopGenerationButton } from "./StopGenerationButton";
 import MessageItem from "./MessageItem";
+import { Prompt } from "../../database/models/Prompt";
+import { useFocusWithin } from "@mantine/hooks";
+import { setActionId, setPromptIsResponsing } from "../../reducers/promptSlice";
+import { v4 } from "uuid";
 
 let isComposing = false;
 
@@ -36,6 +42,8 @@ function getFirstSentence(text: string) {
   return firstSentence;
 }
 
+let historyMessage = "";
+
 const Chat = () => {
   const dispatch = useAppDispatch();
 
@@ -50,6 +58,7 @@ const Chat = () => {
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
+    setToolbarState("");
 
     // 已发送信息和空字串不处理
     if (message.trim() === "" || isResponsing) {
@@ -83,10 +92,13 @@ const Chat = () => {
       inPrompts: true,
     };
 
-    window.electronAPI.databaseIpcRenderer.createMessage(newMessage);
+    window.electronAPI.databaseIpcRenderer
+      .createMessage(newMessage)
+      .then((message) => {
+        dispatch(setNewUserMessage(message));
+        setMessage("");
+      });
 
-    dispatch(setNewUserMessage(newMessage));
-    setMessage("");
     // setLoading(true);
 
     // Send prompt messages
@@ -119,6 +131,71 @@ const Chat = () => {
   }, [promptTokens]);
 
   const chatsContainer = useRef<HTMLDivElement>(null);
+
+  const { ref: inputBoxRef, focused } = useFocusWithin<HTMLDivElement>();
+  const textInputRef = useRef<HTMLTextAreaElement>(null);
+
+  const isPromptResponsing = useAppSelector(
+    (state) => state.prompt.isPromptResponsing
+  );
+
+  const [actionId] = useState<string>(v4());
+  const runningActionId = useAppSelector((state) => state.prompt.actionId);
+  const answerContent = useAppSelector((state) => state.prompt.answerContent);
+
+  useEffect(() => {
+    if (runningActionId === actionId) {
+      setMessage(answerContent);
+    }
+  }, [answerContent, runningActionId]);
+
+  const handlePromptAction = (prompt: Prompt) => {
+    dispatch(setActionId(actionId));
+    setToolbarState(prompt.name);
+    historyMessage = message;
+    requestPromptApi(prompt, message);
+  };
+
+  useEffect(() => {
+    if (runningActionId !== actionId) {
+      return;
+    }
+    if (!isPromptResponsing) {
+      setToolbarState("toolbar");
+      textInputRef.current.focus();
+    }
+  }, [isPromptResponsing, runningActionId]);
+
+  useEffect(() => {
+    if (focused && !isResponsing) {
+      setToolbarState("toolbar");
+    }
+  }, [isResponsing]);
+
+  const [toolbarState, setToolbarState] = useState<string>("");
+
+  const [toolbarItems, setToolbarItems] = useState<Prompt[]>([]);
+
+  useEffect(() => {
+    const ids = window.electronAPI.storeIpcRenderer.get(
+      "chat_input_toolbar_items"
+    ) as number[];
+    window.electronAPI.databaseIpcRenderer
+      .getPromptsByIds(ids)
+      .then((prompts) => {
+        setToolbarItems(prompts);
+      });
+  }, [chatId]);
+
+  useEffect(() => {
+    setMessage("");
+    if (chatId === -1) {
+      textInputRef.current.focus();
+    }
+  }, [chatId]);
+
+  const textAreaInputWaitingActionResponseState = () =>
+    isPromptResponsing && runningActionId === actionId;
 
   return (
     <div className="h-full flex flex-col overflow-hidden flex-1">
@@ -163,38 +240,92 @@ const Chat = () => {
           <Statistics messages={messages}></Statistics>
         )}
       </div>
-      <div className="bg-gray-100 p-4 flex items-center">
-        <IconMessageCircle size={20} className="mr-2" />
-        <form
-          className="flex items-center justify-between flex-1"
-          onSubmit={handleSendMessage}
+      <div ref={inputBoxRef}>
+        <div
+          className={clsx(
+            "bg-white gap-1 w-full flex items-center justify-center px-4 transition-all ease-linear duration-100 overflow-y-hidden",
+            toolbarState && focused
+              ? "h-8 py-1 opacity-100"
+              : "h-0 py-0 opacity-0"
+          )}
         >
-          <Textarea
-            error={textAreaError ? "信息超出tokens限制" : undefined}
-            value={message}
-            onChange={(event) => {
-              setMessage(event.target.value);
-              dispatch(setMessageTokens(event.target.value.trim()));
-            }}
-            onCompositionStart={() => {
-              isComposing = true;
-            }}
-            onCompositionEnd={() => {
-              isComposing = false;
-            }}
-            onKeyDown={(event) => {
-              handleKeyDown(event);
-            }}
-            placeholder="Type your question here..."
-            className="flex-1 mr-2"
-            autosize
-            minRows={1}
-            maxRows={5}
-          ></Textarea>
-          <ActionIcon color="blue" type="submit" variant="subtle" size="sm">
-            <IconSend size={16} />
-          </ActionIcon>
-        </form>
+          {toolbarItems.map((item, i) => (
+            <Button
+              loading={toolbarState === item.name}
+              key={i}
+              className="font-greycliff h-6"
+              radius="lg"
+              size="xs"
+              color="blue"
+              onClick={() => handlePromptAction(item)}
+            >
+              {item.name}
+            </Button>
+          ))}
+        </div>
+        <div className="bg-gray-100 p-4 flex items-center">
+          <IconMessageCircle size={20} className="mr-2" />
+          <form
+            className="flex items-center justify-between flex-1"
+            onSubmit={handleSendMessage}
+          >
+            <Textarea
+              ref={textInputRef}
+              error={textAreaError ? "信息超出tokens限制" : undefined}
+              value={message}
+              onChange={(event) => {
+                setMessage(event.target.value);
+                dispatch(setMessageTokens(event.target.value.trim()));
+              }}
+              disabled={textAreaInputWaitingActionResponseState()}
+              onFocus={() => setToolbarState("activate")}
+              onCompositionStart={() => {
+                isComposing = true;
+              }}
+              onCompositionEnd={() => {
+                isComposing = false;
+              }}
+              onKeyDown={(event) => {
+                handleKeyDown(event);
+              }}
+              placeholder={
+                textAreaInputWaitingActionResponseState()
+                  ? "Waiting..."
+                  : "Type your message here..."
+              }
+              className="flex-1 mr-2"
+              autosize
+              minRows={1}
+              maxRows={5}
+              rightSection={
+                isPromptResponsing ? (
+                  <div className="flex items-end">
+                    <ActionIcon
+                      color="red"
+                      size="sm"
+                      onClick={() => dispatch(setPromptIsResponsing(false))}
+                    >
+                      <IconX size={12} />
+                    </ActionIcon>
+                  </div>
+                ) : (
+                  <div className="flex items-end">
+                    <ActionIcon
+                      color="blue"
+                      size="sm"
+                      onClick={() => setMessage(historyMessage)}
+                    >
+                      <IconArrowBackUp size={12} />
+                    </ActionIcon>
+                  </div>
+                )
+              }
+            ></Textarea>
+            <ActionIcon color="blue" type="submit" variant="subtle" size="sm">
+              <IconSend size={16} />
+            </ActionIcon>
+          </form>
+        </div>
       </div>
     </div>
   );

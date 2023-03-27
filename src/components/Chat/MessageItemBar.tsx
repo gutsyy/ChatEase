@@ -1,4 +1,4 @@
-import { clsx, Tooltip } from "@mantine/core";
+import { Button, clsx, Tooltip } from "@mantine/core";
 import {
   IconArrowBarDown,
   IconArrowBarUp,
@@ -7,10 +7,18 @@ import {
   IconTrash,
   TablerIconsProps,
 } from "@tabler/icons-react";
-import { forwardRef, LegacyRef, Ref } from "react";
+import { forwardRef, LegacyRef, useEffect, useState } from "react";
+import { Prompt } from "../../database/models/Prompt";
 import { Message } from "../../database/models/Message";
-import { useAppDispatch } from "../../hooks/redux";
-import { toggleMessagePrompt } from "../../reducers/chatSlice";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import {
+  clearMessageActionResultByIndex,
+  setMessageActionResultByIndex,
+  toggleMessagePrompt,
+} from "../../reducers/chatSlice";
+import { requestPromptApi } from "../../services/openAI/apiConfig";
+import { v4 as UUIDV4 } from "uuid";
+import { setActionId } from "../../reducers/promptSlice";
 
 interface ActionIconButtonProps {
   icon: (props: TablerIconsProps) => JSX.Element;
@@ -138,13 +146,77 @@ const MessageItemBar = ({
     </>
   );
 
+  const [actionItems, setActionItems] = useState<Prompt[]>([]);
+
+  useEffect(() => {
+    window.electronAPI.databaseIpcRenderer
+      .getPromptsByIds(
+        window.electronAPI.storeIpcRenderer.get(
+          "message_toolbar_items"
+        ) as number[]
+      )
+      .then((prompts) => {
+        setActionItems(prompts);
+      });
+  }, []);
+
+  const [actionId] = useState<string>(UUIDV4());
+
+  const handleActionClick = (prompt: Prompt, message: string) => {
+    dispatch(setActionId(actionId));
+    dispatch(clearMessageActionResultByIndex(index));
+    requestPromptApi(prompt, message);
+  };
+
+  const answerContent = useAppSelector((state) => state.prompt.answerContent);
+  const runningActionId = useAppSelector((state) => state.prompt.actionId);
+  const isPromptResponsing = useAppSelector(
+    (state) => state.prompt.isPromptResponsing
+  );
+
+  useEffect(() => {
+    if (answerContent && runningActionId === actionId) {
+      dispatch(
+        setMessageActionResultByIndex({
+          index,
+          text: answerContent,
+        })
+      );
+    }
+  }, [answerContent, runningActionId]);
+
   return (
     <div className="flex-1 flex justify-between items-center">
       <div className="flex items-center">
         <>{renderTime}</>
         <>{renderTokensCount}</>
       </div>
-      <div className="flex">{renderActions}</div>
+      <div className="flex">
+        <div className="flex">
+          {actionItems.map((item, i) => (
+            <Tooltip
+              label={item.description}
+              key={i}
+              styles={{ tooltip: { fontSize: "12px" } }}
+              withArrow
+            >
+              <Button
+                loading={isPromptResponsing && runningActionId === actionId}
+                disabled={isPromptResponsing && runningActionId !== actionId}
+                size="xs"
+                variant="subtle"
+                className="font-greycliff h-5"
+                onClick={() => {
+                  handleActionClick(item, msg.text);
+                }}
+              >
+                {item.name}
+              </Button>
+            </Tooltip>
+          ))}
+        </div>
+        <div className="flex">{renderActions}</div>
+      </div>
     </div>
   );
 };

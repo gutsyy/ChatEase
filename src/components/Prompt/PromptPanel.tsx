@@ -4,7 +4,7 @@ import { Markdown } from "../../pureComponents";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import {
-  ChatGPTMessageType,
+  calPromptActionMessages,
   requestPromptApi,
 } from "../../services/openAI/apiConfig";
 import { setPromptIsResponsing } from "../../reducers/promptSlice";
@@ -12,21 +12,21 @@ import type { Prompt } from "../../database/models/Prompt";
 
 let isComposing = false;
 
-const calGPTMessages = (
-  prompt: string,
-  inputContent: string
-): ChatGPTMessageType[] => {
-  return [
-    {
-      role: "system",
-      content: prompt,
-    },
-    {
-      role: "user",
-      content: inputContent,
-    },
-  ];
-};
+// const calGPTMessages = (
+//   prompt: string,
+//   inputContent: string
+// ): ChatGPTMessageType[] => {
+//   return [
+//     {
+//       role: "system",
+//       content: prompt,
+//     },
+//     {
+//       role: "user",
+//       content: inputContent,
+//     },
+//   ];
+// };
 
 export const PromptPanel = () => {
   const dispatch = useAppDispatch();
@@ -64,8 +64,7 @@ export const PromptPanel = () => {
 
   const onSend = (event: FormEvent) => {
     event.preventDefault();
-    const messages = calGPTMessages(selectedPrompt.prompt, inputContent);
-    requestPromptApi(messages);
+    requestPromptApi(selectedPrompt, inputContent);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -114,7 +113,7 @@ export const PromptPanel = () => {
               <div className="flex items-center justify-end">
                 <div className="text-sm text-gray-500 mr-2">
                   {`${window.electronAPI.othersIpcRenderer.calMessagesTokens(
-                    calGPTMessages(selectedPrompt.prompt, inputContent)
+                    calPromptActionMessages(selectedPrompt.prompt, inputContent)
                   )} tokens`}
                 </div>
                 <ActionIcon type="submit">

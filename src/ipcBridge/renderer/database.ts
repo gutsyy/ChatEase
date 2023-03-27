@@ -5,7 +5,7 @@ import { Prompt } from "../../database/models/Prompt";
 
 export interface DatabaseIpcRenderer {
   createChat: (chat: Chat) => Promise<number>;
-  createMessage: (msg: Message) => Promise<number>;
+  createMessage: (msg: Message) => Promise<Message>;
   getAllChats: () => Promise<Chat[]>;
   getMessages: (chatId: number) => Promise<Message[]>;
   updateChatName: (id: number, name: string) => Promise<void>;
@@ -19,6 +19,7 @@ export interface DatabaseIpcRenderer {
   updatePrompt: (id: number, prompt: Prompt) => Promise<void>;
   searchPrompt: (name: string) => Promise<Prompt[]>;
   getPromptById: (id: number) => Promise<Prompt>;
+  getPromptsByIds: (ids: number[]) => Promise<Prompt[]>;
 }
 
 export const databaseIpcRenderer: DatabaseIpcRenderer = {
@@ -38,4 +39,5 @@ export const databaseIpcRenderer: DatabaseIpcRenderer = {
   updatePrompt: (id, prompt) => ipcRenderer.invoke("update-prompt", id, prompt),
   searchPrompt: (name) => ipcRenderer.invoke("search-prompts", name),
   getPromptById: (id) => ipcRenderer.invoke("get-prompt", id),
+  getPromptsByIds: (ids) => ipcRenderer.invoke("get-prompts-by-ids", ids),
 };

@@ -122,16 +122,6 @@ export const ChatSlice = createSlice({
       }
     },
 
-    /** Complete the stream, store the message, and recalculate the limitations. */
-    setStreamGPTMessageDone: (state) => {
-      state.isResponsing = false;
-      window.electronAPI.databaseIpcRenderer.createMessage(
-        Object.assign({}, state.messages[state.messages.length - 1])
-      );
-      state.messages = isMessageInPrompts([...state.messages]);
-      state.totalPromptTokens = calPromptTokensByMessages([...state.messages]);
-    },
-
     setNewUserMessage: (state, action: PayloadAction<Message>) => {
       state.messages = isMessageInPrompts([...state.messages, action.payload]);
       state.totalPromptTokens = calPromptTokensByMessages([...state.messages]);
@@ -202,6 +192,18 @@ export const ChatSlice = createSlice({
     setIsWaitingRes: (state, action: PayloadAction<boolean>) => {
       state.isWaitingRes = action.payload;
     },
+
+    setMessageActionResultByIndex: (
+      state,
+      action: PayloadAction<{ index: number; text: string }>
+    ) => {
+      const { index, text } = action.payload;
+      state.messages[index].actionResult = text;
+      // state.messages[index].text = text;
+    },
+    clearMessageActionResultByIndex: (state, action: PayloadAction<number>) => {
+      state.messages[action.payload].actionResult = "";
+    },
   },
 });
 
@@ -220,11 +222,12 @@ export const {
   setMessageTokens,
   setTokensBoxWarningStateTo,
   setStreamGPTMessage,
-  setStreamGPTMessageDone,
   setStreamGPTMessageStart,
   setIsResponsing,
   setIsWaitingRes,
   setNotiGenerate,
+  setMessageActionResultByIndex,
+  clearMessageActionResultByIndex,
 } = ChatSlice.actions;
 
 /** Update chats history after created a new chat */
@@ -271,5 +274,37 @@ export const updateMessages = (
       });
   };
 };
+
+/** Complete the stream, store the message, and recalculate the limitations. */
+export const setStreamGPTMessageDone = (): ThunkAction<
+  void,
+  RootState,
+  unknown,
+  AnyAction
+> => {
+  return async (dispatch, getState) => {
+    dispatch(setIsResponsing(false));
+    const messages = getState().chat.messages;
+    const newMessage = Object.assign({}, messages[messages.length - 1]);
+    delete newMessage.id;
+    window.electronAPI.databaseIpcRenderer
+      .createMessage(newMessage)
+      .then((message) => {
+        dispatch(
+          setMessages([...messages.slice(0, messages.length - 1), message])
+        );
+      });
+  };
+};
+
+/** Complete the stream, store the message, and recalculate the limitations. */
+// setStreamGPTMessageDone: (state) => {
+//   state.isResponsing = false;
+//   window.electronAPI.databaseIpcRenderer.createMessage(
+//     Object.assign({}, state.messages[state.messages.length - 1])
+//   );
+//   state.messages = isMessageInPrompts([...state.messages]);
+//   state.totalPromptTokens = calPromptTokensByMessages([...state.messages]);
+// },
 
 export default ChatSlice.reducer;

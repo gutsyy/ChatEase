@@ -7,6 +7,7 @@ export interface Message {
   timestamp: number;
   chatId: number;
   inPrompts?: boolean;
+  actionResult?: string;
 }
 
 const MessageDefine = {

@@ -2,11 +2,11 @@ import { IconAlien, IconBrandOpenai } from "@tabler/icons-react";
 import { Markdown } from "../../pureComponents/Markdown";
 import { Message } from "../../database/models/Message";
 import MessageItemBar from "./MessageItemBar";
-import { clsx, Collapse, Text } from "@mantine/core";
+import { clsx, Collapse, Divider, Text } from "@mantine/core";
 import { useRef } from "react";
 import { useAppDispatch } from "../../hooks/redux";
 import { updateMessages } from "../../reducers/chatSlice";
-import { useDisclosure, useMergedRef } from "@mantine/hooks";
+import { useDisclosure } from "@mantine/hooks";
 
 const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
   const dispatch = useAppDispatch();
@@ -21,18 +21,22 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
         contentRef.current.clientHeight + 16
       }px`;
       containerRef.current.style.opacity = "1";
-    }
 
-    containerRef.current.className = "transition-all ease-out duration-300";
+      containerRef.current.className = "transition-all ease-out duration-300";
 
-    setTimeout(() => {
-      containerRef.current.style.maxHeight = "0px";
-      containerRef.current.style.opacity = "0";
+      containerRef.current.addEventListener("transitionend", () => {
+        window.electronAPI.databaseIpcRenderer
+          .deleteMessage(msg.id)
+          .then(() => {
+            dispatch(updateMessages(msg.chatId));
+          });
+      });
+
       setTimeout(() => {
-        window.electronAPI.databaseIpcRenderer.deleteMessage(msg.id);
-        dispatch(updateMessages(msg.chatId));
-      }, 310);
-    });
+        containerRef.current.style.maxHeight = "0px";
+        containerRef.current.style.opacity = "0";
+      });
+    }
   };
 
   return (
@@ -117,6 +121,47 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
               <p>{msg.text}</p>
             )}
           </Text>
+          {msg.actionResult && (
+            <>
+              <Divider
+                label="Action Result"
+                labelPosition="center"
+                color="gray"
+                variant="dashed"
+                className="mx-4"
+                styles={{
+                  label: {
+                    font: "Greycliff CF",
+                    fontWeight: 700,
+                  },
+                }}
+              />
+              <Text
+                size="sm"
+                className={clsx(
+                  "ml-4 mr-2",
+                  msg.inPrompts && "text-gray-900",
+                  !msg.inPrompts && "text-gray-400",
+                  msg.sender === "user" && "whitespace-pre-wrap"
+                )}
+              >
+                {msg.sender === "assistant" ? (
+                  <Markdown
+                    text={msg.actionResult}
+                    codeScope={(
+                      window.electronAPI.storeIpcRenderer.get(
+                        "markdown_code_scope"
+                      ) as string
+                    )
+                      .split(",")
+                      .map((language) => language.trim())}
+                  />
+                ) : (
+                  <p>{msg.actionResult}</p>
+                )}
+              </Text>
+            </>
+          )}
         </Collapse>
       </div>
     </div>

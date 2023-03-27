@@ -11,9 +11,13 @@ export type SettingsKey =
   | "openai_api_origin"
   | "max_tokens"
   | "stream_enable"
-  | "markdown_code_scope";
+  | "markdown_code_scope"
+  | "chat_input_toolbar_items"
+  | "message_toolbar_items";
 
-const defaultSettings = {
+const defaultSettings: {
+  [key in SettingsKey]: string | number | boolean | number[];
+} = {
   v2ray: false,
   http_proxy: false,
   http_proxy_host: "",
@@ -27,6 +31,8 @@ const defaultSettings = {
   max_tokens: 4000,
   stream_enable: true,
   markdown_code_scope: "JavaScript,TypeScript,HTML,CSS,JSON,Python,Markdown",
+  chat_input_toolbar_items: [],
+  message_toolbar_items: [],
 };
 
 export { defaultSettings };

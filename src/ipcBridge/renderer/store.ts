@@ -1,7 +1,7 @@
 import { ipcRenderer } from "electron";
 import { SettingsKey } from "../../store/storeModel";
 
-type GetReturnType = string | number | boolean;
+type GetReturnType = string | number | boolean | number[];
 
 export interface StoreIpcRenderer {
   set: (key: SettingsKey, val: any) => void;

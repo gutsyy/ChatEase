@@ -33,10 +33,10 @@ const Statistics = ({ messages }: { messages: Message[] }) => {
   ).length;
 
   const classDefaultStyles =
-    "italic bg-white text-gray-900 px-3 py-1 rounded-full shadow-lg overflow-hidden";
+    "italic bg-white text-gray-900 px-3 py-1 rounded-full shadow overflow-hidden";
 
   const classWarningStyles =
-    "italic bg-white text-gray-900 px-3 py-1 rounded-full shadow-lg outline outline-2 outline-red-500 bg-red-300 px-4 overflow-hidden";
+    "italic bg-white text-gray-900 px-3 py-1 rounded-full shadow outline outline-2 outline-red-500 bg-red-300 px-4 overflow-hidden";
 
   return (
     <div className="sticky bg-transparent flex justify-center bottom-0 z-50">
@@ -60,8 +60,9 @@ const Statistics = ({ messages }: { messages: Message[] }) => {
               warningState === "tokens_limit" ? "text-red-500 font-bold" : ""
             }
           >
-            Tokens in prompt: {promptTokens + messageTokens} (max:
-            {tokens_limit})
+            {`Tokens in prompt: ${
+              promptTokens + messageTokens
+            } (max: ${tokens_limit})`}
           </Text>
           <Text
             size="xs"
@@ -72,8 +73,7 @@ const Statistics = ({ messages }: { messages: Message[] }) => {
                 : "")
             }
           >
-            Messages in prompt: {messagesInPromptsLength} (max:
-            {messages_limit})
+            {`Messages in prompt: ${messagesInPromptsLength} (max: ${messages_limit})`}
           </Text>
         </div>
       </div>

@@ -16,6 +16,7 @@ import {
   setAnswerContent,
   setPromptIsResponsing,
 } from "../../reducers/promptSlice";
+import { Prompt } from "../../database/models/Prompt";
 
 export type ChatGPTMessageType = {
   role: string;
@@ -75,12 +76,29 @@ export const axiosConfigChatGPT = (
 // Create new Message
 const createNewGPTMessage = (content: string, chatId: number): Message => {
   return {
+    id: -1,
     chatId: chatId,
     sender: "assistant",
     text: content,
     timestamp: dateToTimestamp(new Date()),
     inPrompts: true,
   };
+};
+
+export const calPromptActionMessages = (
+  prompt: string,
+  inputContent: string
+): ChatGPTMessageType[] => {
+  return [
+    {
+      role: "system",
+      content: prompt,
+    },
+    {
+      role: "user",
+      content: inputContent,
+    },
+  ];
 };
 
 export const requestApi = (chatId: number, messages: Message[]) => {
@@ -152,14 +170,20 @@ export const requestApi = (chatId: number, messages: Message[]) => {
           res.choices[0].message.content,
           chatId
         );
-        window.electronAPI.databaseIpcRenderer.createMessage(responseMessage);
-        store.dispatch(setNewGPTMessage(responseMessage));
+        delete responseMessage.id;
+        window.electronAPI.databaseIpcRenderer
+          .createMessage(responseMessage)
+          .then((message) => {
+            store.dispatch(setNewGPTMessage(message));
+          });
       }
     });
 };
 
-export const requestPromptApi = (messages: ChatGPTMessageType[]) => {
+export const requestPromptApi = (prompt: Prompt, message: string) => {
   const requestId = UUIDV4();
+
+  const messages = calPromptActionMessages(prompt.prompt, message);
 
   store.dispatch(setPromptIsResponsing(true));
   // const dispatch = useAppDispatch();

@@ -11,7 +11,7 @@ export const axiosIpcMain = (window: BrowserWindow) => {
       if (store.get("http_proxy")) {
         const tunnel = t.httpsOverHttp({
           proxy: {
-            host: store.get("http_proxy_host"),
+            host: store.get("http_proxy_host") as string,
             port: Number(store.get("http_proxy_port")),
           },
         });

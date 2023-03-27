@@ -13,6 +13,7 @@ interface PromptState {
   refreshPanel: boolean;
   answerContent: string;
   isPromptResponsing: boolean;
+  actionId: string;
 }
 
 const initialState: PromptState = {
@@ -21,6 +22,7 @@ const initialState: PromptState = {
   refreshPanel: false,
   answerContent: "",
   isPromptResponsing: false,
+  actionId: "",
 };
 
 const PromptSlice = createSlice({
@@ -63,6 +65,9 @@ const PromptSlice = createSlice({
       }
       state.isPromptResponsing = action.payload;
     },
+    setActionId: (state, action: PayloadAction<string>) => {
+      state.actionId = action.payload;
+    },
   },
 });
 
@@ -73,6 +78,7 @@ export const {
   clearAnswerContent,
   setPromptIsResponsing,
   refreshPanel,
+  setActionId,
 } = PromptSlice.actions;
 
 export const createPrompt = (
