@@ -4,12 +4,15 @@ import {
   IconKey,
   TablerIconsProps,
   IconTools,
+  IconTrash,
 } from "@tabler/icons-react";
 import { useState } from "react";
 import GeneralSettings from "./GeneralSettings";
 import ProxySettings from "./ProxySettings";
 import { ChatToolbarSettings } from "./ChatToolbarSettings";
 import { MessageToolbarSettings } from "./MessageToolbarSettings";
+import { Button } from "@mantine/core";
+import { CleanAppDataSettings } from "./CleanAppDataSettings";
 
 type SettingItem = {
   name: string;
@@ -47,6 +50,12 @@ const Settings = () => {
       onClick: () => null,
       icon: IconTools,
       panel: <MessageToolbarSettings />,
+    },
+    {
+      name: "Clear App Data",
+      onClick: () => null,
+      icon: IconTrash,
+      panel: <CleanAppDataSettings />,
     },
   ];
   const [selected, setSelected] = useState<number>(0);

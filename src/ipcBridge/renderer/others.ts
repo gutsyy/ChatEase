@@ -11,6 +11,7 @@ export interface OthersIpcRenderer {
   getAppVersion: () => string;
   removeAllListeners: (channel: string) => void;
   showContextMenu: () => void;
+  cleanAppData: () => void;
 }
 
 export const othersIpcRenderer: OthersIpcRenderer = {
@@ -35,5 +36,8 @@ export const othersIpcRenderer: OthersIpcRenderer = {
   },
   showContextMenu: () => {
     ipcRenderer.invoke("show-context-menu");
+  },
+  cleanAppData: () => {
+    ipcRenderer.sendSync("clean-app-data");
   },
 };
