@@ -11,7 +11,6 @@ import GeneralSettings from "./GeneralSettings";
 import ProxySettings from "./ProxySettings";
 import { ChatToolbarSettings } from "./ChatToolbarSettings";
 import { MessageToolbarSettings } from "./MessageToolbarSettings";
-import { Button } from "@mantine/core";
 import { CleanAppDataSettings } from "./CleanAppDataSettings";
 
 type SettingItem = {
@@ -98,7 +97,7 @@ const Settings = () => {
 
 export const openSettingsModal = () => {
   modals.open({
-    title: "Settings",
+    title: <div className="font-greycliff font-bold">Settings</div>,
     styles: {
       header: {
         padding: "0.5rem",

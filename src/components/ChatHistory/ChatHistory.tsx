@@ -37,7 +37,7 @@ export const ChatHistory = () => {
               fontWeight: 700,
             },
           }}
-          className="w-full shadow"
+          className="w-full"
           variant="gradient"
           gradient={{ from: "#ed6ea0", to: "#ec8c69", deg: 35 }}
           leftIcon={<IconPlus size={18} />}

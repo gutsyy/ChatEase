@@ -4,7 +4,8 @@ import React, { memo } from "react";
 import ReactMarkdown from "react-markdown";
 import { CodeProps } from "react-markdown/lib/ast-to-react";
 import hljs from "highlight.js";
-import "highlight.js/styles/atom-one-dark-reasonable.css";
+// import "highlight.js/styles/atom-one-dark-reasonable.css";
+import "highlight.js/styles/atom-one-light.css";
 import { handleNotis } from "../services/utils/notis";
 
 const CodeToolbar = ({ type, code }: { type: string; code: string }) => {
@@ -20,7 +21,7 @@ const CodeToolbar = ({ type, code }: { type: string; code: string }) => {
 
   return (
     <div
-      className="flex justify-between items-center h-6 bg-gray-800 text-white px-2"
+      className="flex justify-between items-center h-6 bg-gray-300 text-gray-900 px-2"
       style={{
         borderTopRightRadius: "0.5rem",
         borderTopLeftRadius: "0.5rem",
@@ -33,20 +34,18 @@ const CodeToolbar = ({ type, code }: { type: string; code: string }) => {
           !state ? <IconClipboardCopy size={16} /> : <IconCheck size={16} />
         }
         size="sm"
-        variant="subtle"
-        className="h-5 text-xs"
+        variant="light"
+        className="h-5 text-xs text-gray-900 bg-gray-300"
         color="gray"
         styles={(theme) => ({
           root: {
-            backgroundColor: "#1F2937",
             border: 0,
-            color: "white",
             height: rem(20),
             paddingLeft: rem(5),
             paddingRight: rem(5),
-            "&:not([data-disabled])": theme.fn.hover({
-              backgroundColor: theme.fn.darken("#1F2937", 0.05),
-            }),
+            // "&:not([data-disabled])": theme.fn.hover({
+            //   backgroundColor: theme.fn.darken("#1F2937", 0.05),
+            // }),
           },
 
           leftIcon: {
@@ -96,9 +95,9 @@ export const Markdown = memo(
                   }
                 />
                 <div
-                  className="overflow-scroll py-3 px-2 text-white"
+                  className="overflow-scroll py-3 px-2 text-dark bg-gray-200"
                   style={{
-                    background: "#282C34",
+                    // background: "#282C34",
                     borderBottomRightRadius: "0.5rem",
                     borderBottomLeftRadius: "0.5rem",
                   }}

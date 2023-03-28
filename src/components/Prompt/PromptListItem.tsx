@@ -1,4 +1,4 @@
-import { ActionIcon } from "@mantine/core";
+import { ActionIcon, clsx } from "@mantine/core";
 import { IconSettings, IconTrash } from "@tabler/icons-react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { Prompt } from "../../database/models/Prompt";
@@ -27,12 +27,12 @@ export const PromptListItem = (prompt: Prompt) => {
 
   return (
     <div
-      className={
-        "flex px-2 py-2 my-2 justify-between items-center rounded bg-white shadow " +
-        (selectedPromptId === prompt.id
-          ? "outline outline-1 outline-blue-400"
-          : "hover:cursor-pointer")
-      }
+      className={clsx(
+        "flex px-2 py-2 my-2 justify-between items-center rounded",
+        selectedPromptId === prompt.id
+          ? "bg-white outline outline-1 outline-blue-400"
+          : "bg-gray-200 hover:cursor-pointer"
+      )}
       onClick={() => {
         dispatch(setSelectedPromptId(prompt.id));
       }}

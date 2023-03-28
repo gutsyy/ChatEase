@@ -19,7 +19,7 @@ export const SideExtend = () => {
 
   return (
     <div
-      className="h-full bg-gray-200 py-1 transition-all overflow-hidden"
+      className="h-full bg-gray-100 py-1 transition-all overflow-hidden border-solid border-0 border-r border-gray-200"
       style={{
         width: sideNavExpanded ? "256px" : "0px",
         paddingLeft: sideNavExpanded ? "0.25rem" : "",

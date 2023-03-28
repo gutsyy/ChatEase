@@ -154,6 +154,7 @@ export const MessageToolbarSettings = () => {
                 <div
                   ref={provided.innerRef}
                   className="flex flex-1 ml-2 whitespace-nowrap gap-1 py-1 px-1 bg-white rounded overflow-x-auto h-8"
+                  style={{ maxWidth: "480px" }}
                   {...provided.droppableProps}
                 >
                   {selectedActions.map((action, index) => (

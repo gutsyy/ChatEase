@@ -243,7 +243,7 @@ const Chat = () => {
       <div ref={inputBoxRef}>
         <div
           className={clsx(
-            "bg-white gap-1 w-full flex items-center justify-center px-4 transition-all ease-linear duration-100 overflow-y-hidden",
+            "bg-white border-solid border-0 border-t border-gray-200 gap-1 w-full flex items-center justify-center px-4 transition-all ease-linear duration-100 overflow-y-hidden",
             toolbarState && focused
               ? "h-8 py-1 opacity-100"
               : "h-0 py-0 opacity-0"
@@ -256,14 +256,15 @@ const Chat = () => {
               className="font-greycliff h-6"
               radius="lg"
               size="xs"
-              color="blue"
+              variant="gradient"
+              gradient={{ from: "#ed6ea0", to: "#ec8c69", deg: 35 }}
               onClick={() => handlePromptAction(item)}
             >
               {item.name}
             </Button>
           ))}
         </div>
-        <div className="bg-gray-100 p-4 flex items-center">
+        <div className="bg-gray-100 p-4 flex items-center border-solid border-0 border-t border-gray-200">
           <IconMessageCircle size={20} className="mr-2" />
           <form
             className="flex items-center justify-between flex-1"

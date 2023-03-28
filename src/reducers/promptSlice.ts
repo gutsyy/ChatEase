@@ -6,6 +6,7 @@ import {
 } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { Prompt } from "../database/models/Prompt";
+import { appSlice } from "./appSlice";
 
 interface PromptState {
   prompts: Prompt[];
@@ -70,6 +71,13 @@ const PromptSlice = createSlice({
     },
     setActionId: (state, action: PayloadAction<string>) => {
       state.actionId = action.payload;
+    },
+  },
+
+  extraReducers: {
+    [appSlice.actions.setMode.type]: (state) => {
+      state.answerContent = "";
+      state.isPromptResponsing = false;
     },
   },
 });

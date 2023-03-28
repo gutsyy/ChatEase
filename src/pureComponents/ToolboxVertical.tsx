@@ -10,7 +10,7 @@ export type ToolboxVerticalItem = {
 };
 
 const iconSetProps = (Component: (props: TablerIconsProps) => JSX.Element) => {
-  return <Component strokeWidth={1} />;
+  return <Component strokeWidth={1.2} />;
 };
 
 const SettedTooltip = (props: TooltipProps) => {
@@ -45,13 +45,14 @@ export const ToolboxVertical = memo(
     };
 
     return (
-      <div className="flex-col  ">
+      <div className="flex-col">
         {items.map((item, i) => (
           <SettedTooltip key={i} label={item.name}>
             <div
               className={
-                "p-1 hover:text-white hover:bg-gray-600 flex justify-center items-center rounded my-2 " +
-                (selected === i && "bg-gray-500 shadow text-white")
+                "p-1 px-2 hover:text-gray-900 flex justify-center items-center my-2 " +
+                (selected === i &&
+                  "text-gray-900 border-0 border-solid border-l border-orange-500")
               }
               onClick={() => onItemClick(i)}
             >

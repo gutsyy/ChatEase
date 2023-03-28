@@ -200,7 +200,10 @@ const MessageItemBar = ({
         <>{renderTokensCount}</>
       </div>
       <div className="flex">
-        <div className="flex gap-1">
+        <div
+          className="flex gap-1 overflow-x-auto"
+          style={{ maxWidth: "240px" }}
+        >
           {actionItems.map((item, i) => (
             <Tooltip
               label={item.description}
@@ -209,6 +212,7 @@ const MessageItemBar = ({
               withArrow
             >
               <Button
+                color="blue"
                 styles={{
                   root: {
                     paddingLeft: "0.5rem",

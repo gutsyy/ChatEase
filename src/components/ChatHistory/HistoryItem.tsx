@@ -1,4 +1,4 @@
-import { Tooltip, TextInput, ActionIcon, Button } from "@mantine/core";
+import { Tooltip, TextInput, ActionIcon, Button, clsx } from "@mantine/core";
 import { closeAllModals, openModal } from "@mantine/modals";
 import { IconPencilMinus, IconTrash } from "@tabler/icons-react";
 import { memo } from "react";
@@ -84,13 +84,15 @@ const HistoryItem = memo(({ name, id }: Chat) => {
         <div
           className={
             "w-full py-2 rounded-md hover:cursor-pointer " +
-            (id === selectedChatId && "shadow text-white bg-white")
+            (id === selectedChatId && "text-white bg-gray-200")
           }
           onClick={() => dispatch(switchingChatSession(id))}
         >
           <div className="w-full h-full flex items-center justify-between pr-1 pl-2 whitespace-nowrap">
             <div
-              className="text-xs text-gray-700 flex-1 text-ellipsis overflow-hidden"
+              className={clsx(
+                "text-xs flex-1 text-ellipsis overflow-hidden text-gray-700"
+              )}
               style={{ maxWidth: "170px", marginRight: "5px" }}
             >
               {name}
@@ -99,7 +101,7 @@ const HistoryItem = memo(({ name, id }: Chat) => {
               <ActionIcon
                 radius="xl"
                 size="sm"
-                color="blue"
+                color="gray"
                 onClick={(e) => {
                   e.stopPropagation();
                   openModal({

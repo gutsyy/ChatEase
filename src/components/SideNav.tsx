@@ -55,7 +55,7 @@ export const SideNav = () => {
   ];
 
   return (
-    <div className="px-1 flex flex-col justify-between bg-gray-700 text-white">
+    <div className="flex flex-col justify-between bg-white text-gray-400 border-solid border-0 border-r border-gray-200">
       <ToolboxVertical items={topItems} defaultSelected={0}></ToolboxVertical>
       <ToolboxVertical items={bottomItems} keepClicked={false} />
     </div>
