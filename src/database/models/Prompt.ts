@@ -15,7 +15,7 @@ const PromptDefine = {
       allowNull: false,
     },
     prompt: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
     description: {

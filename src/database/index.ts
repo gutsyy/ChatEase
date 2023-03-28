@@ -1,12 +1,13 @@
 import { app, ipcMain } from "electron";
 import { Op, Sequelize } from "sequelize";
 import sqlite3 from "sqlite3";
+import { initialPrompts } from "./initialDatas";
 import { Chat, ChatDefine } from "./models/Chat";
 import { Message, MessageDefine } from "./models/Message";
 import { Prompt, PromptDefine } from "./models/Prompt";
+import { syncOrCreateTableAndBulkCreateInitialDatas } from "./utils";
 
 const dbInit = async () => {
-  // sqlite3.verbose();
   const sqlitePath = app.getPath("userData") + "/database.db";
   new sqlite3.Database(sqlitePath);
   const sequelize = new Sequelize({
@@ -23,12 +24,19 @@ const dbInit = async () => {
     createdAt: false,
     updatedAt: false,
   });
+
   ChatIns.sync();
+
   const PromptIns = sequelize.define(PromptDefine.name, PromptDefine.model, {
     createdAt: false,
     updatedAt: false,
   });
-  PromptIns.sync();
+
+  await syncOrCreateTableAndBulkCreateInitialDatas(
+    sequelize,
+    PromptIns,
+    initialPrompts
+  );
 
   // ipcMain
   // Create message

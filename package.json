@@ -1,6 +1,6 @@
 {
   "name": "chatease",
-  "productName": "ChatEase",
+  "productName": "ChatEase(Dev)",
   "version": "0.0.5-alpha",
   "main": ".webpack/main",
   "licenses": "GPL-3.0",
