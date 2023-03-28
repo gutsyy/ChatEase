@@ -1,5 +1,5 @@
 import { Tooltip } from "@mantine/core";
-import { IconHelpCircle } from "@tabler/icons-react";
+import { IconHelpOctagon } from "@tabler/icons-react";
 
 export interface SettingItemProps {
   label: string;
@@ -32,7 +32,7 @@ const SettingItem = ({
               label={questionInfo}
               withArrow
             >
-              <IconHelpCircle className="text-gray-500 ml-1" size={15} />
+              <IconHelpOctagon className="text-gray-500 ml-1" size={12} />
             </Tooltip>
           )}
         </div>

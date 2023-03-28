@@ -14,6 +14,7 @@ export const CleanAppDataSettings = () => {
       <Button
         className="mt-2"
         color="red"
+        variant="light"
         leftIcon={<IconTrash size={16} />}
         size="xs"
         onClick={() => {
