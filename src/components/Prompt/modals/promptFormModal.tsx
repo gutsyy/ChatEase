@@ -76,7 +76,7 @@ const PromptForm = (initialValues: Prompt) => {
         }}
       >
         <Button size="xs" type="submit">
-          {initialValues.id ? "Update" : "Create"}
+          {initialValues.id ? "Save" : "Create"}
         </Button>
       </div>
     </form>

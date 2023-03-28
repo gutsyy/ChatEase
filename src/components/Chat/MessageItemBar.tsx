@@ -17,7 +17,6 @@ import {
   toggleMessagePrompt,
 } from "../../reducers/chatSlice";
 import { requestPromptApi } from "../../services/openAI/apiConfig";
-import { v4 as UUIDV4 } from "uuid";
 import { setActionId } from "../../reducers/promptSlice";
 
 interface ActionIconButtonProps {
@@ -69,12 +68,14 @@ const MessageItemBar = ({
   onDelete,
   expanded,
   onToggleExpanded,
+  actionId,
 }: {
   msg: Message;
   index: number;
   expanded: boolean;
   onDelete: () => void;
   onToggleExpanded: () => void;
+  actionId: string;
 }) => {
   const dispatch = useAppDispatch();
 
@@ -160,10 +161,11 @@ const MessageItemBar = ({
       });
   }, []);
 
-  const [actionId] = useState<string>(UUIDV4());
+  const [runningActionName, setRunningActionName] = useState("");
 
   const handleActionClick = (prompt: Prompt, message: string) => {
     dispatch(setActionId(actionId));
+    setRunningActionName(prompt.name);
     dispatch(clearMessageActionResultByIndex(index));
     requestPromptApi(prompt, message);
   };
@@ -173,6 +175,12 @@ const MessageItemBar = ({
   const isPromptResponsing = useAppSelector(
     (state) => state.prompt.isPromptResponsing
   );
+
+  if (!isPromptResponsing) {
+    if (runningActionName) {
+      setRunningActionName("");
+    }
+  }
 
   useEffect(() => {
     if (answerContent && runningActionId === actionId) {
@@ -192,7 +200,7 @@ const MessageItemBar = ({
         <>{renderTokensCount}</>
       </div>
       <div className="flex">
-        <div className="flex">
+        <div className="flex gap-1">
           {actionItems.map((item, i) => (
             <Tooltip
               label={item.description}
@@ -201,8 +209,22 @@ const MessageItemBar = ({
               withArrow
             >
               <Button
-                loading={isPromptResponsing && runningActionId === actionId}
-                disabled={isPromptResponsing && runningActionId !== actionId}
+                styles={{
+                  root: {
+                    paddingLeft: "0.5rem",
+                    paddingRight: "0.5rem",
+                  },
+                }}
+                loading={
+                  isPromptResponsing &&
+                  runningActionId === actionId &&
+                  runningActionName === item.name
+                }
+                disabled={
+                  (isPromptResponsing && runningActionId !== actionId) ||
+                  (runningActionName !== item.name &&
+                    Boolean(runningActionName))
+                }
                 size="xs"
                 variant="subtle"
                 className="font-greycliff h-5"

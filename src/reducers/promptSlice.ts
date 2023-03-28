@@ -63,6 +63,9 @@ const PromptSlice = createSlice({
       if (action.payload) {
         state.answerContent = "";
       }
+      if (!action.payload) {
+        state.actionId = "";
+      }
       state.isPromptResponsing = action.payload;
     },
     setActionId: (state, action: PayloadAction<string>) => {

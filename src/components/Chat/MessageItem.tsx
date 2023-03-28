@@ -2,11 +2,39 @@ import { IconAlien, IconBrandOpenai } from "@tabler/icons-react";
 import { Markdown } from "../../pureComponents/Markdown";
 import { Message } from "../../database/models/Message";
 import MessageItemBar from "./MessageItemBar";
-import { clsx, Collapse, Divider, Text } from "@mantine/core";
-import { useRef } from "react";
-import { useAppDispatch } from "../../hooks/redux";
+import { Button, clsx, Collapse, Divider, Text } from "@mantine/core";
+import { useRef, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { updateMessages } from "../../reducers/chatSlice";
 import { useDisclosure } from "@mantine/hooks";
+import { v4 } from "uuid";
+import { setPromptIsResponsing } from "../../reducers/promptSlice";
+
+const StopGenerationButton = ({ actionId }: { actionId: string }) => {
+  const dispatch = useAppDispatch();
+  const runningActionId = useAppSelector((state) => state.prompt.actionId);
+
+  return (
+    <>
+      {runningActionId === actionId && (
+        <div className="sticky w-full flex bg-transparent justify-center bottom-0">
+          <Button
+            size="xs"
+            color="red"
+            radius="lg"
+            className="h-6"
+            variant="light"
+            onClick={() => {
+              dispatch(setPromptIsResponsing(false));
+            }}
+          >
+            Stop Generation
+          </Button>
+        </div>
+      )}
+    </>
+  );
+};
 
 const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
   const dispatch = useAppDispatch();
@@ -39,11 +67,13 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
     }
   };
 
+  const [actionId] = useState(v4());
+
   return (
     <div ref={containerRef} style={{ overflow: "hidden" }}>
       <div
         className={clsx(
-          "p-3 mb-4 rounded-lg",
+          "p-3 mb-4 rounded-lg relative",
           msg.sender === "user" && "bg-white",
           msg.sender === "assistant" && "bg-gray-100"
         )}
@@ -87,6 +117,7 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
           <MessageItemBar
             msg={msg}
             index={index}
+            actionId={actionId}
             onDelete={onDelete}
             expanded={opened}
             onToggleExpanded={toggle}
@@ -163,6 +194,7 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
             </>
           )}
         </Collapse>
+        <StopGenerationButton actionId={actionId} />
       </div>
     </div>
   );
