@@ -12,7 +12,6 @@ import {
 import { renderDate } from "./renderDate";
 import { useForm } from "@mantine/form";
 import { openDeleteConfirmModal } from "../modals/customModals";
-import { AnyAction } from "@reduxjs/toolkit";
 
 const ChatNameEditForm = (chat: Chat) => {
   const dispatch = useAppDispatch();
@@ -83,7 +82,7 @@ const HistoryItem = memo(({ name, id }: Chat) => {
       >
         <div
           className={
-            "w-full py-2 rounded-md hover:cursor-pointer " +
+            "w-full py-2 rounded hover:cursor-pointer " +
             (id === selectedChatId && "text-white bg-gray-200")
           }
           onClick={() => dispatch(switchingChatSession(id))}

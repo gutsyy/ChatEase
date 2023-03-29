@@ -3,7 +3,7 @@ import { Markdown } from "../../pureComponents/Markdown";
 import { Message } from "../../database/models/Message";
 import MessageItemBar from "./MessageItemBar";
 import { Button, clsx, Collapse, Divider, Text } from "@mantine/core";
-import { useRef, useState } from "react";
+import { memo, useCallback, useMemo, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { updateMessages } from "../../reducers/chatSlice";
 import { useDisclosure } from "@mantine/hooks";
@@ -46,7 +46,7 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
 
   const [opened, { toggle }] = useDisclosure(true);
 
-  const onDelete = () => {
+  const onDelete = useCallback(() => {
     if (containerRef.current && contentRef.current) {
       containerRef.current.style.maxHeight = `${
         contentRef.current.clientHeight + 16
@@ -68,9 +68,9 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
         containerRef.current.style.opacity = "0";
       });
     }
-  };
+  }, [msg.id]);
 
-  const [actionId] = useState(v4());
+  const actionId = useMemo(() => v4(), [msg.id]);
 
   return (
     <div ref={containerRef} style={{ overflow: "hidden" }}>
@@ -82,7 +82,7 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
         )}
         ref={contentRef}
       >
-        <div className="flex justify-start items-center mb-1 w-full">
+        <div className="flex justify-start items-center w-full">
           <div className="flex justify-start items-center">
             {msg.sender === "assistant" ? (
               <IconBrandOpenai
@@ -128,8 +128,8 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
         </div>
         <Collapse
           in={opened}
-          transitionDuration={300}
-          transitionTimingFunction="linear"
+          transitionDuration={200}
+          transitionTimingFunction="ease-out"
         >
           <Text
             size="sm"
@@ -203,4 +203,4 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
   );
 };
 
-export default MessageItem;
+export default memo(MessageItem);

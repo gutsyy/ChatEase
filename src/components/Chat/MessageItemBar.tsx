@@ -124,7 +124,7 @@ const MessageItemBar = ({
   const renderTokensCount = (
     <>
       {msg.inPrompts ? (
-        <div className="text-xs text-white px-1 ml-2 rounded bg-green-500 mr-1">{`${window.electronAPI.othersIpcRenderer.calMessagesTokens(
+        <div className="text-xs text-white px-1 ml-2 rounded bg-blue-400 mr-1">{`${window.electronAPI.othersIpcRenderer.calMessagesTokens(
           [
             {
               role: msg.sender,

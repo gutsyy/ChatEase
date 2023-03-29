@@ -33,7 +33,7 @@ export const PromptsList = () => {
       >
         New Action
       </Button>
-      <div className="flex-1" ref={listContainterRef}>
+      <div className="flex-1 mt-2" ref={listContainterRef}>
         {listContainterRef.current && (
           <ScrollableList
             dataList={prompts}

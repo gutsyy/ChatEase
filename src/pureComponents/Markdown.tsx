@@ -108,18 +108,6 @@ export const Markdown = memo(
                     }}
                   />
                 </div>
-                {/* <SyntaxHighlighter
-                style={nightOwl}
-                customStyle={{
-                  marginTop: 0,
-                  borderBottomRightRadius: "0.5rem",
-                  borderBottomLeftRadius: "0.5rem",
-                }}
-                children={String(children).replace(/\n$/, "")}
-                showLineNumbers={true}
-                PreTag="div"
-                {...props}
-              /> */}
               </div>
             ) : (
               <code className={className} {...props}>

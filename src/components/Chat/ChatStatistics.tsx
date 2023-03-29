@@ -4,7 +4,11 @@ import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { setTokensBoxWarningStateToFalse } from "../../reducers/chatSlice";
 import { Text } from "@mantine/core";
 
-const Statistics = ({ messages }: { messages: Message[] }) => {
+const ChatStatistics = ({
+  messagesInPromptsNum,
+}: {
+  messagesInPromptsNum: number;
+}) => {
   const dispatch = useAppDispatch();
 
   const warningState = useAppSelector(
@@ -27,10 +31,6 @@ const Statistics = ({ messages }: { messages: Message[] }) => {
     window.electronAPI.storeIpcRenderer.get("max_messages_num");
 
   const tokens_limit = window.electronAPI.storeIpcRenderer.get("max_tokens");
-
-  const messagesInPromptsLength = messages.filter(
-    (msg) => msg.inPrompts
-  ).length;
 
   const classDefaultStyles =
     "italic bg-white text-gray-900 px-3 py-1 rounded-full shadow overflow-hidden";
@@ -73,7 +73,7 @@ const Statistics = ({ messages }: { messages: Message[] }) => {
                 : "")
             }
           >
-            {`Messages in prompt: ${messagesInPromptsLength} (max: ${messages_limit})`}
+            {`Messages in prompt: ${messagesInPromptsNum} (max: ${messages_limit})`}
           </Text>
         </div>
       </div>
@@ -81,4 +81,4 @@ const Statistics = ({ messages }: { messages: Message[] }) => {
   );
 };
 
-export default Statistics;
+export default ChatStatistics;

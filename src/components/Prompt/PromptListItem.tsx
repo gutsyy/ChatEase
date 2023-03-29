@@ -28,10 +28,8 @@ export const PromptListItem = (prompt: Prompt) => {
   return (
     <div
       className={clsx(
-        "flex px-2 py-2 my-2 justify-between items-center rounded",
-        selectedPromptId === prompt.id
-          ? "bg-white outline outline-1 outline-blue-400"
-          : "bg-gray-200 hover:cursor-pointer"
+        "flex px-2 py-2 justify-between items-center rounded",
+        selectedPromptId === prompt.id ? "bg-gray-200" : "hover:cursor-pointer"
       )}
       onClick={() => {
         dispatch(setSelectedPromptId(prompt.id));

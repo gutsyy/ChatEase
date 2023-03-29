@@ -39,18 +39,18 @@ export const SideNav = () => {
 
   const bottomItems: ToolboxVerticalItem[] = [
     {
-      name: "设置",
+      name: "Settings",
       icon: IconSettings,
       onClick: () => openSettingsModal(),
       tooltip: "App Settings",
     },
     {
-      name: sideNavExpanded ? "收起" : "展开",
+      name: "Expand/Collapse",
       icon: sideNavExpanded
         ? IconLayoutSidebarLeftCollapse
         : IconLayoutSidebarLeftExpand,
       onClick: () => dispatch(toggleSideNavExpanded()),
-      tooltip: sideNavExpanded ? "收起" : "展开",
+      tooltip: sideNavExpanded ? "Collapse" : "Expand",
     },
   ];
 
