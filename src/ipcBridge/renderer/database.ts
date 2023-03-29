@@ -20,6 +20,7 @@ export interface DatabaseIpcRenderer {
   searchPrompt: (name: string) => Promise<Prompt[]>;
   getPromptById: (id: number) => Promise<Prompt>;
   getPromptsByIds: (ids: number[]) => Promise<Prompt[]>;
+  setMessageCollapseById: (id: number, collapse: boolean) => Promise<void>;
 }
 
 export const databaseIpcRenderer: DatabaseIpcRenderer = {
@@ -40,4 +41,6 @@ export const databaseIpcRenderer: DatabaseIpcRenderer = {
   searchPrompt: (name) => ipcRenderer.invoke("search-prompts", name),
   getPromptById: (id) => ipcRenderer.invoke("get-prompt", id),
   getPromptsByIds: (ids) => ipcRenderer.invoke("get-prompts-by-ids", ids),
+  setMessageCollapseById: (id, collapse) =>
+    ipcRenderer.invoke("set-message-collapse", id, collapse),
 };

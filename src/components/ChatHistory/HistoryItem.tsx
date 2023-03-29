@@ -74,15 +74,18 @@ const HistoryItem = memo(({ name, id }: Chat) => {
                     {
                       title: <ModalTitle title="Delete Chat" />,
                       onConfirm: () => {
-                        window.electronAPI.databaseIpcRenderer.deleteChat(id);
-                        if (id === selectedChatId) {
-                          dispatch(newChat());
-                        }
-
                         window.electronAPI.databaseIpcRenderer
-                          .getAllChats()
-                          .then((chats) => {
-                            dispatch(setChats(chats));
+                          .deleteChat(id)
+                          .then(() => {
+                            if (id === selectedChatId) {
+                              dispatch(newChat());
+                            }
+
+                            window.electronAPI.databaseIpcRenderer
+                              .getAllChats()
+                              .then((chats) => {
+                                dispatch(setChats(chats));
+                              });
                           });
                       },
                     },

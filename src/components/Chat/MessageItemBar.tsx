@@ -1,9 +1,10 @@
-import { ActionIcon, Button, clsx, Tooltip } from "@mantine/core";
+import { ActionIcon, Button, clsx, Popover, Tooltip } from "@mantine/core";
 import {
   IconArrowBarDown,
   IconArrowBarUp,
   IconCloud,
   IconCloudOff,
+  IconEye,
   IconTrash,
   TablerIconsProps,
 } from "@tabler/icons-react";
@@ -18,7 +19,17 @@ import {
 } from "../../reducers/chatSlice";
 import { requestPromptApi } from "../../services/openAI/apiConfig";
 import { setActionId } from "../../reducers/promptSlice";
+import { useDisclosure } from "@mantine/hooks";
+import { RenderContent } from "./MessageItem";
 
+interface MessageItemBarProps {
+  msg: Message;
+  index: number;
+  expanded: boolean;
+  onDelete: () => void;
+  onToggleExpanded: () => void;
+  actionId: string;
+}
 const MessageItemBar = ({
   msg,
   index,
@@ -26,14 +37,7 @@ const MessageItemBar = ({
   expanded,
   onToggleExpanded,
   actionId,
-}: {
-  msg: Message;
-  index: number;
-  expanded: boolean;
-  onDelete: () => void;
-  onToggleExpanded: () => void;
-  actionId: string;
-}) => {
+}: MessageItemBarProps) => {
   const dispatch = useAppDispatch();
   const [actionItems, setActionItems] = useState<Prompt[]>([]);
   const [runningActionName, setRunningActionName] = useState("");
@@ -64,7 +68,7 @@ const MessageItemBar = ({
         tooltip: "Delete",
       },
     ],
-    [expanded]
+    [expanded, msg.inPrompts]
   );
 
   useEffect(() => {
@@ -116,6 +120,7 @@ const MessageItemBar = ({
       <div className="flex items-center">
         <RenderTime {...msg} />
         <RenderTokensCount {...msg} />
+        {!expanded && <RenderPreviewButton {...msg} />}
       </div>
       <div className="flex">
         <div
@@ -230,6 +235,37 @@ const RenderTokensCount = (msg: Message) => {
       ],
       true
     )} tokens`}</div>
+  );
+};
+
+const RenderPreviewButton = (msg: Message) => {
+  const [opened, { close, open }] = useDisclosure(false);
+
+  return (
+    <Popover
+      width={500}
+      position="bottom-start"
+      withArrow
+      shadow="md"
+      opened={opened}
+      radius="md"
+    >
+      <Popover.Target>
+        <ActionIcon
+          className="ml-1"
+          size="xs"
+          onMouseEnter={open}
+          onMouseLeave={close}
+        >
+          <IconEye size={14} className="text-violet-500" />
+        </ActionIcon>
+      </Popover.Target>
+      <Popover.Dropdown>
+        <div style={{ maxHeight: "280px" }} className="overflow-hidden">
+          <RenderContent msg={msg} msgKey={"text"} />
+        </div>
+      </Popover.Dropdown>
+    </Popover>
   );
 };
 

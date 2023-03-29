@@ -98,8 +98,10 @@ const dbInit = async () => {
   // Delete chat by chat.id
   ipcMain.handle("delete-chat", async (event, id: number) => {
     try {
-      const result = await ChatIns.destroy({ where: { id: id } });
-      return result;
+      return sequelize.transaction(async (transaction) => {
+        await MessageIns.destroy({ where: { chatId: id }, transaction });
+        await ChatIns.destroy({ where: { id: id }, transaction });
+      });
     } catch (err) {
       throw new Error("failed");
     }
@@ -221,6 +223,22 @@ const dbInit = async () => {
       throw new Error("failed");
     }
   });
+
+  // set Message.collapse by message.id
+  ipcMain.handle(
+    "set-message-collapse",
+    async (event, id: number, collapse: boolean) => {
+      try {
+        const result = await MessageIns.update(
+          { collapse: collapse },
+          { where: { id: id } }
+        );
+        return result;
+      } catch (err) {
+        throw new Error("failed");
+      }
+    }
+  );
 };
 
 export { dbInit };

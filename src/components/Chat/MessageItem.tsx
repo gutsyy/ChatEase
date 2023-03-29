@@ -15,7 +15,7 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const actionId = useMemo(() => v4(), [msg.id]);
-  const [opened, { toggle }] = useDisclosure(true);
+  const [opened, { toggle }] = useDisclosure(!msg.collapse);
   const [renderContentState, setRenderContentState] = useState<boolean>(true);
 
   const onDelete = useCallback(() => {
@@ -42,22 +42,30 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
     }
   }, [msg.id]);
 
-  const toggleCollapse = () => {
+  const onToggleCollapse = () => {
     if (opened) {
       toggle();
       setTimeout(() => {
         setRenderContentState(false);
+        window.electronAPI.databaseIpcRenderer.setMessageCollapseById(
+          msg.id,
+          true
+        );
       }, 200);
     } else {
       setRenderContentState(true);
       setTimeout(() => {
         toggle();
+        window.electronAPI.databaseIpcRenderer.setMessageCollapseById(
+          msg.id,
+          false
+        );
       });
     }
   };
 
   return (
-    <div ref={containerRef} style={{ overflow: "hidden" }}>
+    <div ref={containerRef}>
       <div
         className={clsx(
           "p-3 mb-4 rounded-lg relative",
@@ -101,7 +109,7 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
             actionId={actionId}
             onDelete={onDelete}
             expanded={opened}
-            onToggleExpanded={() => toggleCollapse()}
+            onToggleExpanded={() => onToggleCollapse()}
           />
         </div>
         <Collapse
@@ -168,7 +176,7 @@ const StopGenerationButton = ({ actionId }: { actionId: string }) => {
   );
 };
 
-const RenderContent = ({
+export const RenderContent = ({
   msg,
   msgKey,
 }: {
