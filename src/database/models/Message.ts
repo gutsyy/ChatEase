@@ -7,6 +7,7 @@ export interface Message {
   timestamp: number;
   chatId: number;
   inPrompts?: boolean;
+  collapse?: boolean;
   actionResult?: string;
 }
 
@@ -28,6 +29,10 @@ const MessageDefine = {
     chatId: {
       type: DataTypes.NUMBER,
       allowNull: false,
+    },
+    collapse: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
   },
 };

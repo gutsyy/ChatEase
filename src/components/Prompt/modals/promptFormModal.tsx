@@ -9,11 +9,9 @@ import { ModalTitle } from "../../../pureComponents/ModalTitle";
 
 const PromptForm = (initialValues: Prompt) => {
   const theme = useMantineTheme();
-
   const form = useForm({
     initialValues,
   });
-
   const dispatch = useAppDispatch();
 
   const handleSubmit = (event: FormEvent) => {

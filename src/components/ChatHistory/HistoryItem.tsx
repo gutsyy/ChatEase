@@ -14,61 +14,8 @@ import { useForm } from "@mantine/form";
 import { openDeleteConfirmModal } from "../modals/customModals";
 import { ModalTitle } from "../../pureComponents/ModalTitle";
 
-const ChatNameEditForm = (chat: Chat) => {
-  const dispatch = useAppDispatch();
-
-  const form = useForm({
-    initialValues: {
-      name: chat ? chat.name : "",
-    },
-    validate: {
-      name: (value: string) => (value.trim() ? null : "Please enter a name"),
-    },
-  });
-
-  return (
-    <form
-      onSubmit={form.onSubmit((values) => {
-        window.electronAPI.databaseIpcRenderer.updateChatName(
-          chat.id,
-          values.name
-        );
-
-        window.electronAPI.databaseIpcRenderer.getAllChats().then((chats) => {
-          dispatch(setChats(chats));
-        });
-
-        renderDate.date = "";
-        closeAllModals();
-      })}
-    >
-      <TextInput
-        size="xs"
-        variant="filled"
-        label="Chat's Name"
-        withAsterisk
-        {...form.getInputProps("name")}
-      ></TextInput>
-      <div className="flex justify-end items-center mt-4">
-        <Button
-          variant="outline"
-          size="xs"
-          color="violet"
-          onClick={() => closeAllModals()}
-        >
-          Cancel
-        </Button>
-        <Button className="ml-2" size="xs" type="submit" color="violet">
-          Confirm
-        </Button>
-      </div>
-    </form>
-  );
-};
-
 const HistoryItem = memo(({ name, id }: Chat) => {
   const dispatch = useAppDispatch();
-
   const selectedChatId = useAppSelector((state) => state.chat.selectedChatId);
 
   return (
@@ -152,5 +99,56 @@ const HistoryItem = memo(({ name, id }: Chat) => {
     </>
   );
 });
+
+const ChatNameEditForm = (chat: Chat) => {
+  const dispatch = useAppDispatch();
+  const form = useForm({
+    initialValues: {
+      name: chat ? chat.name : "",
+    },
+    validate: {
+      name: (value: string) => (value.trim() ? null : "Please enter a name"),
+    },
+  });
+
+  return (
+    <form
+      onSubmit={form.onSubmit((values) => {
+        window.electronAPI.databaseIpcRenderer.updateChatName(
+          chat.id,
+          values.name
+        );
+
+        window.electronAPI.databaseIpcRenderer.getAllChats().then((chats) => {
+          dispatch(setChats(chats));
+        });
+
+        renderDate.date = "";
+        closeAllModals();
+      })}
+    >
+      <TextInput
+        size="xs"
+        variant="filled"
+        label="Chat's Name"
+        withAsterisk
+        {...form.getInputProps("name")}
+      ></TextInput>
+      <div className="flex justify-end items-center mt-4">
+        <Button
+          variant="outline"
+          size="xs"
+          color="violet"
+          onClick={() => closeAllModals()}
+        >
+          Cancel
+        </Button>
+        <Button className="ml-2" size="xs" type="submit" color="violet">
+          Confirm
+        </Button>
+      </div>
+    </form>
+  );
+};
 
 export default HistoryItem;

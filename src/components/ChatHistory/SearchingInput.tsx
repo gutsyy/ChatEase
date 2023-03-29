@@ -6,7 +6,6 @@ import { setChats } from "../../reducers/chatSlice";
 
 const SearchingInput = () => {
   const dispatch = useAppDispatch();
-
   const [keywords, setKeywords] = useState<string>("");
 
   const onSearching = (e: FormEvent) => {

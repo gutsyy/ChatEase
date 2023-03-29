@@ -10,6 +10,135 @@ import { useDisclosure } from "@mantine/hooks";
 import { v4 } from "uuid";
 import { setPromptIsResponsing } from "../../reducers/promptSlice";
 
+const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
+  const dispatch = useAppDispatch();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const actionId = useMemo(() => v4(), [msg.id]);
+  const [opened, { toggle }] = useDisclosure(true);
+  const [renderContentState, setRenderContentState] = useState<boolean>(true);
+
+  const onDelete = useCallback(() => {
+    if (containerRef.current && contentRef.current) {
+      containerRef.current.style.maxHeight = `${
+        contentRef.current.clientHeight + 16
+      }px`;
+      containerRef.current.style.opacity = "1";
+
+      containerRef.current.className = "transition-all ease-out duration-300";
+
+      containerRef.current.addEventListener("transitionend", () => {
+        window.electronAPI.databaseIpcRenderer
+          .deleteMessage(msg.id)
+          .then(() => {
+            dispatch(updateMessages(msg.chatId));
+          });
+      });
+
+      setTimeout(() => {
+        containerRef.current.style.maxHeight = "0px";
+        containerRef.current.style.opacity = "0";
+      });
+    }
+  }, [msg.id]);
+
+  const toggleCollapse = () => {
+    if (opened) {
+      toggle();
+      setTimeout(() => {
+        setRenderContentState(false);
+      }, 200);
+    } else {
+      setRenderContentState(true);
+      setTimeout(() => {
+        toggle();
+      });
+    }
+  };
+
+  return (
+    <div ref={containerRef} style={{ overflow: "hidden" }}>
+      <div
+        className={clsx(
+          "p-3 mb-4 rounded-lg relative",
+          msg.sender === "user" && "bg-white",
+          msg.sender === "assistant" && "bg-gray-100"
+        )}
+        ref={contentRef}
+      >
+        <div className="flex justify-start items-center w-full">
+          <div className="flex justify-start items-center">
+            {msg.sender === "assistant" ? (
+              <IconBrandOpenai
+                className={clsx(
+                  "mr-1",
+                  !msg.inPrompts && "text-gray-300",
+                  msg.inPrompts && "text-violet-500"
+                )}
+                size={12}
+              />
+            ) : (
+              <IconUserCircle
+                size={13}
+                className={clsx(
+                  "mr-1",
+                  msg.inPrompts && "text-gray-500",
+                  !msg.inPrompts && "text-gray-300"
+                )}
+              />
+            )}
+            <Text
+              size="xs"
+              weight={500}
+              className={clsx("mr-2", !msg.inPrompts && "text-gray-300")}
+            >
+              <span>{msg.sender === "user" ? "You" : "ChatGPT"}</span>
+            </Text>
+          </div>
+          <MessageItemBar
+            msg={msg}
+            index={index}
+            actionId={actionId}
+            onDelete={onDelete}
+            expanded={opened}
+            onToggleExpanded={() => toggleCollapse()}
+          />
+        </div>
+        <Collapse
+          in={opened}
+          transitionDuration={200}
+          transitionTimingFunction="ease-out"
+        >
+          {renderContentState && (
+            <>
+              <RenderContent msg={msg} msgKey={"text"} />
+              {msg.actionResult && (
+                <>
+                  <Divider
+                    label="Action Result"
+                    labelPosition="center"
+                    color="gray"
+                    variant="dashed"
+                    className="mx-4"
+                    styles={{
+                      label: {
+                        font: "Greycliff CF",
+                        fontWeight: 700,
+                      },
+                    }}
+                  />
+                  <RenderContent msg={msg} msgKey={"actionResult"} />
+                </>
+              )}
+            </>
+          )}
+        </Collapse>
+        <StopGenerationButton actionId={actionId} />
+      </div>
+    </div>
+  );
+};
+
 const StopGenerationButton = ({ actionId }: { actionId: string }) => {
   const dispatch = useAppDispatch();
   const runningActionId = useAppSelector((state) => state.prompt.actionId);
@@ -68,136 +197,6 @@ const RenderContent = ({
         <p>{msg[msgKey]}</p>
       )}
     </Text>
-  );
-};
-
-const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
-  const dispatch = useAppDispatch();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-
-  const [opened, { toggle }] = useDisclosure(true);
-
-  const onDelete = useCallback(() => {
-    if (containerRef.current && contentRef.current) {
-      containerRef.current.style.maxHeight = `${
-        contentRef.current.clientHeight + 16
-      }px`;
-      containerRef.current.style.opacity = "1";
-
-      containerRef.current.className = "transition-all ease-out duration-300";
-
-      containerRef.current.addEventListener("transitionend", () => {
-        window.electronAPI.databaseIpcRenderer
-          .deleteMessage(msg.id)
-          .then(() => {
-            dispatch(updateMessages(msg.chatId));
-          });
-      });
-
-      setTimeout(() => {
-        containerRef.current.style.maxHeight = "0px";
-        containerRef.current.style.opacity = "0";
-      });
-    }
-  }, [msg.id]);
-
-  const actionId = useMemo(() => v4(), [msg.id]);
-
-  const [renderContentState, setRenderContentState] = useState<boolean>(true);
-
-  return (
-    <div ref={containerRef} style={{ overflow: "hidden" }}>
-      <div
-        className={clsx(
-          "p-3 mb-4 rounded-lg relative",
-          msg.sender === "user" && "bg-white",
-          msg.sender === "assistant" && "bg-gray-100"
-        )}
-        ref={contentRef}
-      >
-        <div className="flex justify-start items-center w-full">
-          <div className="flex justify-start items-center">
-            {msg.sender === "assistant" ? (
-              <IconBrandOpenai
-                className={clsx(
-                  "mr-1",
-                  !msg.inPrompts && "text-gray-300",
-                  msg.inPrompts && "text-violet-500"
-                )}
-                size={12}
-              />
-            ) : (
-              <IconUserCircle
-                size={13}
-                className={clsx(
-                  "mr-1",
-                  msg.inPrompts && "text-gray-500",
-                  !msg.inPrompts && "text-gray-300"
-                )}
-              />
-            )}
-            <Text
-              size="xs"
-              weight={500}
-              className={clsx("mr-2", !msg.inPrompts && "text-gray-300")}
-            >
-              <span>{msg.sender === "user" ? "You" : "ChatGPT"}</span>
-            </Text>
-          </div>
-          <MessageItemBar
-            msg={msg}
-            index={index}
-            actionId={actionId}
-            onDelete={onDelete}
-            expanded={opened}
-            onToggleExpanded={() => {
-              if (opened) {
-                toggle();
-                setTimeout(() => {
-                  setRenderContentState(false);
-                }, 200);
-              } else {
-                setRenderContentState(true);
-                setTimeout(() => {
-                  toggle();
-                });
-              }
-            }}
-          />
-        </div>
-        <Collapse
-          in={opened}
-          transitionDuration={200}
-          transitionTimingFunction="ease-out"
-        >
-          {renderContentState && (
-            <>
-              <RenderContent msg={msg} msgKey={"text"} />
-              {msg.actionResult && (
-                <>
-                  <Divider
-                    label="Action Result"
-                    labelPosition="center"
-                    color="gray"
-                    variant="dashed"
-                    className="mx-4"
-                    styles={{
-                      label: {
-                        font: "Greycliff CF",
-                        fontWeight: 700,
-                      },
-                    }}
-                  />
-                  <RenderContent msg={msg} msgKey={"actionResult"} />
-                </>
-              )}
-            </>
-          )}
-        </Collapse>
-        <StopGenerationButton actionId={actionId} />
-      </div>
-    </div>
   );
 };
 

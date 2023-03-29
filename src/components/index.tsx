@@ -1,4 +1,4 @@
-import Chat from "./Chat/Chat";
+import Chat from "./Chat";
 import { PromptPanel } from "./Prompt/PromptPanel";
 import { useAppSelector } from "../hooks/redux";
 import { SideExtend } from "./SideExtend";

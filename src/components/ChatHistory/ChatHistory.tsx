@@ -3,7 +3,7 @@ import { IconPlus, IconTrash } from "@tabler/icons-react";
 import { useEffect, useRef } from "react";
 import { newChat, setChats } from "../../reducers/chatSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { closeAllModals, openConfirmModal } from "@mantine/modals";
+import { closeAllModals } from "@mantine/modals";
 import SearchingInput from "./SearchingInput";
 import HistoryItem from "./HistoryItem";
 import ScrollableList from "../../pureComponents/ScrollableList";
@@ -16,10 +16,7 @@ import { ModalTitle } from "../../pureComponents/ModalTitle";
 export const ChatHistory = () => {
   const dispatch = useAppDispatch();
   const chats = useAppSelector((state) => state.chat.chats);
-
-  const onNewChat = () => {
-    dispatch(newChat());
-  };
+  const historyContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     window.electronAPI.databaseIpcRenderer.getAllChats().then((chats) => {
@@ -27,7 +24,32 @@ export const ChatHistory = () => {
     });
   }, []);
 
-  const historyContainerRef = useRef<HTMLDivElement>(null);
+  const onNewChat = () => {
+    dispatch(newChat());
+  };
+
+  const handleClearAllHistory = () => {
+    openDeleteConfirmModal(
+      {
+        title: <ModalTitle title="Clear All Chat History" />,
+        children: (
+          <Text color="red" size="sm">
+            Are you sure you want to delete all chat history? This action is
+            irreversible.
+          </Text>
+        ),
+        onCancel: () => closeAllModals(),
+        onConfirm: () => {
+          window.electronAPI.databaseIpcRenderer.deleteAllChats();
+          window.electronAPI.databaseIpcRenderer.getAllChats().then((chats) => {
+            dispatch(setChats(chats));
+          });
+          dispatch(newChat());
+        },
+      },
+      ""
+    );
+  };
 
   return (
     <div className="w-full h-full flex justify-center p-1">
@@ -76,28 +98,7 @@ export const ChatHistory = () => {
             size="xs"
             leftIcon={<IconTrash size={14} />}
             onClick={() => {
-              openDeleteConfirmModal(
-                {
-                  title: <ModalTitle title="Clear All Chat History" />,
-                  children: (
-                    <Text color="red" size="sm">
-                      Are you sure you want to delete all chat history? This
-                      action is irreversible.
-                    </Text>
-                  ),
-                  onCancel: () => closeAllModals(),
-                  onConfirm: () => {
-                    window.electronAPI.databaseIpcRenderer.deleteAllChats();
-                    window.electronAPI.databaseIpcRenderer
-                      .getAllChats()
-                      .then((chats) => {
-                        dispatch(setChats(chats));
-                      });
-                    dispatch(newChat());
-                  },
-                },
-                ""
-              );
+              handleClearAllHistory();
             }}
           >
             Clear all chats

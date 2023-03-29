@@ -7,7 +7,7 @@ import {
   IconTrash,
   TablerIconsProps,
 } from "@tabler/icons-react";
-import { forwardRef, LegacyRef, useEffect, useState } from "react";
+import { forwardRef, LegacyRef, useEffect, useMemo, useState } from "react";
 import { Prompt } from "../../database/models/Prompt";
 import { Message } from "../../database/models/Message";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
@@ -18,51 +18,6 @@ import {
 } from "../../reducers/chatSlice";
 import { requestPromptApi } from "../../services/openAI/apiConfig";
 import { setActionId } from "../../reducers/promptSlice";
-
-interface ActionIconButtonProps {
-  icon: (props: TablerIconsProps) => JSX.Element;
-  onClick: () => void;
-  tooltip: string;
-}
-
-const ActionIconButton = ({
-  icon: Icon,
-  onClick,
-  tooltip,
-}: ActionIconButtonProps) => (
-  <div
-    className="ml-2 flex justify-center items-center"
-    onClick={() => {
-      onClick();
-    }}
-  >
-    <Tooltip
-      styles={{
-        tooltip: {
-          fontSize: "12px",
-        },
-      }}
-      label={tooltip}
-      withArrow
-    >
-      <ActionIcon size="xs" color="violet">
-        <Icon className="text-gray-500" size={14} />
-      </ActionIcon>
-    </Tooltip>
-  </div>
-);
-
-const withIconStyle = (
-  icon: (props: TablerIconsProps) => JSX.Element,
-  setProps: TablerIconsProps
-) => {
-  const Icon = icon;
-  return forwardRef(
-    (props: TablerIconsProps, ref: LegacyRef<SVGSVGElement>) => (
-      <Icon {...props} {...setProps} ref={ref} />
-    )
-  );
-};
 
 const MessageItemBar = ({
   msg,
@@ -80,71 +35,37 @@ const MessageItemBar = ({
   actionId: string;
 }) => {
   const dispatch = useAppDispatch();
-
-  const renderTime = (
-    <div
-      className={clsx(
-        "text-xs italic",
-        msg.inPrompts && "text-gray-400",
-        !msg.inPrompts && "text-gray-300"
-      )}
-    >
-      {new Date(msg.timestamp * 1000).toLocaleTimeString()}
-    </div>
-  );
-
-  const actionsDefine: ActionIconButtonProps[] = [
-    {
-      icon: expanded
-        ? withIconStyle(IconArrowBarUp, { className: "text-gray-400" })
-        : withIconStyle(IconArrowBarDown, { className: "text-violet-500" }),
-      onClick: () => onToggleExpanded(),
-      tooltip: expanded ? "collapse" : "expand",
-    },
-    {
-      icon: msg.inPrompts
-        ? withIconStyle(IconCloud, { className: "text-violet-500" })
-        : withIconStyle(IconCloudOff, { className: "text-gray-400" }),
-      onClick: () => dispatch(toggleMessagePrompt(index)),
-      tooltip: `${msg.inPrompts ? "In" : "Not in"} promps`,
-    },
-    {
-      icon: withIconStyle(IconTrash, { className: "text-red-500" }),
-      onClick: () => onDelete(),
-      tooltip: "Delete",
-    },
-  ];
-
-  const renderActions = (
-    <>
-      {actionsDefine.map((action, i) => (
-        <ActionIconButton key={i} {...action} />
-      ))}
-    </>
-  );
-
-  const renderTokensCount = (
-    <>
-      <div
-        className={clsx(
-          "text-xs px-1 ml-3 rounded-sm mr-1 font-greycliff",
-          msg.inPrompts
-            ? "bg-violet-100 text-violet-500"
-            : "bg-gray-200 text-white"
-        )}
-      >{`${window.electronAPI.othersIpcRenderer.calMessagesTokens(
-        [
-          {
-            role: msg.sender,
-            content: msg.text,
-          },
-        ],
-        true
-      )} tokens`}</div>
-    </>
-  );
-
   const [actionItems, setActionItems] = useState<Prompt[]>([]);
+  const [runningActionName, setRunningActionName] = useState("");
+  const answerContent = useAppSelector((state) => state.prompt.answerContent);
+  const runningActionId = useAppSelector((state) => state.prompt.actionId);
+  const isPromptResponsing = useAppSelector(
+    (state) => state.prompt.isPromptResponsing
+  );
+  const actionsDefine: RenderActionButtonProps[] = useMemo(
+    () => [
+      {
+        icon: expanded
+          ? withIconStyle(IconArrowBarUp, { className: "text-gray-400" })
+          : withIconStyle(IconArrowBarDown, { className: "text-violet-500" }),
+        onClick: () => onToggleExpanded(),
+        tooltip: expanded ? "collapse" : "expand",
+      },
+      {
+        icon: msg.inPrompts
+          ? withIconStyle(IconCloud, { className: "text-violet-500" })
+          : withIconStyle(IconCloudOff, { className: "text-gray-400" }),
+        onClick: () => dispatch(toggleMessagePrompt(index)),
+        tooltip: `${msg.inPrompts ? "In" : "Not in"} promps`,
+      },
+      {
+        icon: withIconStyle(IconTrash, { className: "text-red-500" }),
+        onClick: () => onDelete(),
+        tooltip: "Delete",
+      },
+    ],
+    [expanded]
+  );
 
   useEffect(() => {
     window.electronAPI.databaseIpcRenderer
@@ -158,27 +79,6 @@ const MessageItemBar = ({
       });
   }, []);
 
-  const [runningActionName, setRunningActionName] = useState("");
-
-  const handleActionClick = (prompt: Prompt, message: string) => {
-    dispatch(setActionId(actionId));
-    setRunningActionName(prompt.name);
-    dispatch(clearMessageActionResultByIndex(index));
-    requestPromptApi(prompt, message);
-  };
-
-  const answerContent = useAppSelector((state) => state.prompt.answerContent);
-  const runningActionId = useAppSelector((state) => state.prompt.actionId);
-  const isPromptResponsing = useAppSelector(
-    (state) => state.prompt.isPromptResponsing
-  );
-
-  if (!isPromptResponsing) {
-    if (runningActionName) {
-      setRunningActionName("");
-    }
-  }
-
   useEffect(() => {
     if (answerContent && runningActionId === actionId) {
       dispatch(
@@ -190,11 +90,32 @@ const MessageItemBar = ({
     }
   }, [answerContent, runningActionId]);
 
+  const handleActionClick = (prompt: Prompt, message: string) => {
+    dispatch(setActionId(actionId));
+    setRunningActionName(prompt.name);
+    dispatch(clearMessageActionResultByIndex(index));
+    requestPromptApi(prompt, message);
+  };
+
+  const renderActions = (
+    <>
+      {actionsDefine.map((action, i) => (
+        <RenderActionButton key={i} {...action} />
+      ))}
+    </>
+  );
+
+  if (!isPromptResponsing) {
+    if (runningActionName) {
+      setRunningActionName("");
+    }
+  }
+
   return (
     <div className="flex-1 flex justify-between items-center">
       <div className="flex items-center">
-        <>{renderTime}</>
-        <>{renderTokensCount}</>
+        <RenderTime {...msg} />
+        <RenderTokensCount {...msg} />
       </div>
       <div className="flex">
         <div
@@ -241,6 +162,86 @@ const MessageItemBar = ({
         <div className="flex">{renderActions}</div>
       </div>
     </div>
+  );
+};
+
+interface RenderActionButtonProps {
+  icon: (props: TablerIconsProps) => JSX.Element;
+  onClick: () => void;
+  tooltip: string;
+}
+
+const RenderActionButton = ({
+  icon: Icon,
+  onClick,
+  tooltip,
+}: RenderActionButtonProps) => (
+  <div
+    className="ml-2 flex justify-center items-center"
+    onClick={() => {
+      onClick();
+    }}
+  >
+    <Tooltip
+      styles={{
+        tooltip: {
+          fontSize: "12px",
+        },
+      }}
+      label={tooltip}
+      withArrow
+    >
+      <ActionIcon size="xs" color="violet">
+        <Icon className="text-gray-500" size={14} />
+      </ActionIcon>
+    </Tooltip>
+  </div>
+);
+
+const RenderTime = (msg: Message) => {
+  return (
+    <div
+      className={clsx(
+        "text-xs italic",
+        msg.inPrompts && "text-gray-400",
+        !msg.inPrompts && "text-gray-300"
+      )}
+    >
+      {new Date(msg.timestamp * 1000).toLocaleTimeString()}
+    </div>
+  );
+};
+
+const RenderTokensCount = (msg: Message) => {
+  return (
+    <div
+      className={clsx(
+        "text-xs px-1 ml-3 rounded-sm mr-1 font-greycliff",
+        msg.inPrompts
+          ? "bg-violet-100 text-violet-500"
+          : "bg-gray-200 text-white"
+      )}
+    >{`${window.electronAPI.othersIpcRenderer.calMessagesTokens(
+      [
+        {
+          role: msg.sender,
+          content: msg.text,
+        },
+      ],
+      true
+    )} tokens`}</div>
+  );
+};
+
+const withIconStyle = (
+  icon: (props: TablerIconsProps) => JSX.Element,
+  setProps: TablerIconsProps
+) => {
+  const Icon = icon;
+  return forwardRef(
+    (props: TablerIconsProps, ref: LegacyRef<SVGSVGElement>) => (
+      <Icon {...props} {...setProps} ref={ref} />
+    )
   );
 };
 

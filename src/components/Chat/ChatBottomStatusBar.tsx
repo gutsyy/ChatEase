@@ -1,5 +1,5 @@
 import { useAppSelector } from "../../hooks/redux";
-import ChatStatistics from "./ChatStatistics";
+import { ChatStatistics } from "./ChatStatistics";
 import { RenderStopGenerationButton } from "./StopGenerationButton";
 
 interface ChatBottomStatusBarProps {

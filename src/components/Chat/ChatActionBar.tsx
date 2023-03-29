@@ -4,17 +4,14 @@ import { useEffect, useState } from "react";
 import { useAppSelector } from "../../hooks/redux";
 import { Prompt } from "../../database/models/Prompt";
 
-export const ChatActionBar = ({
-  visible,
-  onClick,
-}: {
+interface ChatActionBarProps {
   visible: boolean;
   onClick: (prompt: Prompt) => boolean;
-}) => {
+}
+
+export const ChatActionBar = ({ visible, onClick }: ChatActionBarProps) => {
   const [runningActionId, setRunningActionId] = useState(-1);
-
   const [actions, setActions] = useState<Prompt[]>([]);
-
   const actionId = useAppSelector((state) => state.prompt.actionId);
 
   useEffect(() => {

@@ -1,11 +1,5 @@
 import { Textarea, ActionIcon } from "@mantine/core";
-import {
-  IconX,
-  IconArrowBackUp,
-  IconMessageCircle,
-  IconSend,
-  IconBrandTelegram,
-} from "@tabler/icons-react";
+import { IconX, IconArrowBackUp, IconBrandTelegram } from "@tabler/icons-react";
 import {
   forwardRef,
   MutableRefObject,
@@ -56,20 +50,37 @@ export const ChatInputBox = forwardRef(
     ref: MutableRefObject<HTMLTextAreaElement>
   ) => {
     const dispatch = useAppDispatch();
-
     const isPromptResponsing = useAppSelector(
       (state) => state.prompt.isPromptResponsing
     );
-
     const isResponsing = useAppSelector((state) => state.chat.isResponsing);
     const promptTokens = useAppSelector(
       (state) => state.chat.totalPromptTokens
     );
     const runningActionId = useAppSelector((state) => state.prompt.actionId);
     const answerContent = useAppSelector((state) => state.prompt.answerContent);
-
     const [message, setMessage] = useState<string>();
     const [actionsBarVisible, setActionsBarVisible] = useState<boolean>(false);
+    const textAreaInputWaitingActionResponseState = useMemo(
+      () => isPromptResponsing && runningActionId === "chat-action",
+      [isPromptResponsing, runningActionId]
+    );
+    const { ref: inputBoxRef, focused } = useFocusWithin();
+    const textAreaRef = useRef<HTMLTextAreaElement>(null);
+    const _textAreaRef = useMergedRef(textAreaRef, ref);
+
+    useEffect(() => {
+      setActionsBarVisible(focused);
+    }, [focused]);
+    useEffect(() => {
+      if (runningActionId === "chat-action") {
+        setMessage(answerContent);
+        if (!isPromptResponsing) {
+          dispatch(setActionId(""));
+          textAreaRef.current.focus();
+        }
+      }
+    }, [answerContent, isPromptResponsing]);
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       const target = e.target as HTMLTextAreaElement;
@@ -81,7 +92,6 @@ export const ChatInputBox = forwardRef(
         );
       }
     };
-
     const handleSendMessage = async (e: React.FormEvent) => {
       e.preventDefault();
       setActionsBarVisible(false);
@@ -133,12 +143,6 @@ export const ChatInputBox = forwardRef(
       // Send request to OpenAI
       requestApi(_chatId, sendMessages);
     };
-
-    const textAreaInputWaitingActionResponseState = useMemo(
-      () => isPromptResponsing && runningActionId === "chat-action",
-      [isPromptResponsing, runningActionId]
-    );
-
     const handlePromptAction = (prompt: Prompt): boolean => {
       if (!message || !message.trim()) {
         return false;
@@ -148,24 +152,6 @@ export const ChatInputBox = forwardRef(
       requestPromptApi(prompt, message);
       return true;
     };
-
-    const { ref: inputBoxRef, focused } = useFocusWithin();
-    const textAreaRef = useRef<HTMLTextAreaElement>(null);
-    const _textAreaRef = useMergedRef(textAreaRef, ref);
-
-    useEffect(() => {
-      setActionsBarVisible(focused);
-    }, [focused]);
-
-    useEffect(() => {
-      if (runningActionId === "chat-action") {
-        setMessage(answerContent);
-        if (!isPromptResponsing) {
-          dispatch(setActionId(""));
-          textAreaRef.current.focus();
-        }
-      }
-    }, [answerContent, isPromptResponsing]);
 
     return (
       <div ref={inputBoxRef}>

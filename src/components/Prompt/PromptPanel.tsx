@@ -24,6 +24,7 @@ export const PromptPanel = () => {
   );
   const [inputContent, setInputContent] = useState<string>("");
   const textAreaInputRef = useRef<HTMLTextAreaElement>(null);
+  const [selectedPrompt, setSelectedPrompt] = useState<Prompt>(null);
 
   useEffect(() => {
     setInputContent("");
@@ -31,8 +32,6 @@ export const PromptPanel = () => {
       textAreaInputRef.current?.focus();
     }
   }, [selectedPromptId]);
-
-  const [selectedPrompt, setSelectedPrompt] = useState<Prompt>(null);
 
   useEffect(() => {
     if (selectedPromptId === -1) {

@@ -1,19 +1,25 @@
 import { useEffect } from "react";
-import { Message } from "../../database/models/Message";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { setTokensBoxWarningStateToFalse } from "../../reducers/chatSlice";
-import { Text } from "@mantine/core";
+import { clsx, Text } from "@mantine/core";
 
-const ChatStatistics = ({
-  messagesInPromptsNum,
-}: {
+interface ChatStatisticsProps {
   messagesInPromptsNum: number;
-}) => {
-  const dispatch = useAppDispatch();
+}
 
+export const ChatStatistics = ({
+  messagesInPromptsNum,
+}: ChatStatisticsProps) => {
+  const dispatch = useAppDispatch();
   const warningState = useAppSelector(
     (state) => state.chat.tokensBoxWarningState
   );
+  const messageTokens = useAppSelector((state) => state.chat.inputBoxTokens);
+  const promptTokens = useAppSelector((state) => state.chat.totalPromptTokens);
+
+  const messages_limit =
+    window.electronAPI.storeIpcRenderer.get("max_messages_num");
+  const tokens_limit = window.electronAPI.storeIpcRenderer.get("max_tokens");
 
   useEffect(() => {
     if (warningState) {
@@ -23,25 +29,13 @@ const ChatStatistics = ({
     }
   }, [warningState]);
 
-  const messageTokens = useAppSelector((state) => state.chat.inputBoxTokens);
-
-  const promptTokens = useAppSelector((state) => state.chat.totalPromptTokens);
-
-  const messages_limit =
-    window.electronAPI.storeIpcRenderer.get("max_messages_num");
-
-  const tokens_limit = window.electronAPI.storeIpcRenderer.get("max_tokens");
-
-  const classDefaultStyles =
-    "italic bg-white text-gray-900 px-3 py-1 rounded-full shadow overflow-hidden";
-
-  const classWarningStyles =
-    "italic bg-white text-gray-900 px-3 py-1 rounded-full shadow outline outline-2 outline-red-500 bg-red-300 px-4 overflow-hidden";
-
   return (
     <div className="sticky bg-transparent flex justify-center bottom-0 z-50">
       <div
-        className={warningState ? classWarningStyles : classDefaultStyles}
+        className={clsx(
+          "italic bg-white text-gray-900 px-3 py-1 rounded-full shadow overflow-hidden",
+          warningState && "outline outline-2 outline-red-500"
+        )}
         style={{
           display: "inline-block",
           height: warningState ? "42.59px" : "26.59px",
@@ -66,12 +60,10 @@ const ChatStatistics = ({
           </Text>
           <Text
             size="xs"
-            className={
-              "ml-2 " +
-              (warningState === "messages_limit"
-                ? "text-red-500 font-bold"
-                : "")
-            }
+            className={clsx(
+              "ml-2",
+              warningState === "messages_limit" && "text-red-500 font-bold"
+            )}
           >
             {`Messages in prompt: ${messagesInPromptsNum} (max: ${messages_limit})`}
           </Text>
@@ -80,5 +72,3 @@ const ChatStatistics = ({
     </div>
   );
 };
-
-export default ChatStatistics;
