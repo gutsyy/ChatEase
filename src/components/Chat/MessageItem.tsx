@@ -1,9 +1,9 @@
-import { IconAlien, IconBrandOpenai } from "@tabler/icons-react";
+import { IconBrandOpenai, IconUserCircle } from "@tabler/icons-react";
 import { Markdown } from "../../pureComponents/Markdown";
 import { Message } from "../../database/models/Message";
 import MessageItemBar from "./MessageItemBar";
 import { Button, clsx, Collapse, Divider, Text } from "@mantine/core";
-import { memo, useCallback, useMemo, useRef } from "react";
+import { memo, useCallback, useMemo, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { updateMessages } from "../../reducers/chatSlice";
 import { useDisclosure } from "@mantine/hooks";
@@ -23,7 +23,7 @@ const StopGenerationButton = ({ actionId }: { actionId: string }) => {
         <div className="sticky w-full flex bg-transparent justify-center bottom-0">
           <Button
             size="xs"
-            color="red"
+            color="violet"
             radius="lg"
             className="h-6"
             variant="light"
@@ -36,6 +36,38 @@ const StopGenerationButton = ({ actionId }: { actionId: string }) => {
         </div>
       )}
     </>
+  );
+};
+
+const RenderContent = ({
+  msg,
+  msgKey,
+}: {
+  msg: Message;
+  msgKey: "text" | "actionResult";
+}) => {
+  const codeScope = (
+    window.electronAPI.storeIpcRenderer.get("markdown_code_scope") as string
+  )
+    .split(",")
+    .map((language) => language.trim());
+
+  return (
+    <Text
+      size="xs"
+      className={clsx(
+        "ml-4 mr-2",
+        msg.inPrompts && "text-gray-900",
+        !msg.inPrompts && "text-gray-400",
+        msg.sender === "user" && "whitespace-pre-wrap"
+      )}
+    >
+      {msg.sender === "assistant" ? (
+        <Markdown text={msg[msgKey]} codeScope={codeScope} />
+      ) : (
+        <p>{msg[msgKey]}</p>
+      )}
+    </Text>
   );
 };
 
@@ -72,6 +104,8 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
 
   const actionId = useMemo(() => v4(), [msg.id]);
 
+  const [renderContentState, setRenderContentState] = useState<boolean>(true);
+
   return (
     <div ref={containerRef} style={{ overflow: "hidden" }}>
       <div
@@ -89,30 +123,24 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
                 className={clsx(
                   "mr-1",
                   !msg.inPrompts && "text-gray-300",
-                  msg.inPrompts && "text-blue-500"
+                  msg.inPrompts && "text-violet-500"
                 )}
                 size={12}
               />
             ) : (
-              <IconAlien
-                size={12}
+              <IconUserCircle
+                size={13}
                 className={clsx(
                   "mr-1",
-                  msg.inPrompts && "text-gray-400",
+                  msg.inPrompts && "text-gray-500",
                   !msg.inPrompts && "text-gray-300"
                 )}
               />
             )}
             <Text
               size="xs"
-              weight={700}
-              className={clsx(
-                "mr-2 font-greycliff tracking-wide",
-                !msg.inPrompts && "text-gray-300"
-              )}
-              style={{
-                transform: "translateY(0.8px)",
-              }}
+              weight={500}
+              className={clsx("mr-2", !msg.inPrompts && "text-gray-300")}
             >
               <span>{msg.sender === "user" ? "You" : "ChatGPT"}</span>
             </Text>
@@ -123,7 +151,19 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
             actionId={actionId}
             onDelete={onDelete}
             expanded={opened}
-            onToggleExpanded={toggle}
+            onToggleExpanded={() => {
+              if (opened) {
+                toggle();
+                setTimeout(() => {
+                  setRenderContentState(false);
+                }, 200);
+              } else {
+                setRenderContentState(true);
+                setTimeout(() => {
+                  toggle();
+                });
+              }
+            }}
           />
         </div>
         <Collapse
@@ -131,69 +171,27 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
           transitionDuration={200}
           transitionTimingFunction="ease-out"
         >
-          <Text
-            size="sm"
-            className={clsx(
-              "ml-4 mr-2",
-              msg.inPrompts && "text-gray-900",
-              !msg.inPrompts && "text-gray-400",
-              msg.sender === "user" && "whitespace-pre-wrap"
-            )}
-          >
-            {msg.sender === "assistant" ? (
-              <Markdown
-                text={msg.text}
-                codeScope={(
-                  window.electronAPI.storeIpcRenderer.get(
-                    "markdown_code_scope"
-                  ) as string
-                )
-                  .split(",")
-                  .map((language) => language.trim())}
-              />
-            ) : (
-              <p>{msg.text}</p>
-            )}
-          </Text>
-          {msg.actionResult && (
+          {renderContentState && (
             <>
-              <Divider
-                label="Action Result"
-                labelPosition="center"
-                color="gray"
-                variant="dashed"
-                className="mx-4"
-                styles={{
-                  label: {
-                    font: "Greycliff CF",
-                    fontWeight: 700,
-                  },
-                }}
-              />
-              <Text
-                size="sm"
-                className={clsx(
-                  "ml-4 mr-2",
-                  msg.inPrompts && "text-gray-900",
-                  !msg.inPrompts && "text-gray-400",
-                  msg.sender === "user" && "whitespace-pre-wrap"
-                )}
-              >
-                {msg.sender === "assistant" ? (
-                  <Markdown
-                    text={msg.actionResult}
-                    codeScope={(
-                      window.electronAPI.storeIpcRenderer.get(
-                        "markdown_code_scope"
-                      ) as string
-                    )
-                      .split(",")
-                      .map((language) => language.trim())}
+              <RenderContent msg={msg} msgKey={"text"} />
+              {msg.actionResult && (
+                <>
+                  <Divider
+                    label="Action Result"
+                    labelPosition="center"
+                    color="gray"
+                    variant="dashed"
+                    className="mx-4"
+                    styles={{
+                      label: {
+                        font: "Greycliff CF",
+                        fontWeight: 700,
+                      },
+                    }}
                   />
-                ) : (
-                  <p>{msg.actionResult}</p>
-                )}
-              </Text>
+                  <RenderContent msg={msg} msgKey={"actionResult"} />
+                </>
+              )}
             </>
           )}
         </Collapse>

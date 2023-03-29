@@ -9,7 +9,7 @@ export const ChatActionBar = ({
   onClick,
 }: {
   visible: boolean;
-  onClick: (prompt: Prompt) => void;
+  onClick: (prompt: Prompt) => boolean;
 }) => {
   const [runningActionId, setRunningActionId] = useState(-1);
 
@@ -49,10 +49,11 @@ export const ChatActionBar = ({
           radius="lg"
           size="xs"
           variant="gradient"
-          gradient={{ from: "#ed6ea0", to: "#ec8c69", deg: 35 }}
+          gradient={{ from: "#9B30FF", to: "#DA70D6", deg: 90 }}
           onClick={() => {
-            setRunningActionId(item.id);
-            onClick(item);
+            if (onClick(item)) {
+              setRunningActionId(item.id);
+            }
           }}
         >
           {item.name}

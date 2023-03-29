@@ -12,6 +12,7 @@ import {
 import { renderDate } from "./renderDate";
 import { useForm } from "@mantine/form";
 import { openDeleteConfirmModal } from "../modals/customModals";
+import { ModalTitle } from "../../pureComponents/ModalTitle";
 
 const ChatNameEditForm = (chat: Chat) => {
   const dispatch = useAppDispatch();
@@ -49,10 +50,15 @@ const ChatNameEditForm = (chat: Chat) => {
         {...form.getInputProps("name")}
       ></TextInput>
       <div className="flex justify-end items-center mt-4">
-        <Button variant="outline" size="xs" onClick={() => closeAllModals()}>
+        <Button
+          variant="outline"
+          size="xs"
+          color="violet"
+          onClick={() => closeAllModals()}
+        >
           Cancel
         </Button>
-        <Button className="ml-2" size="xs" type="submit">
+        <Button className="ml-2" size="xs" type="submit" color="violet">
           Confirm
         </Button>
       </div>
@@ -100,11 +106,11 @@ const HistoryItem = memo(({ name, id }: Chat) => {
               <ActionIcon
                 radius="xl"
                 size="sm"
-                color="gray"
+                color="violet"
                 onClick={(e) => {
                   e.stopPropagation();
                   openModal({
-                    title: "Set Chat's Name",
+                    title: <ModalTitle title="Set Chat Name" />,
                     children: <ChatNameEditForm name={name} id={id} />,
                   });
                 }}
@@ -119,7 +125,7 @@ const HistoryItem = memo(({ name, id }: Chat) => {
                   event.stopPropagation();
                   openDeleteConfirmModal(
                     {
-                      title: "Delete Chat",
+                      title: <ModalTitle title="Delete Chat" />,
                       onConfirm: () => {
                         window.electronAPI.databaseIpcRenderer.deleteChat(id);
                         if (id === selectedChatId) {

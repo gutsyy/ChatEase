@@ -10,6 +10,8 @@ import ScrollableList from "../../pureComponents/ScrollableList";
 import { renderDate } from "./renderDate";
 import { Chat } from "../../database/models/Chat";
 import { timestampToDate } from "../../services/utils/DateTimestamp";
+import { openDeleteConfirmModal } from "../modals/customModals";
+import { ModalTitle } from "../../pureComponents/ModalTitle";
 
 export const ChatHistory = () => {
   const dispatch = useAppDispatch();
@@ -39,7 +41,7 @@ export const ChatHistory = () => {
           }}
           className="w-full"
           variant="gradient"
-          gradient={{ from: "#ed6ea0", to: "#ec8c69", deg: 35 }}
+          gradient={{ from: "#8B5CF6", to: "#B794F4", deg: 35 }}
           leftIcon={<IconPlus size={18} />}
           onClick={() => onNewChat()}
         >
@@ -74,25 +76,28 @@ export const ChatHistory = () => {
             size="xs"
             leftIcon={<IconTrash size={14} />}
             onClick={() => {
-              openConfirmModal({
-                title: "删除所有会话",
-                children: (
-                  <Text color="red" size="sm">
-                    确认要删除所有历史会话吗？
-                  </Text>
-                ),
-                labels: { confirm: "删除", cancel: "取消" },
-                onCancel: () => closeAllModals(),
-                onConfirm: () => {
-                  window.electronAPI.databaseIpcRenderer.deleteAllChats();
-                  window.electronAPI.databaseIpcRenderer
-                    .getAllChats()
-                    .then((chats) => {
-                      dispatch(setChats(chats));
-                    });
-                  dispatch(newChat());
+              openDeleteConfirmModal(
+                {
+                  title: <ModalTitle title="Clear All Chat History" />,
+                  children: (
+                    <Text color="red" size="sm">
+                      Are you sure you want to delete all chat history? This
+                      action is irreversible.
+                    </Text>
+                  ),
+                  onCancel: () => closeAllModals(),
+                  onConfirm: () => {
+                    window.electronAPI.databaseIpcRenderer.deleteAllChats();
+                    window.electronAPI.databaseIpcRenderer
+                      .getAllChats()
+                      .then((chats) => {
+                        dispatch(setChats(chats));
+                      });
+                    dispatch(newChat());
+                  },
                 },
-              });
+                ""
+              );
             }}
           >
             Clear all chats

@@ -50,7 +50,7 @@ const ChatStatistics = ({
       >
         {warningState ? (
           <div className="text-red-500 font-semibold text-xs flex justify-center items-center">
-            操作失败：超出限制！！！
+            Operation failed: Exceeding limit!
           </div>
         ) : null}
         <div className="flex justify-center items-center italic">

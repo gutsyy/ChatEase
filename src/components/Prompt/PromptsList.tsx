@@ -27,7 +27,7 @@ export const PromptsList = () => {
         }}
         className="w-full"
         variant="gradient"
-        gradient={{ from: "indigo", to: "cyan" }}
+        gradient={{ from: "violet", to: "indigo" }}
         leftIcon={<IconPlus size={18} />}
         onClick={() => openPromptFormModal()}
       >

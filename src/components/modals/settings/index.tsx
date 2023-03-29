@@ -79,7 +79,7 @@ const Settings = () => {
             <div
               className={
                 "p-1 rounded flex justify-center items-center bg-blue-500 " +
-                (selected === i ? "bg-blue-500" : "bg-gray-400")
+                (selected === i ? "bg-violet-500" : "bg-gray-400")
               }
             >
               {setIcon(item.icon)}

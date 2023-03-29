@@ -12,22 +12,6 @@ import type { Prompt } from "../../database/models/Prompt";
 
 let isComposing = false;
 
-// const calGPTMessages = (
-//   prompt: string,
-//   inputContent: string
-// ): ChatGPTMessageType[] => {
-//   return [
-//     {
-//       role: "system",
-//       content: prompt,
-//     },
-//     {
-//       role: "user",
-//       content: inputContent,
-//     },
-//   ];
-// };
-
 export const PromptPanel = () => {
   const dispatch = useAppDispatch();
   const selectedPromptId = useAppSelector(
@@ -111,13 +95,13 @@ export const PromptPanel = () => {
             ></Textarea>
             <div className="w-full flex mt-1 justify-end">
               <div className="flex items-center justify-end">
-                <div className="text-sm text-gray-500 mr-2">
+                <div className="text-sm text-gray-500 mr-2 font-greycliff tracking-wide">
                   {`${window.electronAPI.othersIpcRenderer.calMessagesTokens(
                     calPromptActionMessages(selectedPrompt.prompt, inputContent)
                   )} tokens`}
                 </div>
                 <ActionIcon type="submit">
-                  <IconBrandTelegram className="text-blue-500" size={18} />
+                  <IconBrandTelegram className="text-violet-500" size={18} />
                 </ActionIcon>
               </div>
             </div>

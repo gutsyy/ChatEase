@@ -10,9 +10,9 @@ export const NoMessages = () => {
         <IconBrandOpenai
           size={48}
           strokeWidth={1}
-          className=" bg-green-600 p-1 text-white rounded-xl shadow"
+          className=" bg-violet-500 p-1 text-white rounded-xl shadow animate-bounce"
         />
-        <div className="mt-2 text-gray-500">
+        <div className="mt-2 text-gray-500 font-greycliff font-bold">
           Making things easy with OpenAI ChatGPT
         </div>
       </div>

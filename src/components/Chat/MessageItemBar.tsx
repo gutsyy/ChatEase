@@ -1,4 +1,4 @@
-import { Button, clsx, Tooltip } from "@mantine/core";
+import { ActionIcon, Button, clsx, Tooltip } from "@mantine/core";
 import {
   IconArrowBarDown,
   IconArrowBarUp,
@@ -45,7 +45,9 @@ const ActionIconButton = ({
       label={tooltip}
       withArrow
     >
-      <Icon className="text-gray-500" size={14} />
+      <ActionIcon size="xs" color="violet">
+        <Icon className="text-gray-500" size={14} />
+      </ActionIcon>
     </Tooltip>
   </div>
 );
@@ -82,8 +84,8 @@ const MessageItemBar = ({
   const renderTime = (
     <div
       className={clsx(
-        "text-xs",
-        msg.inPrompts && "text-gray-500",
+        "text-xs italic",
+        msg.inPrompts && "text-gray-400",
         !msg.inPrompts && "text-gray-300"
       )}
     >
@@ -94,15 +96,15 @@ const MessageItemBar = ({
   const actionsDefine: ActionIconButtonProps[] = [
     {
       icon: expanded
-        ? withIconStyle(IconArrowBarUp, { className: "text-gray-500" })
-        : withIconStyle(IconArrowBarDown, { className: "text-blue-500" }),
+        ? withIconStyle(IconArrowBarUp, { className: "text-gray-400" })
+        : withIconStyle(IconArrowBarDown, { className: "text-violet-500" }),
       onClick: () => onToggleExpanded(),
       tooltip: expanded ? "collapse" : "expand",
     },
     {
       icon: msg.inPrompts
-        ? withIconStyle(IconCloud, { className: "text-blue-500" })
-        : withIconStyle(IconCloudOff, { className: "text-gray-500" }),
+        ? withIconStyle(IconCloud, { className: "text-violet-500" })
+        : withIconStyle(IconCloudOff, { className: "text-gray-400" }),
       onClick: () => dispatch(toggleMessagePrompt(index)),
       tooltip: `${msg.inPrompts ? "In" : "Not in"} promps`,
     },
@@ -123,27 +125,22 @@ const MessageItemBar = ({
 
   const renderTokensCount = (
     <>
-      {msg.inPrompts ? (
-        <div className="text-xs text-white px-1 ml-2 rounded bg-blue-400 mr-1">{`${window.electronAPI.othersIpcRenderer.calMessagesTokens(
-          [
-            {
-              role: msg.sender,
-              content: msg.text,
-            },
-          ],
-          true
-        )} tokens in prompt`}</div>
-      ) : (
-        <div className="text-xs text-white px-1 ml-2 rounded bg-gray-300 mr-1">{`${window.electronAPI.othersIpcRenderer.calMessagesTokens(
-          [
-            {
-              role: msg.sender,
-              content: msg.text,
-            },
-          ],
-          true
-        )} tokens`}</div>
-      )}
+      <div
+        className={clsx(
+          "text-xs px-1 ml-3 rounded-sm mr-1 font-greycliff",
+          msg.inPrompts
+            ? "bg-violet-100 text-violet-500"
+            : "bg-gray-200 text-white"
+        )}
+      >{`${window.electronAPI.othersIpcRenderer.calMessagesTokens(
+        [
+          {
+            role: msg.sender,
+            content: msg.text,
+          },
+        ],
+        true
+      )} tokens`}</div>
     </>
   );
 
@@ -212,7 +209,7 @@ const MessageItemBar = ({
               withArrow
             >
               <Button
-                color="blue"
+                color="violet"
                 styles={{
                   root: {
                     paddingLeft: "0.5rem",

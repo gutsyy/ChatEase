@@ -4,6 +4,7 @@ import {
   IconArrowBackUp,
   IconMessageCircle,
   IconSend,
+  IconBrandTelegram,
 } from "@tabler/icons-react";
 import {
   forwardRef,
@@ -85,12 +86,12 @@ export const ChatInputBox = forwardRef(
       e.preventDefault();
       setActionsBarVisible(false);
 
-      // 已发送信息和空字串不处理
+      // Check if message is empty and is waiting responsing state
       if (!message || message.trim() === "" || isResponsing) {
         return;
       }
 
-      // 检查是否符合tokens限制
+      // Check limits
       if (
         promptTokens > window.electronAPI.storeIpcRenderer.get("max_tokens")
       ) {
@@ -98,18 +99,17 @@ export const ChatInputBox = forwardRef(
         return;
       }
 
-      // 判断是否为新会话
+      // If it's a new chat, create it.
       let _chatId: number = chatId;
       if (_chatId === -1) {
         _chatId = await window.electronAPI.databaseIpcRenderer.createChat({
           name: getFirstSentence(message),
           timestamp: dateToTimestamp(new Date()),
         });
-        // 创建会话
         dispatch(updateChatsAfterCreated(_chatId));
       }
 
-      // create a new message
+      // New message object
       const newMessage: Message = {
         text: message.trim(),
         sender: "user",
@@ -125,13 +125,12 @@ export const ChatInputBox = forwardRef(
           setMessage("");
         });
 
-      // setLoading(true);
-
-      // Send prompt messages
+      // Filter out the messages that should be in prompt
       const sendMessages: Message[] = [...messages, newMessage].filter(
         (msg) => msg.inPrompts
       );
 
+      // Send request to OpenAI
       requestApi(_chatId, sendMessages);
     };
 
@@ -140,10 +139,14 @@ export const ChatInputBox = forwardRef(
       [isPromptResponsing, runningActionId]
     );
 
-    const handlePromptAction = (prompt: Prompt) => {
+    const handlePromptAction = (prompt: Prompt): boolean => {
+      if (!message || !message.trim()) {
+        return false;
+      }
       dispatch(setActionId("chat-action"));
       historyMessage = message;
       requestPromptApi(prompt, message);
+      return true;
     };
 
     const { ref: inputBoxRef, focused } = useFocusWithin();
@@ -171,7 +174,6 @@ export const ChatInputBox = forwardRef(
           onClick={(prompt) => handlePromptAction(prompt)}
         />
         <div className="bg-gray-100 p-4 flex items-center border-solid border-0 border-t border-gray-200">
-          <IconMessageCircle size={20} className="mr-2" />
           <form
             className="flex items-center justify-between flex-1"
             onSubmit={handleSendMessage}
@@ -217,7 +219,7 @@ export const ChatInputBox = forwardRef(
                 ) : (
                   <div className="flex items-end">
                     <ActionIcon
-                      color="blue"
+                      color="violet"
                       size="sm"
                       onClick={() => setMessage(historyMessage)}
                     >
@@ -227,8 +229,9 @@ export const ChatInputBox = forwardRef(
                 )
               }
             ></Textarea>
-            <ActionIcon color="blue" type="submit" variant="subtle" size="sm">
-              <IconSend size={16} />
+            <ActionIcon color="violet" type="submit" variant="subtle" size="sm">
+              {/* <IconSend size={16} /> */}
+              <IconBrandTelegram size={16} />
             </ActionIcon>
           </form>
         </div>

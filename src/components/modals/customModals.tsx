@@ -1,6 +1,7 @@
 import { closeAllModals, modals, openConfirmModal } from "@mantine/modals";
 import { Text } from "@mantine/core";
 import type { OpenConfirmModal } from "@mantine/modals/lib/context";
+import { ModalTitle } from "../../pureComponents/ModalTitle";
 
 export const openCustomConfirmModal = (props: OpenConfirmModal) => {
   modals.openConfirmModal({
@@ -21,11 +22,11 @@ export const openDeleteConfirmModal = (
   deleteName: string
 ) => {
   openConfirmModal({
-    title: "Confirm deletion",
+    title: <ModalTitle title="Confirm deletion" />,
     children: (
       <Text size="sm" weight="normal">
         Are you sure you want to delete?{" "}
-        <div className="text-red-500 font-semibold mt-1">{deleteName}</div>
+        <div className="text-red-500 mt-1">{deleteName}</div>
       </Text>
     ),
     labels: { confirm: "Confirm", cancel: "Cancel" },

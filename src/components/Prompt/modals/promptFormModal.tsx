@@ -5,6 +5,7 @@ import { createPrompt, getAllPrompts } from "../../../reducers/promptSlice";
 import { useAppDispatch } from "../../../hooks/redux";
 import { useForm } from "@mantine/form";
 import { Prompt } from "../../../database/models/Prompt";
+import { ModalTitle } from "../../../pureComponents/ModalTitle";
 
 const PromptForm = (initialValues: Prompt) => {
   const theme = useMantineTheme();
@@ -92,7 +93,9 @@ export const openPromptFormModal = (initialValues?: Prompt) => {
     };
   }
   modals.open({
-    title: initialValues ? "Edit Action" : "Create Action",
+    title: (
+      <ModalTitle title={initialValues ? "Edit Action" : "Create Action"} />
+    ),
     styles: {
       header: {
         padding: "0.5rem",

@@ -5,6 +5,7 @@ import { Prompt } from "../../database/models/Prompt";
 import { getAllPrompts, setSelectedPromptId } from "../../reducers/promptSlice";
 import { openPromptFormModal } from "./modals/promptFormModal";
 import { openDeleteConfirmModal } from "../modals/customModals";
+import { ModalTitle } from "../../pureComponents/ModalTitle";
 
 export const PromptListItem = (prompt: Prompt) => {
   const selectedPromptId = useAppSelector(
@@ -15,7 +16,7 @@ export const PromptListItem = (prompt: Prompt) => {
   const onDelete = () => {
     openDeleteConfirmModal(
       {
-        title: "Delete Prompt",
+        title: <ModalTitle title="Delete Action" />,
         onConfirm: () => {
           window.electronAPI.databaseIpcRenderer.deletePrompt(prompt.id);
           dispatch(getAllPrompts());

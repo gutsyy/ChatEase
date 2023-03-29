@@ -87,15 +87,35 @@ export const App = () => {
 
   return (
     <Provider store={store}>
-      <SpotlightProvider
-        radius="md"
-        actions={searchProviderActions}
-        searchIcon={<IconSearch size="1.2rem" />}
-        searchPlaceholder="Searching Prompt Action..."
-        shortcut="mod + K"
-        nothingFoundMessage="Nothing found..."
+      <MantineProvider
+        withGlobalStyles
+        withNormalizeCSS
+        theme={{
+          colors: {
+            blue: [
+              "#f5f3ff",
+              "#ede9fe",
+              "#ddd6fe",
+              "#c4b5fd",
+              "#a78bfa",
+              "#8b5cf6",
+              "#7c3aed",
+              "#6d28d9",
+              "#5b21b6",
+              "#4c1d95",
+            ],
+          },
+        }}
       >
-        <MantineProvider withGlobalStyles withNormalizeCSS>
+        {" "}
+        <SpotlightProvider
+          radius="md"
+          actions={searchProviderActions}
+          searchIcon={<IconSearch size="1.2rem" />}
+          searchPlaceholder="Searching Prompt Action..."
+          shortcut="mod + K"
+          nothingFoundMessage="Nothing found..."
+        >
           <Notifications position="top-right" />
           <ModalsProvider>
             <div className="flex w-full h-full">
@@ -104,8 +124,8 @@ export const App = () => {
               <MainPanel />
             </div>
           </ModalsProvider>
-        </MantineProvider>
-      </SpotlightProvider>
+        </SpotlightProvider>
+      </MantineProvider>
     </Provider>
   );
 };
