@@ -13,7 +13,8 @@ export type SettingsKey =
   | "stream_enable"
   | "markdown_code_scope"
   | "chat_input_toolbar_items"
-  | "message_toolbar_items";
+  | "message_toolbar_items"
+  | "temperature";
 
 const defaultSettings: {
   [key in SettingsKey]: string | number | boolean | number[];
@@ -33,6 +34,7 @@ const defaultSettings: {
   markdown_code_scope: "JavaScript,TypeScript,HTML,CSS,JSON,Python,Markdown",
   chat_input_toolbar_items: [],
   message_toolbar_items: [],
+  temperature: 1,
 };
 
 export { defaultSettings };

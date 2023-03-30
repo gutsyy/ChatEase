@@ -38,6 +38,11 @@ export const ChatActionBar = ({ visible, onClick }: ChatActionBarProps) => {
         visible ? "h-8 py-1 opacity-100" : "h-0 py-0 opacity-0"
       )}
     >
+      {actions.length === 0 && (
+        <div className="w-full flex justify-center items-center font-greycliff text-sm text-gray-500">
+          {`No Actions settings, You can go to App Settings -> Chat Toolbar to add actions.`}
+        </div>
+      )}
       {actions.map((item, i) => (
         <Button
           loading={runningActionId === item.id}

@@ -93,6 +93,24 @@ const settings: SettingItemProps[] = [
     ),
   },
   {
+    label: "GPT Temperature",
+    input: () => (
+      <NumberInputSetStyles
+        min={0}
+        max={2}
+        defaultValue={
+          window.electronAPI.storeIpcRenderer.get("temperature") as number
+        }
+        step={0.1}
+        precision={1}
+        width={60}
+        onChange={(value) =>
+          window.electronAPI.storeIpcRenderer.set("temperature", value)
+        }
+      ></NumberInputSetStyles>
+    ),
+  },
+  {
     label: "Maximum limit of tokens",
     input: () => (
       <NumberInputSetStyles

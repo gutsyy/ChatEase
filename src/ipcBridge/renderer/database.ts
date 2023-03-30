@@ -3,6 +3,8 @@ import { Message } from "../../database/models/Message";
 import { Chat } from "../../database/models/Chat";
 import { Prompt } from "../../database/models/Prompt";
 
+type GetByKey<T, K extends keyof T> = T[K];
+
 export interface DatabaseIpcRenderer {
   createChat: (chat: Chat) => Promise<number>;
   createMessage: (msg: Message) => Promise<Message>;
@@ -21,6 +23,21 @@ export interface DatabaseIpcRenderer {
   getPromptById: (id: number) => Promise<Prompt>;
   getPromptsByIds: (ids: number[]) => Promise<Prompt[]>;
   setMessageCollapseById: (id: number, collapse: boolean) => Promise<void>;
+  updateMessageFieldById: (
+    id: number,
+    field: keyof Message,
+    value: any
+  ) => Promise<Message>;
+  updateChatFieldById: (
+    id: number,
+    field: keyof Chat,
+    value: any
+  ) => Promise<Chat>;
+  getChatFieldById: (
+    id: number,
+    field: keyof Chat
+  ) => Promise<GetByKey<Chat, keyof Chat>>;
+  getChatById: (id: number) => Promise<Chat>;
 }
 
 export const databaseIpcRenderer: DatabaseIpcRenderer = {
@@ -43,4 +60,11 @@ export const databaseIpcRenderer: DatabaseIpcRenderer = {
   getPromptsByIds: (ids) => ipcRenderer.invoke("get-prompts-by-ids", ids),
   setMessageCollapseById: (id, collapse) =>
     ipcRenderer.invoke("set-message-collapse", id, collapse),
+  updateChatFieldById: (id, field, value) =>
+    ipcRenderer.invoke("update-chat-field-by-id", id, field, value),
+  updateMessageFieldById: (id, field, value) =>
+    ipcRenderer.invoke("update-message-field-by-id", id, field, value),
+  getChatFieldById: (id, field) =>
+    ipcRenderer.invoke("get-chat-field-by-id", id, field),
+  getChatById: (id) => ipcRenderer.invoke("get-chat-by-id", id),
 };

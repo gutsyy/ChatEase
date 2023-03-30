@@ -17,6 +17,7 @@ import {
   setPromptIsResponsing,
 } from "../../reducers/promptSlice";
 import { Prompt } from "../../database/models/Prompt";
+import { Chat } from "../../database/models/Chat";
 
 export type ChatGPTMessageType = {
   role: string;
@@ -43,7 +44,8 @@ export interface ChatCompletion {
 }
 
 export const axiosConfigChatGPT = (
-  message: ChatGPTMessageType[]
+  message: ChatGPTMessageType[],
+  chat: Chat | null
 ): PostRequest => {
   const key = window.electronAPI.storeIpcRenderer.get("open_api_key");
   const origin = window.electronAPI.storeIpcRenderer.get("openai_api_origin");
@@ -63,6 +65,9 @@ export const axiosConfigChatGPT = (
       model: "gpt-3.5-turbo",
       messages: message,
       stream: window.electronAPI.storeIpcRenderer.get("stream_enable"),
+      temperature:
+        (chat && chat.temperature) ??
+        window.electronAPI.storeIpcRenderer.get("temperature"),
     },
     config: {
       headers: {
@@ -101,7 +106,7 @@ export const calPromptActionMessages = (
   ];
 };
 
-export const requestApi = (chatId: number, messages: Message[]) => {
+export const requestApi = async (chatId: number, messages: Message[]) => {
   const requestId = UUIDV4();
 
   store.dispatch(setIsResponsing(true));
@@ -141,13 +146,19 @@ export const requestApi = (chatId: number, messages: Message[]) => {
     window.electronAPI.axiosIpcRenderer.stream(streamCallback);
   }
 
+  const chat: Chat =
+    chatId === -1
+      ? null
+      : await window.electronAPI.databaseIpcRenderer.getChatById(chatId);
+
   window.electronAPI.axiosIpcRenderer
     .post(
       axiosConfigChatGPT(
         messages.map((message) => ({
           role: message.sender,
           content: message.text,
-        }))
+        })),
+        chat
       ),
       requestId,
       streamEnable
@@ -218,7 +229,7 @@ export const requestPromptApi = (prompt: Prompt, message: string) => {
   }
 
   window.electronAPI.axiosIpcRenderer
-    .post(axiosConfigChatGPT(messages), requestId, streamEnable)
+    .post(axiosConfigChatGPT(messages, null), requestId, streamEnable)
     .then((res) => {
       if (!store.getState().prompt.isPromptResponsing) {
         return;

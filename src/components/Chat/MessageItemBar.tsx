@@ -5,16 +5,26 @@ import {
   IconCloud,
   IconCloudOff,
   IconEye,
+  IconPin,
+  IconPinnedOff,
   IconTrash,
   TablerIconsProps,
 } from "@tabler/icons-react";
-import { forwardRef, LegacyRef, useEffect, useMemo, useState } from "react";
+import {
+  forwardRef,
+  LegacyRef,
+  MutableRefObject,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { Prompt } from "../../database/models/Prompt";
 import { Message } from "../../database/models/Message";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import {
   clearMessageActionResultByIndex,
   setMessageActionResultByIndex,
+  toggleMesageFixedInPrompt,
   toggleMessagePrompt,
 } from "../../reducers/chatSlice";
 import { requestPromptApi } from "../../services/openAI/apiConfig";
@@ -56,11 +66,28 @@ const MessageItemBar = ({
         tooltip: expanded ? "collapse" : "expand",
       },
       {
+        icon: msg.fixedInPrompt
+          ? withIconStyle(IconPinnedOff, { className: "text-gray-500" })
+          : withIconStyle(IconPin, { className: "text-violet-400" }),
+        onClick: () =>
+          dispatch(toggleMesageFixedInPrompt({ index, id: msg.id })),
+        tooltip: msg.fixedInPrompt
+          ? "Cancel Fixed the message on the prompt"
+          : "Fixed the message on the prompt",
+      },
+      {
+        disabled: msg.fixedInPrompt,
         icon: msg.inPrompts
-          ? withIconStyle(IconCloud, { className: "text-violet-500" })
+          ? withIconStyle(IconCloud, {
+              className: msg.fixedInPrompt
+                ? "text-gray-400"
+                : "text-violet-500",
+            })
           : withIconStyle(IconCloudOff, { className: "text-gray-400" }),
         onClick: () => dispatch(toggleMessagePrompt(index)),
-        tooltip: `${msg.inPrompts ? "In" : "Not in"} promps`,
+        tooltip: msg.fixedInPrompt
+          ? "Button disabled: This message was fixed in prompt"
+          : `${msg.inPrompts ? "Remove from" : "Add to"} prompt`,
       },
       {
         icon: withIconStyle(IconTrash, { className: "text-red-500" }),
@@ -68,7 +95,7 @@ const MessageItemBar = ({
         tooltip: "Delete",
       },
     ],
-    [expanded, msg.inPrompts]
+    [expanded, msg.inPrompts, msg.fixedInPrompt]
   );
 
   useEffect(() => {
@@ -133,6 +160,7 @@ const MessageItemBar = ({
               key={i}
               styles={{ tooltip: { fontSize: "12px" } }}
               withArrow
+              openDelay={1000}
             >
               <Button
                 color="violet"
@@ -174,33 +202,36 @@ interface RenderActionButtonProps {
   icon: (props: TablerIconsProps) => JSX.Element;
   onClick: () => void;
   tooltip: string;
+  disabled?: boolean;
 }
 
 const RenderActionButton = ({
   icon: Icon,
   onClick,
   tooltip,
+  disabled = false,
 }: RenderActionButtonProps) => (
-  <div
-    className="ml-2 flex justify-center items-center"
-    onClick={() => {
-      onClick();
+  <Tooltip
+    styles={{
+      tooltip: {
+        fontSize: "12px",
+      },
     }}
+    openDelay={1000}
+    label={tooltip}
+    withArrow
   >
-    <Tooltip
-      styles={{
-        tooltip: {
-          fontSize: "12px",
-        },
-      }}
-      label={tooltip}
-      withArrow
-    >
-      <ActionIcon size="xs" color="violet">
+    <div className="ml-2 flex justify-center items-center">
+      <ActionIcon
+        size="xs"
+        color="violet"
+        disabled={disabled}
+        onClick={onClick}
+      >
         <Icon className="text-gray-500" size={14} />
       </ActionIcon>
-    </Tooltip>
-  </div>
+    </div>
+  </Tooltip>
 );
 
 const RenderTime = (msg: Message) => {
@@ -275,7 +306,7 @@ const withIconStyle = (
 ) => {
   const Icon = icon;
   return forwardRef(
-    (props: TablerIconsProps, ref: LegacyRef<SVGSVGElement>) => (
+    (props: TablerIconsProps, ref: MutableRefObject<SVGSVGElement>) => (
       <Icon {...props} {...setProps} ref={ref} />
     )
   );

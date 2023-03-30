@@ -239,6 +239,53 @@ const dbInit = async () => {
       }
     }
   );
+
+  ipcMain.handle(
+    "update-chat-field-by-id",
+    async (event, id: number, field: keyof Chat, value: any) => {
+      try {
+        await ChatIns.update({ [field]: value }, { where: { id: id } });
+        const updatedChat = await ChatIns.findByPk(id);
+        return updatedChat.dataValues;
+      } catch (err) {
+        throw new Error("failed");
+      }
+    }
+  );
+
+  ipcMain.handle(
+    "get-chat-field-by-id",
+    async (event, id: number, field: keyof Chat) => {
+      try {
+        const result = await ChatIns.findByPk(id);
+        return result.dataValues[field];
+      } catch (err) {
+        throw new Error("failed");
+      }
+    }
+  );
+
+  ipcMain.handle("get-chat-by-id", async (event, id: number) => {
+    try {
+      const result = await ChatIns.findByPk(id);
+      return result.dataValues;
+    } catch (err) {
+      throw new Error("failed");
+    }
+  });
+
+  ipcMain.handle(
+    "update-message-field-by-id",
+    async (event, id: number, field: keyof Message, value: any) => {
+      try {
+        await MessageIns.update({ [field]: value }, { where: { id: id } });
+        const updatedMessage = await MessageIns.findByPk(id);
+        return updatedMessage.dataValues;
+      } catch (err) {
+        throw new Error("failed");
+      }
+    }
+  );
 };
 
 export { dbInit };

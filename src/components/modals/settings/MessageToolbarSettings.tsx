@@ -141,7 +141,7 @@ export const MessageToolbarSettings = () => {
           )}
         </Droppable>
         <div className="text-sm font-greycliff font-bold mt-4 text-gray-900">
-          Selected Actions on Chat Input Toolbar
+          Selected Actions on Message Box Bar.
         </div>
         <div className="text-xs text-gray-400 mb-1">
           If you want to remove it, drag it to the top toolbar.

@@ -9,6 +9,7 @@ export interface Message {
   inPrompts?: boolean;
   collapse?: boolean;
   actionResult?: string;
+  fixedInPrompt?: boolean;
 }
 
 const MessageDefine = {
@@ -31,6 +32,10 @@ const MessageDefine = {
       allowNull: false,
     },
     collapse: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    fixedInPrompt: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
