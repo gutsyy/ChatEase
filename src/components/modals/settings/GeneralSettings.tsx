@@ -52,7 +52,7 @@ const settings: SettingItemProps[] = [
       return (
         <InputSetStyles
           value={origin}
-          width="300px"
+          width="360px"
           onChange={(event) => {
             window.electronAPI.storeIpcRenderer.set(
               "openai_api_origin",

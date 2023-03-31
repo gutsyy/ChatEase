@@ -251,6 +251,12 @@ export const ChatSlice = createSlice({
       }
     },
 
+    setAllMessageInPromptsToFalse: (state) => {
+      state.messages = state.messages.map((msg) => {
+        return { ...msg, inPrompts: msg.fixedInPrompt ?? false };
+      });
+    },
+
     setTokensBoxWarningStateToFalse: (state) => {
       state.tokensBoxWarningState = "";
     },
@@ -319,6 +325,7 @@ export const {
   recalMessages,
   setSelectedChat,
   collapseAllMessages,
+  setAllMessageInPromptsToFalse,
 } = ChatSlice.actions;
 
 /** Update chats history after created a new chat */

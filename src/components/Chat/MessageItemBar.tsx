@@ -2,6 +2,7 @@ import { ActionIcon, Button, clsx, Popover, Tooltip } from "@mantine/core";
 import {
   IconArrowBarDown,
   IconArrowBarUp,
+  IconClipboardCopy,
   IconCloud,
   IconCloudOff,
   IconEye,
@@ -12,7 +13,6 @@ import {
 } from "@tabler/icons-react";
 import {
   forwardRef,
-  LegacyRef,
   MutableRefObject,
   useEffect,
   useMemo,
@@ -59,6 +59,15 @@ const MessageItemBar = ({
   const actionsDefine: RenderActionButtonProps[] = useMemo(
     () => [
       {
+        icon: withIconStyle(IconClipboardCopy, {
+          className: "text-violet-500",
+        }),
+        onClick: () => {
+          navigator.clipboard.writeText(msg.text);
+        },
+        tooltip: "Raw copy",
+      },
+      {
         icon: expanded
           ? withIconStyle(IconArrowBarUp, { className: "text-gray-400" })
           : withIconStyle(IconArrowBarDown, { className: "text-violet-500" }),
@@ -68,7 +77,7 @@ const MessageItemBar = ({
       {
         icon: msg.fixedInPrompt
           ? withIconStyle(IconPinnedOff, { className: "text-gray-500" })
-          : withIconStyle(IconPin, { className: "text-violet-400" }),
+          : withIconStyle(IconPin, { className: "text-violet-500" }),
         onClick: () =>
           dispatch(toggleMesageFixedInPrompt({ index, id: msg.id })),
         tooltip: msg.fixedInPrompt

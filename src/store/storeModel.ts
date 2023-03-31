@@ -28,7 +28,7 @@ const defaultSettings: {
   language: "zh-CN",
   open_api_key: "",
   max_messages_num: 6,
-  openai_api_origin: "https://api.openai.com/v1/chat/completions",
+  openai_api_origin: "https://api.openai.com/",
   max_tokens: 3000,
   stream_enable: true,
   markdown_code_scope: "JavaScript,TypeScript,HTML,CSS,JSON,Python,Markdown",

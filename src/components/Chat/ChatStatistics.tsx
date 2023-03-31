@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import {
   collapseAllMessages,
   recalMessages,
+  setAllMessageInPromptsToFalse,
   setSelectedChat,
   setTokensBoxWarningStateToFalse,
 } from "../../reducers/chatSlice";
@@ -19,6 +20,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { storeRendererUtils } from "../../store/storeRendererUtils";
 import { openAIModels } from "../../services/openAI/data";
 import {
+  IconArrowBarDown,
   IconArrowBarUp,
   IconArrowDown,
   IconMenu2,
@@ -300,18 +302,32 @@ const ChatMenu = () => {
       </Menu.Target>
       <Menu.Dropdown>
         <Menu.Item
-          className="text-sm font-greycliff text-gray-500"
-          icon={<IconArrowBarUp size={14} className="text-violet-500" />}
+          className="text-xs text-gray-500"
+          icon={<IconArrowBarDown size={12} className="text-violet-500" />}
           onClick={() => dispatch(collapseAllMessages(false))}
         >
-          Expand All Collapse
+          Expand all messages
         </Menu.Item>
         <Menu.Item
-          className="text-sm font-greycliff text-gray-500"
-          icon={<IconArrowBarUp size={14} className="text-violet-500" />}
+          className="text-xs text-gray-500"
+          icon={<IconArrowBarUp size={12} className="text-violet-500" />}
           onClick={() => dispatch(collapseAllMessages(true))}
         >
-          Collapse All Collapse
+          Collapse all messages
+        </Menu.Item>
+        <Menu.Item
+          className="text-xs text-gray-500"
+          icon={<IconArrowBarUp size={12} className="text-violet-500" />}
+          onClick={() => dispatch(setAllMessageInPromptsToFalse())}
+        >
+          Remove all messages from prompt
+        </Menu.Item>
+        <Menu.Item
+          className="text-xs text-gray-500"
+          icon={<IconArrowBarUp size={12} className="text-violet-500" />}
+          onClick={() => dispatch(recalMessages())}
+        >
+          Recaculate which message in prompt
         </Menu.Item>
       </Menu.Dropdown>
     </Menu>

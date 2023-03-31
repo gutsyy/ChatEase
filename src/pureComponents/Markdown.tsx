@@ -35,7 +35,7 @@ const CodeToolbar = ({ type, code }: { type: string; code: string }) => {
         }
         size="sm"
         variant="light"
-        className="h-5 text-xs text-gray-900 bg-gray-300"
+        className="h-5 text-xs text-gray-500 bg-gray-300"
         color="gray"
         styles={(theme) => ({
           root: {

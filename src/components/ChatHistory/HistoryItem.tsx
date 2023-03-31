@@ -133,7 +133,7 @@ const ChatNameEditForm = (chat: Chat) => {
       <TextInput
         size="xs"
         variant="filled"
-        label="Chat's Name"
+        label="Chat Name"
         withAsterisk
         {...form.getInputProps("name")}
       ></TextInput>

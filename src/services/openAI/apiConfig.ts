@@ -48,7 +48,9 @@ export const axiosConfigChatGPT = (
   chat: Chat | null
 ): PostRequest => {
   const key = window.electronAPI.storeIpcRenderer.get("open_api_key");
-  const origin = window.electronAPI.storeIpcRenderer.get("openai_api_origin");
+  const origin =
+    window.electronAPI.storeIpcRenderer.get("openai_api_origin") +
+    "v1/chat/completions";
 
   if (!key) {
     handleNotis({
