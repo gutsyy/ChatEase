@@ -93,7 +93,7 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
           "p-3 mb-4 rounded-lg relative",
           msg.sender === "user" && "bg-white",
           msg.sender === "assistant" && "bg-gray-100",
-          msg.fixedInPrompt && "shadow shadow-violet-50"
+          msg.fixedInPrompt && "outline outline-1 outline-violet-500"
         )}
         ref={contentRef}
       >

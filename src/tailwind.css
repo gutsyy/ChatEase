@@ -693,12 +693,20 @@
   outline-width: 2px;
 }
 
+.outline-1 {
+  outline-width: 1px;
+}
+
 .outline-red-400 {
   outline-color: #f87171;
 }
 
 .outline-red-500 {
   outline-color: #ef4444;
+}
+
+.outline-violet-500 {
+  outline-color: #8b5cf6;
 }
 
 .filter {

@@ -47,7 +47,7 @@ const Form = ({
         <div className="flex justify-end mt-4">
           <Button
             size="xs"
-            variant="gradient"
+            variant="filled"
             type="submit"
             gradient={{ from: "teal", to: "blue", deg: 60 }}
           >
