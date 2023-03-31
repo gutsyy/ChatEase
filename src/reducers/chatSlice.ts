@@ -277,6 +277,20 @@ export const ChatSlice = createSlice({
     clearMessageActionResultByIndex: (state, action: PayloadAction<number>) => {
       state.messages[action.payload].actionResult = "";
     },
+
+    collapseAllMessages: (state, action: PayloadAction<boolean>) => {
+      state.messages = state.messages.map((msg) => {
+        if (!msg.fixedInPrompt) {
+          msg.collapse = action.payload;
+          window.electronAPI.databaseIpcRenderer.updateMessageFieldById(
+            msg.id,
+            "collapse",
+            msg.collapse
+          );
+        }
+        return msg;
+      });
+    },
   },
 });
 
@@ -304,6 +318,7 @@ export const {
   clearMessageActionResultByIndex,
   recalMessages,
   setSelectedChat,
+  collapseAllMessages,
 } = ChatSlice.actions;
 
 /** Update chats history after created a new chat */

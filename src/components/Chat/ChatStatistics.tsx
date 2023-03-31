@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import {
+  collapseAllMessages,
   recalMessages,
   setSelectedChat,
   setTokensBoxWarningStateToFalse,
@@ -8,6 +9,7 @@ import {
 import {
   ActionIcon,
   clsx,
+  Menu,
   NumberInput,
   Select,
   Slider,
@@ -16,7 +18,13 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { storeRendererUtils } from "../../store/storeRendererUtils";
 import { openAIModels } from "../../services/openAI/data";
-import { IconX } from "@tabler/icons-react";
+import {
+  IconArrowBarUp,
+  IconArrowDown,
+  IconMenu2,
+  IconX,
+} from "@tabler/icons-react";
+import { ChatContext } from ".";
 
 interface ChatStatisticsProps {
   messagesInPromptsNum: number;
@@ -31,6 +39,7 @@ export const ChatStatistics = ({
   );
   const chatId = useAppSelector((state) => state.chat.selectedChatId);
   const [opened, { close, open }] = useDisclosure();
+  const { scrollToBottom } = useContext(ChatContext);
 
   useEffect(() => {
     if (warningState) {
@@ -49,10 +58,11 @@ export const ChatStatistics = ({
   return (
     <div
       className={clsx(
-        "sticky bg-transparent flex justify-center bottom-0 z-50 transition-all",
+        "sticky bg-transparent flex justify-between items-end bottom-0 z-50 transition-all",
         chatId === -1 && "max-h-0 overflow-hidden"
       )}
     >
+      <ChatMenu />
       <div
         className={clsx(
           "bg-white text-gray-900 px-3 py-1 shadow overflow-hidden",
@@ -77,6 +87,16 @@ export const ChatStatistics = ({
           />
         )}
       </div>
+      <ActionIcon
+        className="bg-violet-400"
+        variant="filled"
+        size="md"
+        radius="lg"
+        color="violet"
+        onClick={scrollToBottom}
+      >
+        <IconArrowDown size={18} />
+      </ActionIcon>
     </div>
   );
 };
@@ -259,5 +279,41 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
         ></Select>
       </form>
     </div>
+  );
+};
+
+const ChatMenu = () => {
+  const dispatch = useAppDispatch();
+
+  return (
+    <Menu shadow="md" position="top-start">
+      <Menu.Target>
+        <ActionIcon
+          className="bg-violet-400"
+          variant="filled"
+          size="md"
+          radius="lg"
+          color="violet"
+        >
+          <IconMenu2 size={16} />
+        </ActionIcon>
+      </Menu.Target>
+      <Menu.Dropdown>
+        <Menu.Item
+          className="text-sm font-greycliff text-gray-500"
+          icon={<IconArrowBarUp size={14} className="text-violet-500" />}
+          onClick={() => dispatch(collapseAllMessages(false))}
+        >
+          Expand All Collapse
+        </Menu.Item>
+        <Menu.Item
+          className="text-sm font-greycliff text-gray-500"
+          icon={<IconArrowBarUp size={14} className="text-violet-500" />}
+          onClick={() => dispatch(collapseAllMessages(true))}
+        >
+          Collapse All Collapse
+        </Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
   );
 };

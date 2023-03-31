@@ -1,11 +1,21 @@
-import { IconBrandOpenai, IconUserCircle } from "@tabler/icons-react";
+import { IconBrandOpenai, IconUserCircle, IconX } from "@tabler/icons-react";
 import { Markdown } from "../../pureComponents/Markdown";
 import { Message } from "../../database/models/Message";
 import MessageItemBar from "./MessageItemBar";
-import { Button, clsx, Collapse, Divider, Text } from "@mantine/core";
-import { memo, useCallback, useMemo, useRef, useState } from "react";
+import {
+  ActionIcon,
+  Button,
+  clsx,
+  Collapse,
+  Divider,
+  Text,
+} from "@mantine/core";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { updateMessages } from "../../reducers/chatSlice";
+import {
+  setMessageActionResultByIndex,
+  updateMessages,
+} from "../../reducers/chatSlice";
 import { useDisclosure } from "@mantine/hooks";
 import { v4 } from "uuid";
 import { setPromptIsResponsing } from "../../reducers/promptSlice";
@@ -15,8 +25,16 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const actionId = useMemo(() => v4(), [msg.id]);
-  const [opened, { toggle }] = useDisclosure(!msg.collapse);
+  const [opened, { toggle, open, close }] = useDisclosure(!msg.collapse);
   const [renderContentState, setRenderContentState] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (msg.collapse) {
+      close();
+    } else {
+      open();
+    }
+  }, [msg.collapse]);
 
   const onDelete = useCallback(() => {
     if (containerRef.current && contentRef.current) {
@@ -64,13 +82,18 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
     }
   };
 
+  const onRemoveActionResult = () => {
+    dispatch(setMessageActionResultByIndex({ index, text: "" }));
+  };
+
   return (
     <div ref={containerRef}>
       <div
         className={clsx(
           "p-3 mb-4 rounded-lg relative",
           msg.sender === "user" && "bg-white",
-          msg.sender === "assistant" && "bg-gray-100"
+          msg.sender === "assistant" && "bg-gray-100",
+          msg.fixedInPrompt && "shadow shadow-violet-50"
         )}
         ref={contentRef}
       >
@@ -123,7 +146,18 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
               {msg.actionResult && (
                 <>
                   <Divider
-                    label="Action Result"
+                    label={
+                      <div className="font-greycliff font-bold flex justify-center items-center">
+                        <div style={{ lineHeight: "18px" }}>Action Result</div>
+                        <ActionIcon
+                          size="xs"
+                          className="ml-4"
+                          onClick={onRemoveActionResult}
+                        >
+                          <IconX size={12} />
+                        </ActionIcon>
+                      </div>
+                    }
                     labelPosition="center"
                     color="gray"
                     variant="dashed"
@@ -195,7 +229,7 @@ export const RenderContent = ({
       className={clsx(
         "ml-4 mr-2",
         msg.inPrompts && "text-gray-900",
-        !msg.inPrompts && "text-gray-400",
+        !msg.inPrompts && "text-gray-500",
         msg.sender === "user" && "whitespace-pre-wrap"
       )}
     >
