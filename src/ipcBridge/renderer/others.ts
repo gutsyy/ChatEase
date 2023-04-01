@@ -12,6 +12,7 @@ export interface OthersIpcRenderer {
   removeAllListeners: (channel: string) => void;
   showContextMenu: () => void;
   cleanAppData: () => void;
+  colorScheme: (colorScheme: "light" | "dark") => void;
 }
 
 export const othersIpcRenderer: OthersIpcRenderer = {
@@ -39,5 +40,8 @@ export const othersIpcRenderer: OthersIpcRenderer = {
   },
   cleanAppData: () => {
     ipcRenderer.sendSync("clean-app-data");
+  },
+  colorScheme: (colorScheme) => {
+    ipcRenderer.sendSync("color-scheme", colorScheme);
   },
 };

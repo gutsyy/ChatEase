@@ -1,4 +1,11 @@
-import { Tooltip, TextInput, ActionIcon, Button, clsx } from "@mantine/core";
+import {
+  Text,
+  TextInput,
+  ActionIcon,
+  Button,
+  clsx,
+  useMantineTheme,
+} from "@mantine/core";
 import { closeAllModals, openModal } from "@mantine/modals";
 import { IconPencilMinus, IconTrash } from "@tabler/icons-react";
 import { memo } from "react";
@@ -20,6 +27,7 @@ const HistoryItem = memo(({ name, id }: Chat) => {
   const dispatch = useAppDispatch();
   const selectedChatId = useAppSelector((state) => state.chat.selectedChatId);
   const { t } = useTranslation();
+  const { colorScheme } = useMantineTheme();
 
   return (
     <>
@@ -31,17 +39,22 @@ const HistoryItem = memo(({ name, id }: Chat) => {
         openDelay={1000}
       >
         <div
-          className={
-            "w-full py-2 rounded hover:cursor-pointer " +
-            (id === selectedChatId && "text-white bg-gray-200")
-          }
+          className={clsx(
+            "w-full py-2 rounded hover:cursor-pointer",
+            id !== selectedChatId && colorScheme === "light" && "text-gray-600",
+            id !== selectedChatId && colorScheme === "dark" && "text-dark-300",
+            id === selectedChatId &&
+              colorScheme === "light" &&
+              "bg-gray-200 text-gray-700",
+            id === selectedChatId &&
+              colorScheme === "dark" &&
+              "bg-dark-500 text-white"
+          )}
           onClick={() => dispatch(switchingChatSession(id))}
         >
           <div className="w-full h-full flex items-center justify-between pr-1 pl-2 whitespace-nowrap">
             <div
-              className={clsx(
-                "text-xs flex-1 text-ellipsis overflow-hidden text-gray-700"
-              )}
+              className={clsx("text-xs flex-1 text-ellipsis overflow-hidden")}
               style={{ maxWidth: "170px", marginRight: "5px" }}
             >
               {name}
@@ -61,7 +74,12 @@ const HistoryItem = memo(({ name, id }: Chat) => {
                   });
                 }}
               >
-                <IconPencilMinus size={12} />
+                <IconPencilMinus
+                  className={
+                    colorScheme === "dark" ? "text-dark-100" : "text-violet-500"
+                  }
+                  size={12}
+                />
               </ActionIcon>
               <ActionIcon
                 radius="xl"
@@ -94,7 +112,7 @@ const HistoryItem = memo(({ name, id }: Chat) => {
                   );
                 }}
               >
-                <IconTrash size={12} />
+                <IconTrash className="text-red-400" size={12} />
               </ActionIcon>
             </div>
           </div>

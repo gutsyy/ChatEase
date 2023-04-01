@@ -1,4 +1,11 @@
-import { ActionIcon, Button, clsx, Popover, Tooltip } from "@mantine/core";
+import {
+  ActionIcon,
+  Button,
+  clsx,
+  Popover,
+  Tooltip,
+  useMantineTheme,
+} from "@mantine/core";
 import {
   IconArrowBarDown,
   IconArrowBarUp,
@@ -58,11 +65,16 @@ const MessageItemBar = ({
   const isPromptResponsing = useAppSelector(
     (state) => state.prompt.isPromptResponsing
   );
+  const { colorScheme } = useMantineTheme();
+
+  const iconThemeColor =
+    colorScheme === "dark" ? "text-dark-100" : "text-violet-500";
+
   const actionsDefine: RenderActionButtonProps[] = useMemo(
     () => [
       {
         icon: withIconStyle(IconClipboardCopy, {
-          className: "text-violet-500",
+          className: iconThemeColor,
         }),
         onClick: () => {
           navigator.clipboard.writeText(msg.text);
@@ -71,15 +83,19 @@ const MessageItemBar = ({
       },
       {
         icon: expanded
-          ? withIconStyle(IconArrowBarUp, { className: "text-gray-400" })
-          : withIconStyle(IconArrowBarDown, { className: "text-violet-500" }),
+          ? withIconStyle(IconArrowBarUp, {
+              className: "text-gray-400",
+            })
+          : withIconStyle(IconArrowBarDown, {
+              className: iconThemeColor,
+            }),
         onClick: () => onToggleExpanded(),
         tooltip: expanded ? t("collapse") : t("expand"),
       },
       {
         icon: msg.fixedInPrompt
           ? withIconStyle(IconPinnedOff, { className: "text-gray-500" })
-          : withIconStyle(IconPin, { className: "text-violet-500" }),
+          : withIconStyle(IconPin, { className: iconThemeColor }),
         onClick: () =>
           dispatch(toggleMesageFixedInPrompt({ index, id: msg.id })),
         tooltip: msg.fixedInPrompt
@@ -90,9 +106,7 @@ const MessageItemBar = ({
         disabled: msg.fixedInPrompt,
         icon: msg.inPrompts
           ? withIconStyle(IconCloud, {
-              className: msg.fixedInPrompt
-                ? "text-gray-400"
-                : "text-violet-500",
+              className: msg.fixedInPrompt ? "text-gray-400" : iconThemeColor,
             })
           : withIconStyle(IconCloudOff, { className: "text-gray-400" }),
         onClick: () => dispatch(toggleMessagePrompt(index)),
@@ -105,12 +119,12 @@ const MessageItemBar = ({
             }`,
       },
       {
-        icon: withIconStyle(IconTrash, { className: "text-red-500" }),
+        icon: withIconStyle(IconTrash, { className: "text-red-400" }),
         onClick: () => onDelete(),
         tooltip: t("message_actions_delete"),
       },
     ],
-    [expanded, msg.inPrompts, msg.fixedInPrompt, t]
+    [expanded, msg.inPrompts, msg.fixedInPrompt, t, colorScheme]
   );
 
   useEffect(() => {
@@ -202,7 +216,7 @@ const MessageItemBar = ({
                   handleActionClick(item, msg.text);
                 }}
               >
-                {item.name}
+                <span className={iconThemeColor}>{item.name}</span>
               </Button>
             </Tooltip>
           ))}
@@ -250,12 +264,14 @@ const RenderActionButton = ({
 );
 
 const RenderTime = (msg: Message) => {
+  const { colorScheme } = useMantineTheme();
+  const dark = colorScheme === "dark";
   return (
     <div
       className={clsx(
         "text-xs italic",
-        msg.inPrompts && "text-gray-400",
-        !msg.inPrompts && "text-gray-300"
+        msg.inPrompts && (dark ? "text-gray-300" : "text-gray-400"),
+        !msg.inPrompts && (dark ? "text-dark-400" : "text-gray-300")
       )}
     >
       {new Date(msg.timestamp * 1000).toLocaleTimeString()}
@@ -264,13 +280,18 @@ const RenderTime = (msg: Message) => {
 };
 
 const RenderTokensCount = (msg: Message) => {
+  const { colorScheme } = useMantineTheme();
   return (
     <div
       className={clsx(
         "text-xs px-1 ml-3 rounded-sm mr-1 font-greycliff",
-        msg.inPrompts
-          ? "bg-violet-100 text-violet-500"
-          : "bg-gray-200 text-white"
+        colorScheme === "light"
+          ? msg.inPrompts
+            ? "bg-violet-100 text-violet-500"
+            : "bg-gray-200 text-white"
+          : msg.inPrompts
+          ? "text-dark-100 font-bold"
+          : "text-dark-400 font-bold"
       )}
     >{`${window.electronAPI.othersIpcRenderer.calMessagesTokens(
       [
@@ -286,6 +307,7 @@ const RenderTokensCount = (msg: Message) => {
 
 const RenderPreviewButton = (msg: Message) => {
   const [opened, { close, open }] = useDisclosure(false);
+  const { colorScheme } = useMantineTheme();
 
   return (
     <Popover
@@ -303,7 +325,12 @@ const RenderPreviewButton = (msg: Message) => {
           onMouseEnter={open}
           onMouseLeave={close}
         >
-          <IconEye size={14} className="text-violet-500" />
+          <IconEye
+            size={14}
+            className={
+              colorScheme === "dark" ? "text-white" : "text-violet-500"
+            }
+          />
         </ActionIcon>
       </Popover.Target>
       <Popover.Dropdown>

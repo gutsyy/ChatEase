@@ -4,6 +4,7 @@ import {
   ipcMain,
   Menu,
   MenuItemConstructorOptions,
+  nativeTheme,
   shell,
 } from "electron";
 import { encode } from "gpt-3-encoder";
@@ -71,5 +72,10 @@ export const othersIpcMain = (window: BrowserWindow) => {
         app.quit();
       }
     });
+  });
+
+  ipcMain.on("color-scheme", (event, colorScheme) => {
+    nativeTheme.themeSource = colorScheme;
+    event.returnValue = null;
   });
 };

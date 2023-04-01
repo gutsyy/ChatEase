@@ -1,3 +1,5 @@
+import { useMantineTheme } from "@mantine/core";
+import clsx from "clsx";
 import { useAppSelector } from "../hooks/redux";
 import { ChatHistory } from "./ChatHistory/ChatHistory";
 import { PromptsList } from "./Prompt/PromptsList";
@@ -17,9 +19,15 @@ export const SideExtend = () => {
 
   const sideNavExpanded = useAppSelector((state) => state.app.sideNavExpanded);
 
+  const { colorScheme } = useMantineTheme();
+
   return (
     <div
-      className="h-full bg-gray-100 py-1 transition-all overflow-hidden border-solid border-0 border-r border-gray-200"
+      className={clsx(
+        "h-full py-1 transition-all overflow-hidden border-solid border-0 border-r",
+        colorScheme === "light" && "bg-gray-100 border-gray-200",
+        colorScheme === "dark" && "bg-dark-700 border-dark-700"
+      )}
       style={{
         width: sideNavExpanded ? "256px" : "0px",
         paddingLeft: sideNavExpanded ? "0.25rem" : "",

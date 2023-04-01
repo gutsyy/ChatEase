@@ -8,7 +8,7 @@ export const CleanAppDataSettings = () => {
 
   return (
     <div>
-      <div className="font-greycliff font-bold text-gray-800">
+      <div className="font-greycliff font-bold">
         {t("settings_cleanAppData_title")}
       </div>
       <div className="text-gray-400 font-greycliff text-xs">

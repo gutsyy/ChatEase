@@ -5,7 +5,7 @@ import {
   Droppable,
   Draggable,
 } from "react-beautiful-dnd";
-import { Textarea } from "@mantine/core";
+import { clsx, Textarea, useMantineTheme } from "@mantine/core";
 import { Prompt } from "../../../database/models/Prompt";
 import { IconBrandTelegram, IconMessage2 } from "@tabler/icons-react";
 import { useTranslation } from "react-i18next";
@@ -14,6 +14,7 @@ export const ChatToolbarSettings = () => {
   const [allActions, setAllActions] = useState<Prompt[]>([]);
   const [selectedActions, setSelectedActions] = useState<Prompt[]>([]);
   const { t } = useTranslation();
+  const { colorScheme } = useMantineTheme();
 
   useEffect(() => {
     const selectedActionIds = window.electronAPI.storeIpcRenderer.get(
@@ -105,7 +106,7 @@ export const ChatToolbarSettings = () => {
 
   return (
     <div className="w-full">
-      <div className="text-sm font-greycliff font-bold text-gray-900">
+      <div className="text-sm font-greycliff font-bold">
         {t("settings_chatToolbar_selectableActions")}
       </div>
       <div className="text-xs text-gray-400 mb-1">
@@ -116,7 +117,10 @@ export const ChatToolbarSettings = () => {
           {(provided) => (
             <div
               ref={provided.innerRef}
-              className="flex whitespace-nowrap gap-1 py-1 px-1 bg-gray-100 rounded overflow-x-auto h-8"
+              className={clsx(
+                "flex whitespace-nowrap gap-1 py-1 px-1 rounded overflow-x-auto h-8",
+                colorScheme === "dark" ? "bg-dark-600" : "bg-gray-100"
+              )}
               style={{ maxWidth: "620px" }}
               {...provided.droppableProps}
             >
@@ -129,7 +133,10 @@ export const ChatToolbarSettings = () => {
                   {(provided) => (
                     <div
                       ref={provided.innerRef}
-                      className="py-1 px-3 text-xs font-greycliff bg-gray-300 text-white rounded-full"
+                      className={clsx(
+                        "py-1 px-3 text-xs font-greycliff text-white rounded-full",
+                        colorScheme === "dark" ? "bg-dark-900" : "bg-gray-300"
+                      )}
                       {...provided.dragHandleProps}
                       {...provided.draggableProps}
                     >
@@ -142,18 +149,26 @@ export const ChatToolbarSettings = () => {
             </div>
           )}
         </Droppable>
-        <div className="text-sm font-greycliff font-bold mt-4 text-gray-900">
+        <div className="text-sm font-greycliff font-bold mt-4">
           {t("settings_chatToolbar_SelectedActions")}
         </div>
         <div className="text-xs text-gray-400 mb-1">
           {t("settings_chatToolbar_SelectedActions_help")}
         </div>
-        <div className="p-2 bg-gray-100 rounded">
+        <div
+          className={clsx(
+            "p-2 rounded",
+            colorScheme === "dark" ? "bg-dark-700" : "bg-white"
+          )}
+        >
           <Droppable droppableId="selectedActions" direction="horizontal">
             {(provided) => (
               <div
                 ref={provided.innerRef}
-                className="flex w-full whitespace-nowrap gap-1 py-1 px-1 bg-white rounded overflow-x-auto h-8"
+                className={clsx(
+                  "flex whitespace-nowrap gap-1 py-1 px-1 rounded overflow-x-auto h-8",
+                  colorScheme === "dark" ? "bg-dark-500" : "bg-gray-100"
+                )}
                 style={{ maxWidth: "620px" }}
                 {...provided.droppableProps}
               >
@@ -182,7 +197,7 @@ export const ChatToolbarSettings = () => {
           <div className="flex w-full items-center gap-1 mt-2">
             <IconMessage2 size={18} className="text-gray-500" />
             <Textarea className="flex-1" minRows={1} disabled></Textarea>
-            <IconBrandTelegram size={18} className="text-blue-500" />
+            <IconBrandTelegram size={18} className="text-gray-500" />
           </div>
         </div>
       </DragDropContext>

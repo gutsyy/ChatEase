@@ -5,7 +5,7 @@ import {
   Droppable,
   Draggable,
 } from "react-beautiful-dnd";
-import { Skeleton } from "@mantine/core";
+import { clsx, Skeleton, useMantineTheme } from "@mantine/core";
 import { Prompt } from "../../../database/models/Prompt";
 import { useTranslation } from "react-i18next";
 
@@ -13,6 +13,7 @@ export const MessageToolbarSettings = () => {
   const [allActions, setAllActions] = useState<Prompt[]>([]);
   const [selectedActions, setSelectedActions] = useState<Prompt[]>([]);
   const { t } = useTranslation();
+  const { colorScheme } = useMantineTheme();
 
   useEffect(() => {
     const selectedActionIds = window.electronAPI.storeIpcRenderer.get(
@@ -104,7 +105,7 @@ export const MessageToolbarSettings = () => {
 
   return (
     <div className="w-full">
-      <div className="text-sm font-greycliff font-bold text-gray-900">
+      <div className="text-sm font-greycliff font-bold">
         {t("settings_message_selectableActions")}
       </div>
       <div className="text-xs text-gray-400 mb-1">
@@ -115,7 +116,10 @@ export const MessageToolbarSettings = () => {
           {(provided) => (
             <div
               ref={provided.innerRef}
-              className="flex whitespace-nowrap gap-1 py-1 px-1 bg-gray-100 rounded overflow-x-auto h-8"
+              className={clsx(
+                "flex whitespace-nowrap gap-1 py-1 px-1 rounded overflow-x-auto h-8",
+                colorScheme === "dark" ? "bg-dark-600" : "bg-gray-100"
+              )}
               style={{ maxWidth: "620px" }}
               {...provided.droppableProps}
             >
@@ -141,20 +145,28 @@ export const MessageToolbarSettings = () => {
             </div>
           )}
         </Droppable>
-        <div className="text-sm font-greycliff font-bold mt-4 text-gray-900">
+        <div className="text-sm font-greycliff font-bold mt-4">
           {t("settings_message_SelectedActions")}
         </div>
         <div className="text-xs text-gray-400 mb-1">
           {t("settings_message_SelectedActions_help")}
         </div>
-        <div className="p-2 bg-gray-100 rounded w-full">
+        <div
+          className={clsx(
+            "p-2 rounded w-full",
+            colorScheme === "dark" ? "bg-dark-700" : "bg-gray-100"
+          )}
+        >
           <div className="flex justify-between items-center">
             <Skeleton className="h-6" width={120}></Skeleton>
             <Droppable droppableId="selectedActions" direction="horizontal">
               {(provided) => (
                 <div
                   ref={provided.innerRef}
-                  className="flex flex-1 ml-2 whitespace-nowrap gap-1 py-1 px-1 bg-white rounded overflow-x-auto h-8"
+                  className={clsx(
+                    "flex flex-1 ml-2 whitespace-nowrap gap-1 py-1 px-1 rounded overflow-x-auto h-8",
+                    colorScheme === "dark" ? "bg-dark-500" : "bg-white"
+                  )}
                   style={{ maxWidth: "480px" }}
                   {...provided.droppableProps}
                 >

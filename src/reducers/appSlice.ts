@@ -5,11 +5,15 @@ type AppModule = "chat" | "action";
 interface AppState {
   selectedAppModule: AppModule;
   sideNavExpanded: boolean; // createChat,
+  theme: "light" | "dark";
 }
 
 const initialState: AppState = {
   selectedAppModule: "chat",
   sideNavExpanded: true,
+  theme:
+    (window.electronAPI.storeIpcRenderer.get("theme") as "light" | "dark") ??
+    "light",
 };
 
 export const appSlice = createSlice({
@@ -25,9 +29,17 @@ export const appSlice = createSlice({
     toggleSideNavExpanded: (state) => {
       state.sideNavExpanded = !state.sideNavExpanded;
     },
+
+    /** Toggle theme */
+    toggleAppTheme: (state, action: PayloadAction<"light" | "dark">) => {
+      state.theme = action.payload;
+      window.electronAPI.storeIpcRenderer.set("theme", action.payload);
+      window.electronAPI.othersIpcRenderer.colorScheme(action.payload);
+    },
   },
 });
 
-export const { setMode, toggleSideNavExpanded } = appSlice.actions;
+export const { setMode, toggleSideNavExpanded, toggleAppTheme } =
+  appSlice.actions;
 
 export default appSlice.reducer;

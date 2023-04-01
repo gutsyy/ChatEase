@@ -14,6 +14,7 @@ import { MessageToolbarSettings } from "./MessageToolbarSettings";
 import { CleanAppDataSettings } from "./CleanAppDataSettings";
 import { useTranslation } from "react-i18next";
 import { t } from "i18next";
+import { clsx, useMantineTheme } from "@mantine/core";
 
 type SettingItem = {
   name: string;
@@ -29,6 +30,7 @@ const setIcon = (Component: (props: TablerIconsProps) => JSX.Element) => {
 const Settings = () => {
   const [selected, setSelected] = useState<number>(0);
   const { t } = useTranslation();
+  const { colorScheme } = useMantineTheme();
 
   const settings: SettingItem[] = [
     {
@@ -70,21 +72,33 @@ const Settings = () => {
 
   return (
     <div className="flex" style={{ height: "500px" }}>
-      <div className="flex flex-col w-36 bg-gray-50 p-1 rounded">
+      <div
+        className={clsx(
+          "flex flex-col w-36 p-1 rounded",
+          colorScheme === "dark" ? "bg-dark-700" : "bg-gray-50"
+        )}
+      >
         {settings.map((item, i) => (
           <div
             key={i}
             className={
               "flex w-full justify-between items-center mt-1 p-1 rounded hover:cursor-pointer " +
-              (selected === i && "bg-gray-200")
+              (selected === i &&
+                (colorScheme === "dark" ? "bg-dark-500" : "bg-gray-200"))
             }
             onClick={() => onSettingItemClick(i)}
           >
             <div
-              className={
-                "p-1 rounded flex justify-center items-center bg-blue-500 " +
-                (selected === i ? "bg-violet-500" : "bg-gray-400")
-              }
+              className={clsx(
+                "p-1 rounded flex justify-center items-center bg-blue-500",
+                colorScheme !== "dark"
+                  ? selected === i
+                    ? "bg-violet-500"
+                    : "bg-gray-400"
+                  : selected === i
+                  ? "bg-violet-500"
+                  : "bg-dark-500"
+              )}
             >
               {setIcon(item.icon)}
             </div>

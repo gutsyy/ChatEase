@@ -1,4 +1,4 @@
-import { Button } from "@mantine/core";
+import { Button, useMantineTheme } from "@mantine/core";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../../hooks/redux";
@@ -13,6 +13,7 @@ export const ChatActionBar = ({ visible, onClick }: ChatActionBarProps) => {
   const [runningActionId, setRunningActionId] = useState(-1);
   const [actions, setActions] = useState<Prompt[]>([]);
   const actionId = useAppSelector((state) => state.prompt.actionId);
+  const { colorScheme } = useMantineTheme();
 
   useEffect(() => {
     if (actionId !== "chat-action" && runningActionId !== -1) {
@@ -34,8 +35,11 @@ export const ChatActionBar = ({ visible, onClick }: ChatActionBarProps) => {
   return (
     <div
       className={clsx(
-        "bg-white border-solid border-0 border-t border-gray-200 gap-1 w-full flex items-center justify-center px-4 transition-all ease-linear duration-100 overflow-y-hidden",
-        visible ? "h-8 py-1 opacity-100" : "h-0 py-0 opacity-0"
+        "border-solid border-0 border-t gap-1 w-full flex items-center justify-center px-4 transition-all ease-linear duration-100 overflow-y-hidden",
+        visible ? "h-8 py-1 opacity-100" : "h-0 py-0 opacity-0",
+        colorScheme === "dark"
+          ? "bg-dark-800 border-dark-600 border-b"
+          : "border-gray-200 bg-white"
       )}
     >
       {actions.length === 0 && (

@@ -63,7 +63,7 @@ const PromptForm = (initialValues: Prompt) => {
         required
         {...form.getInputProps("description")}
       />
-      <div className="mt-2 text-xs font-medium text-gray-800">
+      <div className="mt-2 text-xs font-medium">
         {t("sideExtend_prompt_form_temperature")}
       </div>
       <Slider
@@ -71,6 +71,7 @@ const PromptForm = (initialValues: Prompt) => {
         min={0}
         size="xs"
         max={2}
+        color="violet"
         label={(value) => value.toFixed(1)}
         step={0.1}
         {...form.getInputProps("temperature")}
@@ -92,7 +93,7 @@ const PromptForm = (initialValues: Prompt) => {
           marginTop: theme.spacing.sm,
         }}
       >
-        <Button size="xs" type="submit">
+        <Button size="xs" type="submit" color="violet">
           {initialValues.id
             ? t("sideExtend_prompt_form_save_button")
             : t("sideExtend_prompt_form_create_button")}

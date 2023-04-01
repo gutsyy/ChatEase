@@ -1,17 +1,25 @@
-import { Select, Switch } from "@mantine/core";
-import { IconRotateClockwise } from "@tabler/icons-react";
+import { Select, Switch, useMantineTheme } from "@mantine/core";
+import {
+  IconMoonStars,
+  IconRotateClockwise,
+  IconSun,
+} from "@tabler/icons-react";
 import { changeLanguage } from "i18next";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useAppDispatch } from "../../../hooks/redux";
 import { lans } from "../../../i18n/i18n";
 import InputSetStyles from "./InputSetStyles";
 import NumberInputSetStyles from "./NumberInputSetStyles";
 import SettingItem, { SettingItemProps } from "./SettingItem";
 import TextareaSetStyles from "./TextareaSetStyles";
 import TooltipSetStyles from "./TooltipSetStyles";
+import { toggleAppTheme } from "../../../reducers/appSlice";
 
 const GeneralSettings = () => {
   const { t } = useTranslation();
+  const theme = useMantineTheme();
+  const dispatch = useAppDispatch();
 
   const settings: SettingItemProps[] = [
     {
@@ -40,6 +48,30 @@ const GeneralSettings = () => {
             changeLanguage(value);
           }}
         ></Select>
+      ),
+    },
+    {
+      label: t("settings_general_theme"),
+      input: () => (
+        <Switch
+          size="md"
+          checked={theme.colorScheme === "dark"}
+          color={theme.colorScheme === "dark" ? "gray" : "dark"}
+          onLabel={
+            <IconSun size="1rem" stroke={2.5} color={theme.colors.yellow[4]} />
+          }
+          offLabel={
+            <IconMoonStars
+              size="1rem"
+              stroke={2.5}
+              color={theme.colors.blue[6]}
+            />
+          }
+          onChange={(e) => {
+            const isDarkMode = e.currentTarget.checked;
+            dispatch(toggleAppTheme(isDarkMode ? "dark" : "light"));
+          }}
+        />
       ),
     },
     {

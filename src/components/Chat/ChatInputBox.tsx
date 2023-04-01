@@ -1,4 +1,4 @@
-import { Textarea, ActionIcon } from "@mantine/core";
+import { Textarea, ActionIcon, clsx, useMantineTheme } from "@mantine/core";
 import { IconX, IconArrowBackUp, IconBrandTelegram } from "@tabler/icons-react";
 import {
   forwardRef,
@@ -70,6 +70,7 @@ export const ChatInputBox = forwardRef(
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
     const { t } = useTranslation();
     const _textAreaRef = useMergedRef(textAreaRef, ref);
+    const { colorScheme } = useMantineTheme();
 
     useEffect(() => {
       setActionsBarVisible(focused);
@@ -161,7 +162,13 @@ export const ChatInputBox = forwardRef(
           visible={actionsBarVisible}
           onClick={(prompt) => handlePromptAction(prompt)}
         />
-        <div className="bg-gray-100 p-4 flex items-center border-solid border-0 border-t border-gray-200">
+        <div
+          className={clsx(
+            "p-4 flex items-center border-solid border-0 border-t",
+            colorScheme === "dark" && "bg-dark-900 border-dark-900",
+            colorScheme === "light" && "bg-gray-100 border-gray-200"
+          )}
+        >
           <form
             className="flex items-center justify-between flex-1"
             onSubmit={handleSendMessage}
@@ -211,7 +218,14 @@ export const ChatInputBox = forwardRef(
                       size="sm"
                       onClick={() => setMessage(historyMessage)}
                     >
-                      <IconArrowBackUp size={12} />
+                      <IconArrowBackUp
+                        className={
+                          colorScheme === "dark"
+                            ? "text-dark-100"
+                            : "text-violet-500"
+                        }
+                        size={12}
+                      />
                     </ActionIcon>
                   </div>
                 )
@@ -219,7 +233,12 @@ export const ChatInputBox = forwardRef(
             ></Textarea>
             <ActionIcon color="violet" type="submit" variant="subtle" size="sm">
               {/* <IconSend size={16} /> */}
-              <IconBrandTelegram size={16} />
+              <IconBrandTelegram
+                className={
+                  colorScheme === "dark" ? "text-dark-100" : "text-violet-500"
+                }
+                size={16}
+              />
             </ActionIcon>
           </form>
         </div>

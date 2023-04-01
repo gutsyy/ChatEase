@@ -6,6 +6,7 @@ import MessageItem from "./MessageItem";
 import { ChatBottomStatusBar } from "./ChatBottomStatusBar";
 import { NoMessages } from "./NoMessages";
 import { ChatInputBox } from "./ChatInputBox";
+import { clsx, useMantineTheme } from "@mantine/core";
 
 export const ChatContext = createContext<{
   scrollToBottom: () => void;
@@ -19,6 +20,7 @@ export default function Chat() {
     () => messages.filter((msg) => msg.inPrompts).length,
     [messages]
   );
+  const { colorScheme } = useMantineTheme();
 
   const scrollToBottom = () => {
     if (chatsContainer.current) {
@@ -33,7 +35,11 @@ export default function Chat() {
     <ChatContext.Provider value={{ scrollToBottom }}>
       <div className="h-full flex flex-col overflow-hidden flex-1">
         <div
-          className="bg-gray-50 flex-1 px-4 py-2 overflow-auto relative chat-messages-view flex flex-col"
+          className={clsx(
+            "flex-1 px-4 py-2 overflow-auto relative chat-messages-view flex flex-col",
+            colorScheme === "dark" && "bg-dark-800",
+            colorScheme === "light" && "bg-gray-50"
+          )}
           ref={chatsContainer}
         >
           {messages.length === 0 && <NoMessages />}

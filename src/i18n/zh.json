@@ -1,7 +1,7 @@
 {
   "translation": {
     "sideNav_chat_tooltip": "与GPT会话",
-    "sideNav_prompt_tooltip": "Prompt 仓库",
+    "sideNav_prompt_tooltip": "Prompt仓库",
     "sideNav_settings_tooltip": "设置",
 
     "sideExtend_chat_newChat": "新建会话",
@@ -27,6 +27,7 @@
 
     "settings_general_title": "通用设置",
     "settings_general_language": "语言",
+    "settings_general_theme": "暗黑模式", 
     "settings_general_apiKey": "OpenAI API Key",
     "settings_general_maxMessages": "Prompt中最大消息数",
     "settings_general_maxMessages_tooltip": "如果值为0，则根据最大tokens限制自动计算",
@@ -45,7 +46,7 @@
     "settings_chatToolbar_title": "会话工具栏",
     "settings_chatToolbar_selectableActions": "可选择的Prompt",
     "settings_chatToolbar_selectableActions_help": "如要选择，请拖动Prompt到下方工具栏",
-    "settings_chatToolbar_SelectedActions": "已选择的 Prompt",
+    "settings_chatToolbar_SelectedActions": "已选择的Prompt",
     "settings_chatToolbar_SelectedActions_help": "如要移除，请拖动Prompt到上方工具栏",
 
     "settings_message_title": "消息工具栏",

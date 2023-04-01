@@ -65,7 +65,7 @@ export const ChatHistory = () => {
           }}
           className="w-full"
           variant="gradient"
-          gradient={{ from: "#8B5CF6", to: "#B794F4", deg: 35 }}
+          gradient={{ from: "#7335ff", to: "#bf5ad9", deg: 35 }}
           leftIcon={<IconPlus size={18} />}
           onClick={() => onNewChat()}
         >

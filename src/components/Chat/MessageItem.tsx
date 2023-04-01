@@ -9,6 +9,7 @@ import {
   Collapse,
   Divider,
   Text,
+  useMantineTheme,
 } from "@mantine/core";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
@@ -27,6 +28,8 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
   const actionId = useMemo(() => v4(), [msg.id]);
   const [opened, { toggle, open, close }] = useDisclosure(!msg.collapse);
   const [renderContentState, setRenderContentState] = useState<boolean>(true);
+  const { colorScheme } = useMantineTheme();
+  const dark = colorScheme === "dark";
 
   useEffect(() => {
     if (msg.collapse) {
@@ -91,8 +94,10 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
       <div
         className={clsx(
           "p-3 mb-4 rounded-lg relative",
-          msg.sender === "user" && "bg-white",
-          msg.sender === "assistant" && "bg-gray-100",
+          msg.sender === "user" &&
+            (colorScheme === "light" ? "bg-white" : "bg-dark-900"),
+          msg.sender === "assistant" &&
+            (colorScheme === "light" ? "bg-gray-100" : "bg-dark-700"),
           msg.fixedInPrompt && "outline outline-1 outline-violet-500"
         )}
         ref={contentRef}
@@ -103,7 +108,7 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
               <IconBrandOpenai
                 className={clsx(
                   "mr-1",
-                  !msg.inPrompts && "text-gray-300",
+                  !msg.inPrompts && (dark ? "text-dark-400" : "text-gray-300"),
                   msg.inPrompts && "text-violet-500"
                 )}
                 size={12}
@@ -113,8 +118,13 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
                 size={13}
                 className={clsx(
                   "mr-1",
-                  msg.inPrompts && "text-gray-500",
-                  !msg.inPrompts && "text-gray-300"
+                  !dark
+                    ? msg.inPrompts
+                      ? "text-gray-500"
+                      : "text-gray-300"
+                    : msg.inPrompts
+                    ? "text-dark-100"
+                    : "text-dark-400"
                 )}
               />
             )}
@@ -123,7 +133,13 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
               weight={500}
               className={clsx("mr-2", !msg.inPrompts && "text-gray-300")}
             >
-              <span>{msg.sender === "user" ? "You" : "ChatGPT"}</span>
+              <span
+                className={clsx(
+                  dark && (msg.inPrompts ? "text-dark-100" : "text-dark-400")
+                )}
+              >
+                {msg.sender === "user" ? "You" : "ChatGPT"}
+              </span>
             </Text>
           </div>
           <MessageItemBar
@@ -217,6 +233,8 @@ export const RenderContent = ({
   msg: Message;
   msgKey: "text" | "actionResult";
 }) => {
+  const { colorScheme } = useMantineTheme();
+
   const codeScope = (
     window.electronAPI.storeIpcRenderer.get("markdown_code_scope") as string
   )
@@ -228,13 +246,19 @@ export const RenderContent = ({
       size="xs"
       className={clsx(
         "ml-4 mr-2",
-        msg.inPrompts && "text-gray-900",
-        !msg.inPrompts && "text-gray-500",
+        msg.inPrompts &&
+          (colorScheme === "light" ? "text-gray-900" : "text-dark-100"),
+        !msg.inPrompts &&
+          (colorScheme === "light" ? "text-gray-500" : "text-dark-400"),
         msg.sender === "user" && "whitespace-pre-wrap"
       )}
     >
       {msg.sender === "assistant" ? (
-        <Markdown text={msg[msgKey]} codeScope={codeScope} />
+        <Markdown
+          text={msg[msgKey]}
+          codeScope={codeScope}
+          colorScheme={colorScheme}
+        />
       ) : (
         <p>{msg[msgKey]}</p>
       )}

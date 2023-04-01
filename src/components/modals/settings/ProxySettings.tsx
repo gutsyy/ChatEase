@@ -110,7 +110,7 @@ const ProxySettings = () => {
   // };
 
   return (
-    <div className="text-gray-900 w-full">
+    <div className="w-full">
       {/* <div className="mb-4">
         <div className="flex items-center">
           <div className="mr-3" style={{ fontSize: "0.9rem", fontWeight: 300 }}>
@@ -133,7 +133,7 @@ const ProxySettings = () => {
       </div> */}
       <div className="flex items-center">
         <div
-          className="mr-3 text-gray-800 font-greycliff"
+          className="mr-3 font-greycliff"
           style={{
             fontSize: "0.9rem",
             fontWeight: 600,

@@ -3,7 +3,6 @@ import { Notifications } from "@mantine/notifications";
 import { MainPanel, SideExtend, SideNav } from "./components";
 import { useEffect, useState } from "react";
 import { handleNotis } from "./services/utils/notis";
-import { Provider } from "react-redux";
 import store from "./store";
 import { AxiosIpcRenderer } from "./ipcBridge/renderer/axios";
 import { ModalsProvider } from "@mantine/modals";
@@ -19,6 +18,7 @@ import { setSelectedPromptId } from "./reducers/promptSlice";
 import { openApiKeysSetupModal } from "./components/modals/openApiKeysSetUpModal";
 
 import "./i18n/i18n";
+import { useAppSelector } from "./hooks/redux";
 
 declare global {
   interface Window {
@@ -34,6 +34,8 @@ declare global {
 }
 
 export const App = () => {
+  const theme = useAppSelector((state) => state.app.theme);
+
   useEffect(() => {
     window.electronAPI.notificationIpcRenderer.show((event, data) => {
       handleNotis(data);
@@ -88,46 +90,48 @@ export const App = () => {
   // const selectedMode = useAppSelector((state) => state.app.selectedMode);
 
   return (
-    <Provider store={store}>
-      <MantineProvider
-        withGlobalStyles
-        withNormalizeCSS
-        theme={{
-          colors: {
-            blue: [
-              "#f5f3ff",
-              "#ede9fe",
-              "#ddd6fe",
-              "#c4b5fd",
-              "#a78bfa",
-              "#8b5cf6",
-              "#7c3aed",
-              "#6d28d9",
-              "#5b21b6",
-              "#4c1d95",
-            ],
-          },
-        }}
+    <MantineProvider
+      withGlobalStyles
+      withNormalizeCSS
+      theme={{
+        colorScheme: theme,
+        colors: {
+          blue:
+            theme === "light"
+              ? [
+                  "#f5f3ff",
+                  "#ede9fe",
+                  "#ddd6fe",
+                  "#c4b5fd",
+                  "#a78bfa",
+                  "#8b5cf6",
+                  "#7c3aed",
+                  "#6d28d9",
+                  "#5b21b6",
+                  "#4c1d95",
+                ]
+              : [],
+        },
+      }}
+    >
+      {" "}
+      <SpotlightProvider
+        radius="md"
+        actions={searchProviderActions}
+        searchIcon={<IconSearch size="1.2rem" />}
+        searchPlaceholder="Searching Prompt Action..."
+        shortcut="mod + K"
+        nothingFoundMessage="Nothing found..."
       >
-        {" "}
-        <SpotlightProvider
-          radius="md"
-          actions={searchProviderActions}
-          searchIcon={<IconSearch size="1.2rem" />}
-          searchPlaceholder="Searching Prompt Action..."
-          shortcut="mod + K"
-          nothingFoundMessage="Nothing found..."
-        >
-          <Notifications position="top-right" />
-          <ModalsProvider>
-            <div className="flex w-full h-full">
-              <SideNav />
-              <SideExtend />
-              <MainPanel />
-            </div>
-          </ModalsProvider>
-        </SpotlightProvider>
-      </MantineProvider>
-    </Provider>
+        <Notifications position="top-right" />
+        <ModalsProvider>
+          <div className="flex w-full h-full">
+            <SideNav />
+            <SideExtend />
+            <MainPanel />
+          </div>
+        </ModalsProvider>
+      </SpotlightProvider>
+    </MantineProvider>
   );
 };

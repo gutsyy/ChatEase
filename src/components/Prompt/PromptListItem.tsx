@@ -1,4 +1,4 @@
-import { ActionIcon, clsx } from "@mantine/core";
+import { ActionIcon, clsx, useMantineTheme } from "@mantine/core";
 import { IconSettings, IconTrash } from "@tabler/icons-react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { Prompt } from "../../database/models/Prompt";
@@ -8,6 +8,7 @@ import { openDeleteConfirmModal } from "../modals/customModals";
 import { ModalTitle } from "../../pureComponents/ModalTitle";
 
 export const PromptListItem = (prompt: Prompt) => {
+  const { colorScheme } = useMantineTheme();
   const selectedPromptId = useAppSelector(
     (state) => state.prompt.selectedPromptId
   );
@@ -30,13 +31,22 @@ export const PromptListItem = (prompt: Prompt) => {
     <div
       className={clsx(
         "flex px-2 py-2 justify-between items-center rounded",
-        selectedPromptId === prompt.id ? "bg-gray-200" : "hover:cursor-pointer"
+        selectedPromptId === prompt.id
+          ? colorScheme === "light"
+            ? "bg-gray-200"
+            : "bg-dark-500"
+          : "hover:cursor-pointer"
       )}
       onClick={() => {
         dispatch(setSelectedPromptId(prompt.id));
       }}
     >
-      <div className="flex-1 flex items-center text-xs text-gray-500 whitespace-nowrap text-ellipsis overflow-hidden">
+      <div
+        className={clsx(
+          "flex-1 flex items-center text-xs whitespace-nowrap text-ellipsis overflow-hidden",
+          colorScheme === "light" ? "text-gray-500" : "text-dark-100"
+        )}
+      >
         <div
           style={{ fontFamily: "Greycliff CF, sans serif", fontWeight: 400 }}
         >
@@ -64,7 +74,7 @@ export const PromptListItem = (prompt: Prompt) => {
             onDelete();
           }}
         >
-          <IconTrash size={12} />
+          <IconTrash className="text-red-400" size={12} />
         </ActionIcon>
       </div>
     </div>

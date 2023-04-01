@@ -17,6 +17,11 @@
 }
 
 @font-face {
+  font-family: "Monaco"; /* 字体家族名称 */
+  src: url("./fonts/Monaco.woff") format("woff"); /* 字体文件路径及格式 */
+}
+
+@font-face {
   font-family: "Greycliff CF"; /* 字体家族名称 */
   src: url("./fonts/GreycliffCF-Heavy.woff2") format("woff2"); /* 字体文件路径及格式 */
   font-weight: 900; /* 字体粗细 */

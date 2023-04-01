@@ -13,11 +13,13 @@ import {
 } from "../pureComponents/ToolboxVertical";
 import { openSettingsModal } from "./modals/settings";
 import { useTranslation } from "react-i18next";
+import { clsx, useMantineTheme } from "@mantine/core";
 
 export const SideNav = () => {
   const dispatch = useAppDispatch();
   const sideNavExpanded = useAppSelector((state) => state.app.sideNavExpanded);
   const { t } = useTranslation();
+  const { colorScheme } = useMantineTheme();
 
   const topItems: ToolboxVerticalItem[] = [
     {
@@ -56,7 +58,14 @@ export const SideNav = () => {
   ];
 
   return (
-    <div className="flex flex-col justify-between bg-white text-gray-400 border-solid border-0 border-r border-gray-200">
+    <div
+      className={clsx(
+        "flex flex-col justify-between border-solid border-0 border-r",
+        colorScheme === "dark"
+          ? "bg-dark-800 border-dark-600 text-dark-300"
+          : "bg-white text-gray-400 border-gray-200"
+      )}
+    >
       <ToolboxVertical items={topItems} defaultSelected={0}></ToolboxVertical>
       <ToolboxVertical items={bottomItems} keepClicked={false} />
     </div>

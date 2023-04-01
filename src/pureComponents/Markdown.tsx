@@ -5,10 +5,18 @@ import ReactMarkdown from "react-markdown";
 import { CodeProps } from "react-markdown/lib/ast-to-react";
 import hljs from "highlight.js";
 // import "highlight.js/styles/atom-one-dark-reasonable.css";
-import "highlight.js/styles/atom-one-light.css";
+import "highlight.js/styles/atom-one-dark.css";
 import { handleNotis } from "../services/utils/notis";
 
-const CodeToolbar = ({ type, code }: { type: string; code: string }) => {
+const CodeToolbar = ({
+  type,
+  code,
+  colorScheme = "light",
+}: {
+  type: string;
+  code: string;
+  colorScheme?: "light" | "dark";
+}) => {
   const [state, setState] = React.useState(false);
 
   const onCopyEvent = () => {
@@ -21,7 +29,12 @@ const CodeToolbar = ({ type, code }: { type: string; code: string }) => {
 
   return (
     <div
-      className="flex justify-between items-center h-6 bg-gray-300 text-gray-900 px-2"
+      className={
+        "flex justify-between items-center h-6 px-2 font-monaco " +
+        (colorScheme === "light"
+          ? "bg-gray-300 text-gray-900"
+          : "bg-dark-900 text-dark-100")
+      }
       style={{
         borderTopRightRadius: "0.5rem",
         borderTopLeftRadius: "0.5rem",
@@ -35,7 +48,7 @@ const CodeToolbar = ({ type, code }: { type: string; code: string }) => {
         }
         size="sm"
         variant="light"
-        className="h-5 text-xs text-gray-500 bg-gray-300"
+        className="h-5 text-xs text-gray-500 bg-transparent"
         color="gray"
         styles={(theme) => ({
           root: {
@@ -60,7 +73,15 @@ const CodeToolbar = ({ type, code }: { type: string; code: string }) => {
 };
 
 export const Markdown = memo(
-  ({ text, codeScope }: { text: string; codeScope: string[] }) => {
+  ({
+    text,
+    codeScope,
+    colorScheme = "light",
+  }: {
+    text: string;
+    codeScope: string[];
+    colorScheme?: "light" | "dark";
+  }) => {
     return (
       <ReactMarkdown
         children={text}
@@ -93,9 +114,15 @@ export const Markdown = memo(
                   code={
                     children && children.length > 0 ? children.join("") : ""
                   }
+                  colorScheme={colorScheme}
                 />
                 <div
-                  className="overflow-scroll py-3 px-2 text-dark bg-gray-200"
+                  className={
+                    "overflow-scroll py-3 px-2 font-monaco " +
+                    (colorScheme === "light"
+                      ? "text-black bg-gray-200"
+                      : "text-dark-100 bg-dark-800")
+                  }
                   style={{
                     // background: "#282C34",
                     borderBottomRightRadius: "0.5rem",

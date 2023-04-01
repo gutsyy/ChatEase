@@ -14,7 +14,8 @@ export type SettingsKey =
   | "markdown_code_scope"
   | "chat_input_toolbar_items"
   | "message_toolbar_items"
-  | "temperature";
+  | "temperature"
+  | "theme";
 
 const defaultSettings: {
   [key in SettingsKey]: string | number | boolean | number[];
@@ -35,6 +36,7 @@ const defaultSettings: {
   chat_input_toolbar_items: [],
   message_toolbar_items: [],
   temperature: 1,
+  theme: "light",
 };
 
 export { defaultSettings };

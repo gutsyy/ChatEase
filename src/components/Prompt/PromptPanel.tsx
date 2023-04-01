@@ -65,7 +65,7 @@ export const PromptPanel = () => {
     <>
       {selectedPrompt && (
         <div className="flex flex-1 flex-col p-2 px-4 overflow-y-scroll chat-messages-view overflow-x-hidden relative h-full">
-          <div className="w-full text-center font-bold font-greycliff text-lg text-gray-900">
+          <div className="w-full text-center font-bold font-greycliff text-lg">
             {selectedPrompt.name}
           </div>
           <div className="w-full text-center text-xs text-gray-500">
@@ -118,7 +118,9 @@ export const PromptPanel = () => {
                   .map((language) => language.trim())}
               />
             </div>
-            {isPromptResponsing ? <Loader variant="dots" size="sm" /> : null}
+            {isPromptResponsing ? (
+              <Loader variant="dots" className="text-violet-500" size="sm" />
+            ) : null}
           </div>
           {isPromptResponsing && (
             <div

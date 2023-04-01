@@ -5,7 +5,11 @@ const WaitingResponse = () => {
   const isWaitingRes = useAppSelector((state) => state.chat.isWaitingRes);
 
   return (
-    <>{isWaitingRes && <Loader variant="dots" size={20} className="ml-2" />}</>
+    <>
+      {isWaitingRes && (
+        <Loader variant="dots" color="violet" size={20} className="ml-2" />
+      )}
+    </>
   );
 };
 

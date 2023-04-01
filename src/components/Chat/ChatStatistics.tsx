@@ -15,6 +15,7 @@ import {
   Select,
   Slider,
   Text,
+  useMantineTheme,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { storeRendererUtils } from "../../store/storeRendererUtils";
@@ -45,6 +46,7 @@ export const ChatStatistics = ({
   const chatId = useAppSelector((state) => state.chat.selectedChatId);
   const [opened, { close, open }] = useDisclosure();
   const { scrollToBottom } = useContext(ChatContext);
+  const { colorScheme } = useMantineTheme();
 
   useEffect(() => {
     if (warningState) {
@@ -70,11 +72,12 @@ export const ChatStatistics = ({
       <ChatMenu />
       <div
         className={clsx(
-          "bg-white text-gray-900 px-3 py-1 shadow overflow-hidden",
+          "px-3 py-1 shadow overflow-hidden",
           warningState && "outline outline-2 outline-red-500",
-          opened
-            ? "rounded-lg"
-            : "rounded-full hover:bg-violet-50 hover:cursor-pointer"
+          opened ? "rounded-lg" : "rounded-full hover:cursor-pointer",
+          colorScheme === "dark"
+            ? "bg-dark-900 text-dark-100"
+            : "bg-white text-gray-900"
         )}
         style={{
           display: "inline-block",
@@ -93,7 +96,7 @@ export const ChatStatistics = ({
         )}
       </div>
       <ActionIcon
-        className="bg-violet-400"
+        className="bg-violet-500"
         variant="filled"
         size="md"
         radius="lg"
@@ -130,7 +133,7 @@ const Statistics = ({ warningState, messagesInPromptNum }: StatisticsProps) => {
           Operation failed: Exceeding limit!
         </div>
       )}
-      <div className="flex justify-center items-center italic">
+      <div className="flex justify-center items-center">
         <Text
           size="xs"
           className={
@@ -260,12 +263,13 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
           size="xs"
           label={t("chat_settings_maxTokens")}
         />
-        <div className="mt-2 text-xs font-medium text-gray-800">
+        <Text className="mt-2 text-xs font-medium">
           {t("chat_settings_temperature")}
-        </div>
+        </Text>
         <Slider
           onChange={onTemperatureChange}
           value={temperature}
+          color="violet"
           className="mt-1"
           defaultValue={1}
           min={0}
@@ -296,7 +300,7 @@ const ChatMenu = () => {
     <Menu shadow="md" position="top-start">
       <Menu.Target>
         <ActionIcon
-          className="bg-violet-400"
+          className="bg-violet-500"
           variant="filled"
           size="md"
           radius="lg"
