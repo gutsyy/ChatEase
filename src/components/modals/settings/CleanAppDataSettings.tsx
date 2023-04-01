@@ -1,15 +1,18 @@
 import { Button } from "@mantine/core";
 import { openConfirmModal } from "@mantine/modals";
 import { IconTrash } from "@tabler/icons-react";
+import { useTranslation } from "react-i18next";
 
 export const CleanAppDataSettings = () => {
+  const { t } = useTranslation();
+
   return (
     <div>
-      <div className="font-greycliff font-bold">Clean App Data</div>
-      <div className="text-gray-400 font-greycliff text-sm">
-        This operation will delete all your local data and application settings,
-        and cannot be undone, making the application return to its initial
-        state.
+      <div className="font-greycliff font-bold text-gray-800">
+        {t("settings_cleanAppData_title")}
+      </div>
+      <div className="text-gray-400 font-greycliff text-xs">
+        {t("settings_cleanAppData_help")}
       </div>
       <Button
         className="mt-2"
@@ -45,7 +48,7 @@ export const CleanAppDataSettings = () => {
           });
         }}
       >
-        Clean
+        {t("settings_cleanAppData_button")}
       </Button>
     </div>
   );

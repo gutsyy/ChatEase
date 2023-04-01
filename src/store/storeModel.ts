@@ -25,7 +25,7 @@ const defaultSettings: {
   http_proxy_port: "",
   http_proxy_username: "",
   http_proxy_password: "",
-  language: "zh-CN",
+  language: "zh",
   open_api_key: "",
   max_messages_num: 6,
   openai_api_origin: "https://api.openai.com/",

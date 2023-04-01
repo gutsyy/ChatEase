@@ -23,10 +23,13 @@ import {
   IconArrowBarDown,
   IconArrowBarUp,
   IconArrowDown,
+  IconCalculator,
+  IconCloudOff,
   IconMenu2,
   IconX,
 } from "@tabler/icons-react";
 import { ChatContext } from ".";
+import { useTranslation } from "react-i18next";
 
 interface ChatStatisticsProps {
   messagesInPromptsNum: number;
@@ -286,6 +289,7 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
 
 const ChatMenu = () => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   return (
     <Menu shadow="md" position="top-start">
@@ -306,28 +310,28 @@ const ChatMenu = () => {
           icon={<IconArrowBarDown size={12} className="text-violet-500" />}
           onClick={() => dispatch(collapseAllMessages(false))}
         >
-          Expand all messages
+          {t("chat_menu_expandAll")}
         </Menu.Item>
         <Menu.Item
           className="text-xs text-gray-500"
           icon={<IconArrowBarUp size={12} className="text-violet-500" />}
           onClick={() => dispatch(collapseAllMessages(true))}
         >
-          Collapse all messages
+          {t("chat_menu_collapseAll")}
         </Menu.Item>
         <Menu.Item
           className="text-xs text-gray-500"
-          icon={<IconArrowBarUp size={12} className="text-violet-500" />}
+          icon={<IconCloudOff size={12} className="text-violet-500" />}
           onClick={() => dispatch(setAllMessageInPromptsToFalse())}
         >
-          Remove all messages from prompt
+          {t("chat_menu_removeAll")}
         </Menu.Item>
         <Menu.Item
           className="text-xs text-gray-500"
-          icon={<IconArrowBarUp size={12} className="text-violet-500" />}
+          icon={<IconCalculator size={12} className="text-violet-500" />}
           onClick={() => dispatch(recalMessages())}
         >
-          Recaculate which message in prompt
+          {t("chat_menu_recalulator")}
         </Menu.Item>
       </Menu.Dropdown>
     </Menu>

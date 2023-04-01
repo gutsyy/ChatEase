@@ -6,11 +6,13 @@ import { openPromptFormModal } from "./modals/promptFormModal";
 import { useEffect, useRef } from "react";
 import { PromptListItem } from "./PromptListItem";
 import { getAllPrompts } from "../../reducers/promptSlice";
+import { useTranslation } from "react-i18next";
 
 export const PromptsList = () => {
   const dispatch = useAppDispatch();
   const prompts = useAppSelector((state) => state.prompt.prompts);
   const listContainterRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     dispatch(getAllPrompts());
@@ -31,7 +33,7 @@ export const PromptsList = () => {
         leftIcon={<IconPlus size={18} />}
         onClick={() => openPromptFormModal()}
       >
-        New Action
+        {t("sideExtend_prompt_newPrompt")}
       </Button>
       <div className="flex-1 mt-2" ref={listContainterRef}>
         {listContainterRef.current && (

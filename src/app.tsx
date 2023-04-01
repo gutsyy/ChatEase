@@ -18,6 +18,8 @@ import { setMode } from "./reducers/appSlice";
 import { setSelectedPromptId } from "./reducers/promptSlice";
 import { openApiKeysSetupModal } from "./components/modals/openApiKeysSetUpModal";
 
+import "./i18n/i18n";
+
 declare global {
   interface Window {
     electronAPI: {

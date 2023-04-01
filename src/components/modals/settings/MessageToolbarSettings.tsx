@@ -5,13 +5,14 @@ import {
   Droppable,
   Draggable,
 } from "react-beautiful-dnd";
-import { Skeleton, Textarea } from "@mantine/core";
+import { Skeleton } from "@mantine/core";
 import { Prompt } from "../../../database/models/Prompt";
-import { IconBrandTelegram, IconMessage2 } from "@tabler/icons-react";
+import { useTranslation } from "react-i18next";
 
 export const MessageToolbarSettings = () => {
   const [allActions, setAllActions] = useState<Prompt[]>([]);
   const [selectedActions, setSelectedActions] = useState<Prompt[]>([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const selectedActionIds = window.electronAPI.storeIpcRenderer.get(
@@ -104,10 +105,10 @@ export const MessageToolbarSettings = () => {
   return (
     <div className="w-full">
       <div className="text-sm font-greycliff font-bold text-gray-900">
-        Selectable Actions
+        {t("settings_message_selectableActions")}
       </div>
       <div className="text-xs text-gray-400 mb-1">
-        If you want to select, drag it to the lower toolbar.
+        {t("settings_message_selectableActions_help")}
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="allActions" direction="horizontal">
@@ -141,10 +142,10 @@ export const MessageToolbarSettings = () => {
           )}
         </Droppable>
         <div className="text-sm font-greycliff font-bold mt-4 text-gray-900">
-          Selected Actions on Message Box Bar.
+          {t("settings_message_SelectedActions")}
         </div>
         <div className="text-xs text-gray-400 mb-1">
-          If you want to remove it, drag it to the top toolbar.
+          {t("settings_message_SelectedActions_help")}
         </div>
         <div className="p-2 bg-gray-100 rounded w-full">
           <div className="flex justify-between items-center">

@@ -1,6 +1,7 @@
-import { Tooltip, TooltipProps } from "@mantine/core";
+import { TooltipProps } from "@mantine/core";
 import { TablerIconsProps } from "@tabler/icons-react";
 import { memo, useState } from "react";
+import { TooltipSetStyles } from "./TooltipSetStyles";
 
 export type ToolboxVerticalItem = {
   tooltip: string;
@@ -15,13 +16,12 @@ const iconSetProps = (Component: (props: TablerIconsProps) => JSX.Element) => {
 
 const SettedTooltip = (props: TooltipProps) => {
   return (
-    <Tooltip
-      withArrow
+    <TooltipSetStyles
       offset={10}
       position="right"
       {...props}
       openDelay={300}
-    ></Tooltip>
+    ></TooltipSetStyles>
   );
 };
 

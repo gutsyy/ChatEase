@@ -1,5 +1,5 @@
-import { Tooltip } from "@mantine/core";
 import { IconHelpOctagon } from "@tabler/icons-react";
+import { TooltipSetStyles } from "../../../pureComponents/TooltipSetStyles";
 
 export interface SettingItemProps {
   label: string;
@@ -22,18 +22,9 @@ const SettingItem = ({
         <div className="flex items-center">
           <div className="text-xs">{label}</div>
           {questionInfo && (
-            <Tooltip
-              styles={{
-                tooltip: {
-                  fontSize: "12px",
-                },
-              }}
-              color="gray"
-              label={questionInfo}
-              withArrow
-            >
+            <TooltipSetStyles label={questionInfo}>
               <IconHelpOctagon className="text-gray-500 ml-1" size={12} />
-            </Tooltip>
+            </TooltipSetStyles>
           )}
         </div>
         <Input />

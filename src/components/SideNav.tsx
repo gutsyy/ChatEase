@@ -12,14 +12,17 @@ import {
   ToolboxVerticalItem,
 } from "../pureComponents/ToolboxVertical";
 import { openSettingsModal } from "./modals/settings";
+import { useTranslation } from "react-i18next";
 
 export const SideNav = () => {
   const dispatch = useAppDispatch();
+  const sideNavExpanded = useAppSelector((state) => state.app.sideNavExpanded);
+  const { t } = useTranslation();
 
   const topItems: ToolboxVerticalItem[] = [
     {
       name: "Have chats with GPT3.5",
-      tooltip: "Chatting with ChatGPT",
+      tooltip: t("sideNav_chat_tooltip"),
       icon: IconMessageCircle2,
       onClick: () => {
         dispatch(setMode("chat"));
@@ -27,7 +30,7 @@ export const SideNav = () => {
     },
     {
       name: "Prompt Action Library",
-      tooltip: "Get answers with prompt",
+      tooltip: t("sideNav_prompt_tooltip"),
       icon: IconPrompt,
       onClick: () => {
         dispatch(setMode("action"));
@@ -35,14 +38,12 @@ export const SideNav = () => {
     },
   ];
 
-  const sideNavExpanded = useAppSelector((state) => state.app.sideNavExpanded);
-
   const bottomItems: ToolboxVerticalItem[] = [
     {
       name: "Settings",
       icon: IconSettings,
       onClick: () => openSettingsModal(),
-      tooltip: "App Settings",
+      tooltip: t("sideNav_settings_tooltip"),
     },
     {
       name: "Expand/Collapse",
@@ -50,7 +51,7 @@ export const SideNav = () => {
         ? IconLayoutSidebarLeftCollapse
         : IconLayoutSidebarLeftExpand,
       onClick: () => dispatch(toggleSideNavExpanded()),
-      tooltip: sideNavExpanded ? "Collapse" : "Expand",
+      tooltip: sideNavExpanded ? t("collapse") : t("expand"),
     },
   ];
 

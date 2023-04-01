@@ -12,6 +12,8 @@ import { useAppDispatch } from "../../../hooks/redux";
 import { useForm } from "@mantine/form";
 import { Prompt } from "../../../database/models/Prompt";
 import { ModalTitle } from "../../../pureComponents/ModalTitle";
+import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 
 const PromptForm = (initialValues: Prompt) => {
   const theme = useMantineTheme();
@@ -19,6 +21,7 @@ const PromptForm = (initialValues: Prompt) => {
     initialValues,
   });
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
@@ -47,23 +50,21 @@ const PromptForm = (initialValues: Prompt) => {
     <form onSubmit={handleSubmit}>
       <TextInput
         size="xs"
-        label="Action Name"
+        label={t("sideExtend_prompt_form_name")}
         variant="filled"
         required
-        placeholder="Please enter the action name"
         {...form.getInputProps("name")}
       />
       <TextInput
-        placeholder="Please enter the action description"
         size="xs"
         className="mt-2"
-        label="Action Description"
+        label={t("sideExtend_prompt_form_description")}
         variant="filled"
         required
         {...form.getInputProps("description")}
       />
       <div className="mt-2 text-xs font-medium text-gray-800">
-        GPT temperature
+        {t("sideExtend_prompt_form_temperature")}
       </div>
       <Slider
         className="mt-1"
@@ -78,11 +79,10 @@ const PromptForm = (initialValues: Prompt) => {
         size="xs"
         variant="filled"
         className="mt-2"
-        label="Action Prompt"
+        label={t("sideExtend_prompt_form_prompt")}
         minRows={12}
         maxRows={12}
         required
-        placeholder="Please enter the action prompt"
         {...form.getInputProps("prompt")}
       />
       <div
@@ -93,7 +93,9 @@ const PromptForm = (initialValues: Prompt) => {
         }}
       >
         <Button size="xs" type="submit">
-          {initialValues.id ? "Save" : "Create"}
+          {initialValues.id
+            ? t("sideExtend_prompt_form_save_button")
+            : t("sideExtend_prompt_form_create_button")}
         </Button>
       </div>
     </form>
@@ -114,7 +116,13 @@ export const openPromptFormModal = (initialValues?: Prompt) => {
 
   modals.open({
     title: (
-      <ModalTitle title={initialValues ? "Edit Action" : "Create Action"} />
+      <ModalTitle
+        title={
+          initialValues
+            ? t("sideExtend_prompt_edit_title")
+            : t("sideExtend_prompt_new_title")
+        }
+      />
     ),
     styles: {
       header: {

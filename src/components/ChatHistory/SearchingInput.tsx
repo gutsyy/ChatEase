@@ -1,12 +1,14 @@
 import { TextInput, ActionIcon } from "@mantine/core";
 import { IconSearch } from "@tabler/icons-react";
 import { useState, FormEvent } from "react";
+import { useTranslation } from "react-i18next";
 import { useAppDispatch } from "../../hooks/redux";
 import { setChats } from "../../reducers/chatSlice";
 
 const SearchingInput = () => {
   const dispatch = useAppDispatch();
   const [keywords, setKeywords] = useState<string>("");
+  const { t } = useTranslation();
 
   const onSearching = (e: FormEvent) => {
     e.preventDefault();
@@ -27,7 +29,7 @@ const SearchingInput = () => {
             background: "white",
           },
         }}
-        placeholder="Searching..."
+        placeholder={t("sideExtend_chat_searching")}
         rightSection={
           <ActionIcon type="submit" radius="lg">
             <IconSearch size={16} />

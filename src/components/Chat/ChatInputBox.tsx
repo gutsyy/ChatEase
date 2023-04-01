@@ -22,6 +22,7 @@ import { setActionId, setPromptIsResponsing } from "../../reducers/promptSlice";
 import { ChatActionBar } from "./ChatActionBar";
 import { Prompt } from "../../database/models/Prompt";
 import { useFocusWithin, useMergedRef } from "@mantine/hooks";
+import { useTranslation } from "react-i18next";
 
 function getFirstSentence(text: string) {
   let firstSentence = "";
@@ -67,6 +68,7 @@ export const ChatInputBox = forwardRef(
     );
     const { ref: inputBoxRef, focused } = useFocusWithin();
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
+    const { t } = useTranslation();
     const _textAreaRef = useMergedRef(textAreaRef, ref);
 
     useEffect(() => {
@@ -185,7 +187,7 @@ export const ChatInputBox = forwardRef(
               placeholder={
                 textAreaInputWaitingActionResponseState
                   ? "Waiting..."
-                  : "Type your message here..."
+                  : t("chat_input_placeholder")
               }
               className="flex-1 mr-2"
               autosize

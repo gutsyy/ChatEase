@@ -1,5 +1,6 @@
 import { Switch } from "@mantine/core";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { SettingsKey } from "../../../store/storeModel";
 import InputSetStyles from "./InputSetStyles";
 import NumberInputSetStyles from "./NumberInputSetStyles";
@@ -82,6 +83,7 @@ const ProxySettings = () => {
   const [httpProxySetting, setHttpProxySetting] = useState({
     enable: window.electronAPI.storeIpcRenderer.get("http_proxy"),
   });
+  const { t } = useTranslation();
 
   const setValue = (key: SettingsKey, val: any) => {
     return window.electronAPI.storeIpcRenderer.set(key, val);
@@ -138,7 +140,7 @@ const ProxySettings = () => {
             fontFamily: "Greycliff CF, sans serif",
           }}
         >
-          HTTP Proxy
+          {t("settings_proxy_title")}
         </div>
         <Switch
           checked={httpProxySetting.enable as boolean}

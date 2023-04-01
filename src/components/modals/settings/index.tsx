@@ -12,6 +12,8 @@ import ProxySettings from "./ProxySettings";
 import { ChatToolbarSettings } from "./ChatToolbarSettings";
 import { MessageToolbarSettings } from "./MessageToolbarSettings";
 import { CleanAppDataSettings } from "./CleanAppDataSettings";
+import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 
 type SettingItem = {
   name: string;
@@ -25,39 +27,41 @@ const setIcon = (Component: (props: TablerIconsProps) => JSX.Element) => {
 };
 
 const Settings = () => {
+  const [selected, setSelected] = useState<number>(0);
+  const { t } = useTranslation();
+
   const settings: SettingItem[] = [
     {
-      name: "General settings",
+      name: t("settings_general_title"),
       onClick: () => null,
       icon: IconKey,
       panel: <GeneralSettings />,
     },
     {
-      name: "Proxy settings",
+      name: t("settings_proxy_title"),
       onClick: () => null,
       icon: IconNetwork,
       panel: <ProxySettings />,
     },
     {
-      name: "Chat toolbar",
+      name: t("settings_chatToolbar_title"),
       onClick: () => null,
       icon: IconTools,
       panel: <ChatToolbarSettings />,
     },
     {
-      name: "Message toolbar",
+      name: t("settings_message_title"),
       onClick: () => null,
       icon: IconTools,
       panel: <MessageToolbarSettings />,
     },
     {
-      name: "Clear App Data",
+      name: t("settings_cleanAppData_title"),
       onClick: () => null,
       icon: IconTrash,
       panel: <CleanAppDataSettings />,
     },
   ];
-  const [selected, setSelected] = useState<number>(0);
 
   const onSettingItemClick = (key: number) => {
     setSelected(key);
@@ -97,7 +101,11 @@ const Settings = () => {
 
 export const openSettingsModal = () => {
   modals.open({
-    title: <div className="font-greycliff font-bold">Settings</div>,
+    title: (
+      <div className="font-greycliff font-bold font-gray-800">
+        {t("settings_modal_name")}
+      </div>
+    ),
     styles: {
       header: {
         padding: "0.5rem",

@@ -12,11 +12,13 @@ import { Chat } from "../../database/models/Chat";
 import { timestampToDate } from "../../services/utils/DateTimestamp";
 import { openDeleteConfirmModal } from "../modals/customModals";
 import { ModalTitle } from "../../pureComponents/ModalTitle";
+import { useTranslation } from "react-i18next";
 
 export const ChatHistory = () => {
   const dispatch = useAppDispatch();
   const chats = useAppSelector((state) => state.chat.chats);
   const historyContainerRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     window.electronAPI.databaseIpcRenderer.getAllChats().then((chats) => {
@@ -67,7 +69,7 @@ export const ChatHistory = () => {
           leftIcon={<IconPlus size={18} />}
           onClick={() => onNewChat()}
         >
-          New Chat
+          {t("sideExtend_chat_newChat")}
         </Button>
         <SearchingInput />
         <div
@@ -101,7 +103,7 @@ export const ChatHistory = () => {
               handleClearAllHistory();
             }}
           >
-            Clear all chats
+            {t("sideExtend_chat_clear")}
           </Button>
         </div>
       </div>

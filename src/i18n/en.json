@@ -1,0 +1,80 @@
+{
+  "translation": {
+    "sideNav_chat_tooltip": "Chat with GPT",
+    "sideNav_prompt_tooltip": "Prompt Library",
+    "sideNav_settings_tooltip": "Settings",
+
+    "sideExtend_chat_newChat": "New Chat",
+    "sideExtend_chat_searching": "Searching...",
+    "sideExtend_chat_clear": "Clear All Chats",
+    "sideExtent_chat_edit_title": "Set Chat Name",
+    "sideExtent_chat_edit_chatName_label": "Chat Name",
+    "sideExtend_chat_delete_title": "Delete Chat",
+    "sideExtend_chat_delete_prompt": "Are you sure you want to delete?",
+
+    "sideExtend_prompt_newPrompt": "New Action",
+    "sideExtend_prompt_new_title": "New Action",
+    "sideExtend_prompt_edit_title": "Edit Action",
+    "sideExtend_prompt_form_name": "Action Name",
+    "sideExtend_prompt_form_description": "Action Description",
+    "sideExtend_prompt_form_temperature": "GPT Temperature",
+    "sideExtend_prompt_form_prompt": "Action Prompt",
+    "sideExtend_prompt_form_create_button": "Create",
+    "sideExtend_prompt_form_save_button": "Save",
+    "sideExtend_prompt_delete_title": "Delete Action",
+
+    "settings_modal_name": "Settings",
+
+    "settings_general_title": "General settings",
+    "settings_general_language": "Language",
+    "settings_general_apiKey": "OpenAI API Key",
+    "settings_general_maxMessages": "Maximum number of messages in prompt",
+    "settings_general_maxMessages_tooltip": "If the value is 0, it will be automatically calculated based on the max_tokens",
+    "settings_general_host": "OpenAI API Host",
+    "settings_general_host_tooltip": "Used for reverse proxy",
+    "settings_general_host_help": "How to set up reverse proxy?",
+    "settings_general_temperature": "GPT Temperature",
+    "settings_general_maxTokens": "Maximum number of tokens in prompt",
+    "settings_general_stream": "ChatGPT stream response mode",
+    "settings_general_markdownScope": "Scope of languages in Markdown",
+    "settings_general_markdownScope_help": "Supported Languages",
+
+    "settings_proxy_title": "Proxy settings",
+    "settings_proxy_http_proxy": "HTTP Proxy",
+
+    "settings_chatToolbar_title": "Chat Toolbar",
+    "settings_chatToolbar_selectableActions": "Selectable Actions",
+    "settings_chatToolbar_selectableActions_help": "If you want to select, drag it to the lower toolbar.",
+    "settings_chatToolbar_SelectedActions": "Selected Actions on Chat Input Toolbar",
+    "settings_chatToolbar_SelectedActions_help": "If you want to remove it, drag it to the top toolbar",
+
+    "settings_message_title": "Message Toolbar",
+    "settings_message_selectableActions": "Selectable Actions",
+    "settings_message_selectableActions_help": "If you want to select, drag it to the lower toolbar.",
+    "settings_message_SelectedActions": "Selected Actions on Message Box Toolbar",
+    "settings_message_SelectedActions_help": "If you want to remove it, drag it to the top toolbar",
+
+    "settings_cleanAppData_title": "Clean App Data",
+    "settings_cleanAppData_help": "This operation will delete all your local data and application settings, and cannot be undone, making the application return to its initial state.",
+    "settings_cleanAppData_button": "Clean",
+
+    "chat_input_placeholder": "Type your message here",
+    "message_actions_rawCopy": "Raw Copy",
+    "message_actions_pin": "Fixed the message in prompt",
+    "message_actions_unPin": "Cancal fixed the message in prompt",
+    "message_actions_addPrompt": "Add to prompt",
+    "message_actions_removePrompt": "Remove from prompt",
+    "message_actions_promptToggleButtonDisable": "Button disabled: This message was fixed in prompt",
+    "message_actions_delete": "Delete",
+
+    "chat_menu_expandAll": "Expand all messages",
+    "chat_menu_collapseAll": "Collapse all messages",
+    "chat_menu_removeAll": "Remove all messages from prompt",
+    "chat_menu_recalulator": "Recalculate which message in prompt",
+
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "expand": "expand",
+    "collapse": "collapse"
+  }
+}

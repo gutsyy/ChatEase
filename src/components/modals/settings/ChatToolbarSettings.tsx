@@ -8,10 +8,12 @@ import {
 import { Textarea } from "@mantine/core";
 import { Prompt } from "../../../database/models/Prompt";
 import { IconBrandTelegram, IconMessage2 } from "@tabler/icons-react";
+import { useTranslation } from "react-i18next";
 
 export const ChatToolbarSettings = () => {
   const [allActions, setAllActions] = useState<Prompt[]>([]);
   const [selectedActions, setSelectedActions] = useState<Prompt[]>([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const selectedActionIds = window.electronAPI.storeIpcRenderer.get(
@@ -104,10 +106,10 @@ export const ChatToolbarSettings = () => {
   return (
     <div className="w-full">
       <div className="text-sm font-greycliff font-bold text-gray-900">
-        Selectable Actions
+        {t("settings_chatToolbar_selectableActions")}
       </div>
       <div className="text-xs text-gray-400 mb-1">
-        If you want to select, drag it to the lower toolbar.
+        {t("settings_chatToolbar_selectableActions_help")}
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="allActions" direction="horizontal">
@@ -141,10 +143,10 @@ export const ChatToolbarSettings = () => {
           )}
         </Droppable>
         <div className="text-sm font-greycliff font-bold mt-4 text-gray-900">
-          Selected Actions on Chat Input Toolbar
+          {t("settings_chatToolbar_SelectedActions")}
         </div>
         <div className="text-xs text-gray-400 mb-1">
-          If you want to remove it, drag it to the top toolbar.
+          {t("settings_chatToolbar_SelectedActions_help")}
         </div>
         <div className="p-2 bg-gray-100 rounded">
           <Droppable droppableId="selectedActions" direction="horizontal">

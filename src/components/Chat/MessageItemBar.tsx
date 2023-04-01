@@ -31,6 +31,7 @@ import { requestPromptApi } from "../../services/openAI/apiConfig";
 import { setActionId } from "../../reducers/promptSlice";
 import { useDisclosure } from "@mantine/hooks";
 import { RenderContent } from "./MessageItem";
+import { useTranslation } from "react-i18next";
 
 interface MessageItemBarProps {
   msg: Message;
@@ -53,6 +54,7 @@ const MessageItemBar = ({
   const [runningActionName, setRunningActionName] = useState("");
   const answerContent = useAppSelector((state) => state.prompt.answerContent);
   const runningActionId = useAppSelector((state) => state.prompt.actionId);
+  const { t } = useTranslation();
   const isPromptResponsing = useAppSelector(
     (state) => state.prompt.isPromptResponsing
   );
@@ -65,14 +67,14 @@ const MessageItemBar = ({
         onClick: () => {
           navigator.clipboard.writeText(msg.text);
         },
-        tooltip: "Raw copy",
+        tooltip: t("message_actions_rawCopy"),
       },
       {
         icon: expanded
           ? withIconStyle(IconArrowBarUp, { className: "text-gray-400" })
           : withIconStyle(IconArrowBarDown, { className: "text-violet-500" }),
         onClick: () => onToggleExpanded(),
-        tooltip: expanded ? "collapse" : "expand",
+        tooltip: expanded ? t("collapse") : t("expand"),
       },
       {
         icon: msg.fixedInPrompt
@@ -81,8 +83,8 @@ const MessageItemBar = ({
         onClick: () =>
           dispatch(toggleMesageFixedInPrompt({ index, id: msg.id })),
         tooltip: msg.fixedInPrompt
-          ? "Cancel Fixed the message on the prompt"
-          : "Fixed the message on the prompt",
+          ? t("message_actions_unPin")
+          : t("message_actions_pin"),
       },
       {
         disabled: msg.fixedInPrompt,
@@ -95,16 +97,20 @@ const MessageItemBar = ({
           : withIconStyle(IconCloudOff, { className: "text-gray-400" }),
         onClick: () => dispatch(toggleMessagePrompt(index)),
         tooltip: msg.fixedInPrompt
-          ? "Button disabled: This message was fixed in prompt"
-          : `${msg.inPrompts ? "Remove from" : "Add to"} prompt`,
+          ? t("message_actions_promptToggleButtonDisable")
+          : `${
+              msg.inPrompts
+                ? t("message_actions_removePrompt")
+                : t("message_actions_addPrompt")
+            }`,
       },
       {
         icon: withIconStyle(IconTrash, { className: "text-red-500" }),
         onClick: () => onDelete(),
-        tooltip: "Delete",
+        tooltip: t("message_actions_delete"),
       },
     ],
-    [expanded, msg.inPrompts, msg.fixedInPrompt]
+    [expanded, msg.inPrompts, msg.fixedInPrompt, t]
   );
 
   useEffect(() => {

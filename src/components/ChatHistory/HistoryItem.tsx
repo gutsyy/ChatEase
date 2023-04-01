@@ -13,22 +13,19 @@ import { renderDate } from "./renderDate";
 import { useForm } from "@mantine/form";
 import { openDeleteConfirmModal } from "../modals/customModals";
 import { ModalTitle } from "../../pureComponents/ModalTitle";
+import { TooltipSetStyles } from "../../pureComponents/TooltipSetStyles";
+import { useTranslation } from "react-i18next";
 
 const HistoryItem = memo(({ name, id }: Chat) => {
   const dispatch = useAppDispatch();
   const selectedChatId = useAppSelector((state) => state.chat.selectedChatId);
+  const { t } = useTranslation();
 
   return (
     <>
-      <Tooltip
-        styles={{
-          tooltip: {
-            fontSize: "12px",
-            maxWidth: "300px",
-          },
-        }}
+      <TooltipSetStyles
+        maw={300}
         label={name}
-        withArrow
         multiline
         position="right"
         openDelay={1000}
@@ -57,7 +54,9 @@ const HistoryItem = memo(({ name, id }: Chat) => {
                 onClick={(e) => {
                   e.stopPropagation();
                   openModal({
-                    title: <ModalTitle title="Set Chat Name" />,
+                    title: (
+                      <ModalTitle title={t("sideExtent_chat_edit_title")} />
+                    ),
                     children: <ChatNameEditForm name={name} id={id} />,
                   });
                 }}
@@ -72,7 +71,9 @@ const HistoryItem = memo(({ name, id }: Chat) => {
                   event.stopPropagation();
                   openDeleteConfirmModal(
                     {
-                      title: <ModalTitle title="Delete Chat" />,
+                      title: (
+                        <ModalTitle title={t("sideExtend_chat_delete_title")} />
+                      ),
                       onConfirm: () => {
                         window.electronAPI.databaseIpcRenderer
                           .deleteChat(id)
@@ -98,13 +99,14 @@ const HistoryItem = memo(({ name, id }: Chat) => {
             </div>
           </div>
         </div>
-      </Tooltip>
+      </TooltipSetStyles>
     </>
   );
 });
 
 const ChatNameEditForm = (chat: Chat) => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const form = useForm({
     initialValues: {
       name: chat ? chat.name : "",
@@ -133,7 +135,7 @@ const ChatNameEditForm = (chat: Chat) => {
       <TextInput
         size="xs"
         variant="filled"
-        label="Chat Name"
+        label={t("sideExtent_chat_edit_chatName_label")}
         withAsterisk
         {...form.getInputProps("name")}
       ></TextInput>
@@ -144,10 +146,10 @@ const ChatNameEditForm = (chat: Chat) => {
           color="violet"
           onClick={() => closeAllModals()}
         >
-          Cancel
+          {t("cancel")}
         </Button>
         <Button className="ml-2" size="xs" type="submit" color="violet">
-          Confirm
+          {t("confirm")}
         </Button>
       </div>
     </form>
