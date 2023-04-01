@@ -1,4 +1,10 @@
-import { useMantineTheme, TextInput, Button, Textarea } from "@mantine/core";
+import {
+  useMantineTheme,
+  TextInput,
+  Button,
+  Textarea,
+  Slider,
+} from "@mantine/core";
 import { closeAllModals, modals } from "@mantine/modals";
 import { FormEvent } from "react";
 import { createPrompt, getAllPrompts } from "../../../reducers/promptSlice";
@@ -56,6 +62,18 @@ const PromptForm = (initialValues: Prompt) => {
         required
         {...form.getInputProps("description")}
       />
+      <div className="mt-2 text-xs font-medium text-gray-800">
+        GPT temperature
+      </div>
+      <Slider
+        className="mt-1"
+        min={0}
+        size="xs"
+        max={2}
+        label={(value) => value.toFixed(1)}
+        step={0.1}
+        {...form.getInputProps("temperature")}
+      ></Slider>
       <Textarea
         size="xs"
         variant="filled"
@@ -88,8 +106,12 @@ export const openPromptFormModal = (initialValues?: Prompt) => {
       name: "",
       prompt: "",
       description: "",
+      temperature: window.electronAPI.storeIpcRenderer.get(
+        "temperature"
+      ) as number,
     };
   }
+
   modals.open({
     title: (
       <ModalTitle title={initialValues ? "Edit Action" : "Create Action"} />

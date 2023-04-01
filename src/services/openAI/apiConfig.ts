@@ -45,7 +45,8 @@ export interface ChatCompletion {
 
 export const axiosConfigChatGPT = (
   message: ChatGPTMessageType[],
-  chat: Chat | null
+  // chat: Chat | null
+  temperature?: number
 ): PostRequest => {
   const key = window.electronAPI.storeIpcRenderer.get("open_api_key");
   const origin =
@@ -68,8 +69,7 @@ export const axiosConfigChatGPT = (
       messages: message,
       stream: window.electronAPI.storeIpcRenderer.get("stream_enable"),
       temperature:
-        (chat && chat.temperature) ??
-        window.electronAPI.storeIpcRenderer.get("temperature"),
+        temperature ?? window.electronAPI.storeIpcRenderer.get("temperature"),
     },
     config: {
       headers: {
@@ -160,7 +160,7 @@ export const requestApi = async (chatId: number, messages: Message[]) => {
           role: message.sender,
           content: message.text,
         })),
-        chat
+        chat.temperature
       ),
       requestId,
       streamEnable
@@ -231,7 +231,11 @@ export const requestPromptApi = (prompt: Prompt, message: string) => {
   }
 
   window.electronAPI.axiosIpcRenderer
-    .post(axiosConfigChatGPT(messages, null), requestId, streamEnable)
+    .post(
+      axiosConfigChatGPT(messages, prompt.temperature),
+      requestId,
+      streamEnable
+    )
     .then((res) => {
       if (!store.getState().prompt.isPromptResponsing) {
         return;
