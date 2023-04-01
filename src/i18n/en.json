@@ -72,6 +72,19 @@
     "chat_menu_removeAll": "Remove all messages from prompt",
     "chat_menu_recalulator": "Recalculate which message in prompt",
 
+    "chat_settings_title": "Custom This Chat Settings",
+    "chat_settings_maxMessages": "Limit the number of messages in the prompt context",
+    "chat_settings_maxTokens": "Limit the number of tokens in the prompt context",
+    "chat_settings_temperature": "Temperature",
+    "chat_settings_model": "Model",
+
+    "setup_modal_setKey_title": "First, Set your openAI API Key",
+    "setup_modal_setKey_help": "Before using the application, please set the OpenAI API Key first, This application stores the key locally and will not upload it.",
+    "setup_modal_setKey_button": "Next",
+    "setup_modal_setHost_title": "Second, Set your openAI API Host",
+    "setup_modal_setHost_help": "For some reasons, you can customize the API Host of the application or use the default value directly.",
+    "setup_modal_setHost_button": "Start Journey",
+
     "cancel": "Cancel",
     "confirm": "Confirm",
     "expand": "expand",

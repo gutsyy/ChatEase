@@ -1,6 +1,7 @@
 import { Button, TextInput, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { closeAllModals, openModal } from "@mantine/modals";
+import { t } from "i18next";
 import { useEffect } from "react";
 
 interface FormProps {
@@ -64,7 +65,7 @@ const openSetHostModal = () => {
     size: 600,
     title: (
       <div className="font-greycliff font-bold text-gray-800">
-        Second, Set your openAI API Host
+        {t("setup_modal_setHost_title")}
       </div>
     ),
     closeOnClickOutside: false,
@@ -74,7 +75,7 @@ const openSetHostModal = () => {
         defaultValue={
           window.electronAPI.storeIpcRenderer.get("openai_api_origin") as string
         }
-        buttonName="Start Journey"
+        buttonName={t("setup_modal_setHost_button")}
         onConfirm={(value) => {
           window.electronAPI.storeIpcRenderer.set(
             "openai_api_origin",
@@ -82,7 +83,7 @@ const openSetHostModal = () => {
           );
           closeAllModals();
         }}
-        explanation="For some reasons, you can customize the API Host of the application or use the default value directly."
+        explanation={t("setup_modal_setHost_help")}
       />
     ),
   });
@@ -93,14 +94,14 @@ export const openApiKeysSetupModal = () =>
     size: 600,
     title: (
       <div className="font-greycliff font-bold text-gray-800">
-        First, Set your openAI API key
+        {t("setup_modal_setKey_title")}
       </div>
     ),
     closeOnClickOutside: false,
     withCloseButton: false,
     children: (
       <Form
-        buttonName="Next"
+        buttonName={t("setup_modal_setKey_button")}
         onConfirm={(value) => {
           window.electronAPI.storeIpcRenderer.set(
             "open_api_key",
@@ -108,8 +109,7 @@ export const openApiKeysSetupModal = () =>
           );
           openSetHostModal();
         }}
-        explanation="Before using the application, please set the OpenAI API Key first. This
-        application stores the key locally and will not upload it."
+        explanation={t("setup_modal_setKey_help")}
       />
     ),
   });

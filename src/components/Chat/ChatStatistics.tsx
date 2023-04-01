@@ -162,6 +162,7 @@ interface ChatSettingsProps {
 
 const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const [messagesLimit, setMessagesLimit] = useState<number>(0);
   const [tokensLimit, setTokensLimit] = useState<number>(0);
@@ -232,7 +233,7 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
     <div className="p-1" style={{ width: "420px" }}>
       <div className="flex justify-between items-center">
         <div className="font-greycliff font-bold">
-          Custom This Chat Settings
+          {t("chat_settings_title")}
         </div>
         <ActionIcon
           size="sm"
@@ -249,7 +250,7 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
           value={messagesLimit}
           variant="filled"
           size="xs"
-          label="Limit the number of messages in the prompt context"
+          label={t("chat_settings_maxMessages")}
         />
         <NumberInput
           onChange={onTokensLimitChange}
@@ -257,10 +258,10 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
           variant="filled"
           className="mt-1"
           size="xs"
-          label="Limit the number of tokens in the prompt context"
+          label={t("chat_settings_maxTokens")}
         />
         <div className="mt-2 text-xs font-medium text-gray-800">
-          Temperature
+          {t("chat_settings_temperature")}
         </div>
         <Slider
           onChange={onTemperatureChange}
@@ -279,7 +280,7 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
           className="mt-1"
           size="xs"
           variant="filled"
-          label="Selected Model"
+          label={t("chat_settings_model")}
           data={openAIModels.map((model) => ({ label: model, value: model }))}
         ></Select>
       </form>

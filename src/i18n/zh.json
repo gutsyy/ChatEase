@@ -69,8 +69,21 @@
 
     "chat_menu_expandAll": "展开所有信息",
     "chat_menu_collapseAll": "收起所有信息",
-    "chat_menu_removeAll": "从prompt上下午中移除所有信息",
+    "chat_menu_removeAll": "从prompt上下文中移除所有信息",
     "chat_menu_recalulator": "重新计算prompt上下文的消息",
+
+    "chat_settings_title": "自定义会话设置",
+    "chat_settings_maxMessages": "prompt上下文最大消息数限制",
+    "chat_settings_maxTokens": "prompt上下文最大tokens限制",
+    "chat_settings_temperature": "GPT Temperature",
+    "chat_settings_model": "模型",
+
+    "setup_modal_setKey_title": "请先设置你的OpenAI API Key",
+    "setup_modal_setKey_help": "OpenAI API Key不可或缺，本应用本地存储该key，不会进行任何上传操作",
+    "setup_modal_setKey_button": "下一步",
+    "setup_modal_setHost_title": "自定义API Host",
+    "setup_modal_setHost_help": "出于某些众所周知的原因，你可以使用值得信懒的反向代理服务，或者什么也不做",
+    "setup_modal_setHost_button": "开启会话",
 
     "cancel": "取消",
     "confirm": "确认",
