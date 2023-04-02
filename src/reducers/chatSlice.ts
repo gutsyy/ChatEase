@@ -24,7 +24,7 @@ interface ChatModuleState {
   isWaitingRes: boolean;
   isResponsing: boolean;
   notiStopGenerate: boolean;
-  shareImageOverlay: boolean;
+  shareImageDialog: boolean;
 }
 
 const initialState: ChatModuleState = {
@@ -40,7 +40,7 @@ const initialState: ChatModuleState = {
   isWaitingRes: false,
   isResponsing: false,
   notiStopGenerate: false,
-  shareImageOverlay: false,
+  shareImageDialog: false,
 };
 
 /** Caclulate prompt tokens from Messages */
@@ -61,6 +61,10 @@ export const ChatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
+    setShareImageOverlay: (state, action: PayloadAction<boolean>) => {
+      state.shareImageOverlay = action.payload;
+    },
+
     setNotiGenerate: (state, action: PayloadAction<boolean>) => {
       state.notiStopGenerate = action.payload;
     },
@@ -281,7 +285,6 @@ export const ChatSlice = createSlice({
     ) => {
       const { index, text } = action.payload;
       state.messages[index].actionResult = text;
-      // state.messages[index].text = text;
     },
     clearMessageActionResultByIndex: (state, action: PayloadAction<number>) => {
       state.messages[action.payload].actionResult = "";
@@ -329,6 +332,7 @@ export const {
   setSelectedChat,
   collapseAllMessages,
   setAllMessageInPromptsToFalse,
+  setShareImageOverlay,
 } = ChatSlice.actions;
 
 /** Update chats history after created a new chat */

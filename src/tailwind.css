@@ -120,6 +120,14 @@
   left: 50%;
 }
 
+.bottom-2 {
+  bottom: 0.5rem;
+}
+
+.bottom-1 {
+  bottom: 0.25rem;
+}
+
 .z-10 {
   z-index: 10;
 }
@@ -237,6 +245,14 @@
 
 .h-7 {
   height: 1.75rem;
+}
+
+.h-2 {
+  height: 0.5rem;
+}
+
+.h-3 {
+  height: 0.75rem;
 }
 
 .max-h-0 {
@@ -600,6 +616,14 @@
 
 .pr-1 {
   padding-right: 0.25rem;
+}
+
+.pb-4 {
+  padding-bottom: 1rem;
+}
+
+.pt-2 {
+  padding-top: 0.5rem;
 }
 
 .text-center {

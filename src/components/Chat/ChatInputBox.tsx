@@ -2,6 +2,7 @@ import { Textarea, ActionIcon, clsx, useMantineTheme } from "@mantine/core";
 import { IconX, IconArrowBackUp, IconBrandTelegram } from "@tabler/icons-react";
 import {
   forwardRef,
+  memo,
   MutableRefObject,
   useEffect,
   useMemo,

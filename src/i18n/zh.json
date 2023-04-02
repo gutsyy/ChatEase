@@ -80,6 +80,7 @@
     "chat_menu_collapseAll": "收起所有信息",
     "chat_menu_removeAll": "从Prompt上下文中移除所有信息",
     "chat_menu_recalulator": "重新计算prompt上下文的消息",
+    "chat_menu_share": "分享消息记录",
 
     "chat_settings_title": "自定义会话设置",
     "chat_settings_maxMessages": "Prompt上下文最大消息数限制",

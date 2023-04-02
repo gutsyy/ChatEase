@@ -157,7 +157,7 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
           transitionTimingFunction="ease-out"
         >
           {renderContentState && (
-            <>
+            <div className="overflow-x-auto">
               <RenderContent msg={msg} msgKey={"text"} />
               {msg.actionResult && (
                 <>
@@ -188,7 +188,7 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
                   <RenderContent msg={msg} msgKey={"actionResult"} />
                 </>
               )}
-            </>
+            </div>
           )}
         </Collapse>
         <StopGenerationButton actionId={actionId} />

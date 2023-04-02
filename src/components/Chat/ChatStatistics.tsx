@@ -1,10 +1,11 @@
-import { useContext, useEffect, useState, useTransition } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import {
   collapseAllMessages,
   recalMessages,
   setAllMessageInPromptsToFalse,
   setSelectedChat,
+  setShareImageOverlay,
   setTokensBoxWarningStateToFalse,
 } from "../../reducers/chatSlice";
 import {
@@ -65,7 +66,7 @@ export const ChatStatistics = ({
   return (
     <div
       className={clsx(
-        "sticky bg-transparent flex gap-2 justify-center items-end bottom-0 z-50 transition-all h-4",
+        "sticky bg-transparent flex gap-2 justify-center items-end bottom-2 z-50 transition-all h-4",
         chatId === -1 ? "max-h-0 overflow-hidden" : "overflow-visible"
       )}
     >
@@ -300,9 +301,9 @@ const ChatMenu = () => {
         <Menu.Item
           className="text-xs"
           icon={<IconShare3 size={12} />}
-          onClick={() => dispatch(collapseAllMessages(false))}
+          onClick={() => dispatch(setShareImageOverlay(true))}
         >
-          分享消息记录
+          {t("chat_menu_share")}
         </Menu.Item>
         <Menu.Item
           className="text-xs"

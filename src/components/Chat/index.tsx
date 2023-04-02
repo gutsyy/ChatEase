@@ -1,4 +1,4 @@
-import { createContext, useMemo, useRef } from "react";
+import { createContext, useEffect, useMemo, useRef, useState } from "react";
 
 import { useAppSelector } from "../../hooks/redux";
 import WaitingResponse from "./WaitingResponse";
@@ -7,6 +7,8 @@ import { ChatBottomStatusBar } from "./ChatBottomStatusBar";
 import { NoMessages } from "./NoMessages";
 import { ChatInputBox } from "./ChatInputBox";
 import { clsx, useMantineTheme } from "@mantine/core";
+import html2canvas from "html2canvas";
+import { ShareImageDialog } from "./ShareImageDialog";
 
 export const ChatContext = createContext<{
   scrollToBottom: () => void;
@@ -21,6 +23,22 @@ export default function Chat() {
     [messages]
   );
   const { colorScheme } = useMantineTheme();
+  const messagesContainer = useRef<HTMLDivElement>(null);
+  const shareMessages = useAppSelector((state) => state.chat.shareImageDialog);
+  const [imageCanvas, setImageCanvas] = useState<HTMLCanvasElement | null>(
+    null
+  );
+
+  useEffect(() => {
+    if (messagesContainer.current && shareMessages) {
+      html2canvas(messagesContainer.current as HTMLElement).then((canvas) => {
+        setImageCanvas(canvas);
+      });
+    }
+    if (!shareMessages) {
+      setImageCanvas(null);
+    }
+  }, [shareMessages]);
 
   const scrollToBottom = () => {
     if (chatsContainer.current) {
@@ -33,17 +51,25 @@ export default function Chat() {
 
   return (
     <ChatContext.Provider value={{ scrollToBottom }}>
+      <ShareImageDialog canvas={imageCanvas} />
       <div className="h-full flex flex-col overflow-hidden flex-1">
         <div
           className={clsx(
-            "flex-1 px-4 py-2 overflow-auto relative flex flex-col",
+            "flex-1 overflow-y-scroll relative flex flex-col",
             colorScheme === "dark" && "bg-dark-800 scrollbar-custom-dark",
             colorScheme === "light" && "bg-gray-50 scrollbar-custom"
           )}
           ref={chatsContainer}
         >
           {messages.length === 0 && <NoMessages />}
-          <div className="pb-2 flex-1">
+          <div
+            className={clsx(
+              "pb-4 pt-2 flex-1 px-4",
+              colorScheme === "dark" && "bg-dark-800",
+              colorScheme === "light" && "bg-gray-50"
+            )}
+            ref={messagesContainer}
+          >
             {messages.map((message, i) => (
               <div key={message.id}>
                 <MessageItem msg={message} index={i} />

@@ -1,11 +1,9 @@
 import { Button, rem } from "@mantine/core";
 import { IconClipboardCopy, IconCheck } from "@tabler/icons-react";
-import React, { memo } from "react";
+import React, { memo, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { CodeProps } from "react-markdown/lib/ast-to-react";
 import hljs from "highlight.js";
-// import "highlight.js/styles/atom-one-dark-reasonable.css";
-import "highlight.js/styles/atom-one-dark.css";
 import { handleNotis } from "../services/utils/notis";
 
 const CodeToolbar = ({
@@ -82,6 +80,14 @@ export const Markdown = memo(
     codeScope: string[];
     colorScheme?: "light" | "dark";
   }) => {
+    useEffect(() => {
+      if (colorScheme === "light") {
+        import("highlight.js/styles/atom-one-light.css");
+      } else {
+        import("highlight.js/styles/atom-one-dark.css");
+      }
+    }, [colorScheme]);
+
     return (
       <ReactMarkdown
         children={text}
