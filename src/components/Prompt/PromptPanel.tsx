@@ -119,7 +119,7 @@ export const PromptPanel = () => {
               />
             </div>
             {isPromptResponsing ? (
-              <Loader variant="dots" className="text-violet-500" size="sm" />
+              <Loader variant="dots" color="violet" size="sm" />
             ) : null}
           </div>
           {isPromptResponsing && (

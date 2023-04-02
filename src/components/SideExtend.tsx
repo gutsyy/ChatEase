@@ -26,7 +26,7 @@ export const SideExtend = () => {
       className={clsx(
         "h-full py-1 transition-all overflow-hidden border-solid border-0 border-r",
         colorScheme === "light" && "bg-gray-100 border-gray-200",
-        colorScheme === "dark" && "bg-dark-700 border-dark-700"
+        colorScheme === "dark" && "bg-dark-750 border-dark-750"
       )}
       style={{
         width: sideNavExpanded ? "256px" : "0px",

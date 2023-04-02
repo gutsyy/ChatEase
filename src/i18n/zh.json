@@ -59,6 +59,14 @@
     "settings_cleanAppData_help": "该操作会删除所有的App数据和设置，使应用重置",
     "settings_cleanAppData_button": "清除",
 
+    "settings_data_export": "数据导出",
+    "settings_data_chat_export": "会话所有历史",
+    "settings_data_prompt_export": "全部Prompt操作",
+
+    "export": "导出",
+    "import": "导入",
+    
+
     "chat_input_placeholder": "请输入...",
     "message_actions_rawCopy": "原生拷贝",
     "message_actions_pin": "将该条信息固定在prompt上下文中",
@@ -70,12 +78,12 @@
 
     "chat_menu_expandAll": "展开所有信息",
     "chat_menu_collapseAll": "收起所有信息",
-    "chat_menu_removeAll": "从prompt上下文中移除所有信息",
+    "chat_menu_removeAll": "从Prompt上下文中移除所有信息",
     "chat_menu_recalulator": "重新计算prompt上下文的消息",
 
     "chat_settings_title": "自定义会话设置",
-    "chat_settings_maxMessages": "prompt上下文最大消息数限制",
-    "chat_settings_maxTokens": "prompt上下文最大tokens限制",
+    "chat_settings_maxMessages": "Prompt上下文最大消息数限制",
+    "chat_settings_maxTokens": "Prompt上下文最大tokens限制",
     "chat_settings_temperature": "GPT Temperature",
     "chat_settings_model": "模型",
 

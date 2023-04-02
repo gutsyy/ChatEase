@@ -36,9 +36,9 @@ export default function Chat() {
       <div className="h-full flex flex-col overflow-hidden flex-1">
         <div
           className={clsx(
-            "flex-1 px-4 py-2 overflow-auto relative chat-messages-view flex flex-col",
-            colorScheme === "dark" && "bg-dark-800",
-            colorScheme === "light" && "bg-gray-50"
+            "flex-1 px-4 py-2 overflow-auto relative flex flex-col",
+            colorScheme === "dark" && "bg-dark-800 scrollbar-custom-dark",
+            colorScheme === "light" && "bg-gray-50 scrollbar-custom"
           )}
           ref={chatsContainer}
         >

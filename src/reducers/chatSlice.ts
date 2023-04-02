@@ -24,6 +24,7 @@ interface ChatModuleState {
   isWaitingRes: boolean;
   isResponsing: boolean;
   notiStopGenerate: boolean;
+  shareImageOverlay: boolean;
 }
 
 const initialState: ChatModuleState = {
@@ -39,6 +40,7 @@ const initialState: ChatModuleState = {
   isWaitingRes: false,
   isResponsing: false,
   notiStopGenerate: false,
+  shareImageOverlay: false,
 };
 
 /** Caclulate prompt tokens from Messages */
@@ -255,6 +257,7 @@ export const ChatSlice = createSlice({
       state.messages = state.messages.map((msg) => {
         return { ...msg, inPrompts: msg.fixedInPrompt ?? false };
       });
+      state.totalPromptTokens = calPromptTokensByMessages(state.messages);
     },
 
     setTokensBoxWarningStateToFalse: (state) => {

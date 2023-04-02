@@ -1,4 +1,4 @@
-import { app, ipcMain } from "electron";
+import { app, BrowserWindow, dialog, ipcMain, shell } from "electron";
 import { Op, Sequelize } from "sequelize";
 import sqlite3 from "sqlite3";
 import { initialPrompts } from "./initialDatas";
@@ -6,8 +6,12 @@ import { Chat, ChatDefine } from "./models/Chat";
 import { Message, MessageDefine } from "./models/Message";
 import { Prompt, PromptDefine } from "./models/Prompt";
 import { syncOrCreateTableAndBulkCreateInitialDatas } from "./utils";
+import fs from "fs";
+import { promisify } from "util";
 
-const dbInit = async () => {
+const readFilePromise = promisify(fs.readFile);
+
+const dbInit = async (window: BrowserWindow) => {
   const sqlitePath = app.getPath("userData") + "/database.db";
   new sqlite3.Database(sqlitePath);
   const sequelize = new Sequelize({
@@ -286,6 +290,132 @@ const dbInit = async () => {
       }
     }
   );
+
+  ipcMain.handle("export-all-chats", async () => {
+    const result = await dialog.showSaveDialog(window, {
+      defaultPath: "all_chats.json",
+    });
+    ChatIns.findAll().then((allChat) => {
+      const promises = allChat.map(async (chat) => {
+        const messages = await MessageIns.findAll({
+          where: {
+            chatId: chat.dataValues.id,
+          },
+        });
+        return {
+          ...chat.dataValues,
+          messages: messages.map((message) => message.dataValues),
+        };
+      });
+      Promise.all(promises).then((chats) => {
+        fs.writeFile(result.filePath, JSON.stringify(chats), (err) => {
+          if (!err) {
+            shell.showItemInFolder(result.filePath);
+          }
+        });
+      });
+    });
+  });
+
+  ipcMain.handle("export-all-prompts", async () => {
+    const result = await dialog.showSaveDialog(window, {
+      defaultPath: "all_prompts.json",
+    });
+    PromptIns.findAll().then((allPrompt) => {
+      const chats = allPrompt.map((prompt) => prompt.dataValues);
+      fs.writeFile(result.filePath, JSON.stringify(chats), (err) => {
+        if (!err) {
+          shell.showItemInFolder(result.filePath);
+        }
+      });
+    });
+  });
+
+  ipcMain.handle("import-all-chats", async () => {
+    const result = await dialog.showOpenDialog(window, {
+      properties: ["openFile"],
+      filters: [{ name: "JSON", extensions: ["json"] }],
+    });
+    if (result.canceled) return;
+    try {
+      const data = await readFilePromise(result.filePaths[0], "utf-8");
+      const chats = JSON.parse(data);
+      const promises = chats.map(
+        async (chat: Chat & { messages: Message[] }) => {
+          delete chat.id;
+          const _messages = chat.messages;
+          delete chat.messages;
+          const _chat = await ChatIns.create({ ...chat });
+          const messages: Message[] = _messages.map((message: Message) => {
+            delete message.id;
+            return { ...message, chatId: _chat.dataValues.id };
+          });
+          await MessageIns.bulkCreate(messages as any[]);
+        }
+      );
+      return Promise.all(promises)
+        .then(() => {
+          return dialog.showMessageBox(window, {
+            type: "info",
+            title: "Import successful",
+            message: "All chats have been successfully imported.",
+          });
+        })
+        .catch(() => {
+          dialog.showMessageBox(window, {
+            type: "error",
+            title: "Import failed",
+            message: "Failed to import chats.",
+          });
+        });
+    } catch (error) {
+      dialog.showMessageBox(window, {
+        type: "error",
+        title: "Import failed",
+        message: "Failed to import chats.",
+      });
+      return Promise.reject(new Error(error));
+    }
+  });
+
+  ipcMain.handle("import-all-prompts", async () => {
+    const result = await dialog.showOpenDialog(window, {
+      properties: ["openFile"],
+      filters: [{ name: "JSON", extensions: ["json"] }],
+    });
+    if (result.canceled) return;
+    const filePath = result.filePaths[0];
+    try {
+      const data = await readFilePromise(filePath, "utf-8");
+      const importedPrompts = JSON.parse(data);
+      const prompts = importedPrompts.map((prompt: Prompt) => {
+        delete prompt.id;
+        return prompt;
+      });
+      return PromptIns.bulkCreate(prompts)
+        .then(() => {
+          dialog.showMessageBox(window, {
+            message: "Import successful！",
+            type: "info",
+          });
+          return true;
+        })
+        .catch((error) => {
+          dialog.showMessageBox(window, {
+            message: "Import failed: Failed to write to the database.",
+            type: "error",
+          });
+          return Promise.reject(new Error(error));
+        });
+    } catch {
+      dialog.showMessageBox(window, {
+        type: "error",
+        title: "Import failed",
+        message: "Failed to read file.",
+      });
+      return;
+    }
+  });
 };
 
 export { dbInit };

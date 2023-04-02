@@ -64,6 +64,9 @@ export const App = () => {
       event.preventDefault();
       window.electronAPI.othersIpcRenderer.showContextMenu();
     });
+    window.electronAPI.othersIpcRenderer.colorScheme(
+      window.electronAPI.storeIpcRenderer.get("theme") as "light" | "dark"
+    );
   }, []);
 
   // const dispatch = useAppDispatch();

@@ -5,6 +5,7 @@ import {
   TablerIconsProps,
   IconTools,
   IconTrash,
+  IconFileExport,
 } from "@tabler/icons-react";
 import { useState } from "react";
 import GeneralSettings from "./GeneralSettings";
@@ -15,6 +16,7 @@ import { CleanAppDataSettings } from "./CleanAppDataSettings";
 import { useTranslation } from "react-i18next";
 import { t } from "i18next";
 import { clsx, useMantineTheme } from "@mantine/core";
+import { DataExport } from "./DataExportSettings";
 
 type SettingItem = {
   name: string;
@@ -56,6 +58,12 @@ const Settings = () => {
       onClick: () => null,
       icon: IconTools,
       panel: <MessageToolbarSettings />,
+    },
+    {
+      name: t("settings_data_export"),
+      onClick: () => null,
+      icon: IconFileExport,
+      panel: <DataExport />,
     },
     {
       name: t("settings_cleanAppData_title"),
@@ -102,7 +110,7 @@ const Settings = () => {
             >
               {setIcon(item.icon)}
             </div>
-            <div className="flex-1 flex items-center text-gray-500 ml-2 text-xs">
+            <div className="flex-1 flex items-center ml-2 text-xs">
               {item.name}
             </div>
           </div>

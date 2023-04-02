@@ -132,7 +132,10 @@ export const MessageToolbarSettings = () => {
                   {(provided) => (
                     <div
                       ref={provided.innerRef}
-                      className="py-1 px-3 text-xs font-greycliff bg-gray-300 text-white rounded-full"
+                      className={clsx(
+                        "py-1 px-3 text-xs font-greycliff text-white rounded-full",
+                        colorScheme === "dark" ? "bg-dark-800" : "bg-gray-300"
+                      )}
                       {...provided.dragHandleProps}
                       {...provided.draggableProps}
                     >

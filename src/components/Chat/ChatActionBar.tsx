@@ -11,6 +11,7 @@ interface ChatActionBarProps {
 
 export const ChatActionBar = ({ visible, onClick }: ChatActionBarProps) => {
   const [runningActionId, setRunningActionId] = useState(-1);
+  const selectedChatId = useAppSelector((state) => state.chat.selectedChatId);
   const [actions, setActions] = useState<Prompt[]>([]);
   const actionId = useAppSelector((state) => state.prompt.actionId);
   const { colorScheme } = useMantineTheme();
@@ -30,7 +31,7 @@ export const ChatActionBar = ({ visible, onClick }: ChatActionBarProps) => {
       .then((prompts) => {
         setActions(prompts);
       });
-  }, []);
+  }, [selectedChatId]);
 
   return (
     <div

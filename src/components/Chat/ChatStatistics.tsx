@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useTransition } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import {
   collapseAllMessages,
@@ -23,10 +23,10 @@ import { openAIModels } from "../../services/openAI/data";
 import {
   IconArrowBarDown,
   IconArrowBarUp,
-  IconArrowDown,
   IconCalculator,
   IconCloudOff,
   IconMenu2,
+  IconShare3,
   IconX,
 } from "@tabler/icons-react";
 import { ChatContext } from ".";
@@ -65,8 +65,8 @@ export const ChatStatistics = ({
   return (
     <div
       className={clsx(
-        "sticky bg-transparent flex justify-between items-end bottom-0 z-50 transition-all",
-        chatId === -1 && "max-h-0 overflow-hidden"
+        "sticky bg-transparent flex gap-2 justify-center items-end bottom-0 z-50 transition-all h-4",
+        chatId === -1 ? "max-h-0 overflow-hidden" : "overflow-visible"
       )}
     >
       <ChatMenu />
@@ -95,16 +95,6 @@ export const ChatStatistics = ({
           />
         )}
       </div>
-      <ActionIcon
-        className="bg-violet-500"
-        variant="filled"
-        size="md"
-        radius="lg"
-        color="violet"
-        onClick={scrollToBottom}
-      >
-        <IconArrowDown size={18} />
-      </ActionIcon>
     </div>
   );
 };
@@ -295,45 +285,49 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
 const ChatMenu = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
+  const { colorScheme } = useMantineTheme();
 
   return (
-    <Menu shadow="md" position="top-start">
+    <Menu shadow="md" position="top-start" radius="md">
       <Menu.Target>
-        <ActionIcon
-          className="bg-violet-500"
-          variant="filled"
-          size="md"
-          radius="lg"
-          color="violet"
-        >
-          <IconMenu2 size={16} />
+        <ActionIcon variant="filled" size="md" radius="lg" color="dark">
+          <IconMenu2 size={16} className="text-dark-100" />
         </ActionIcon>
       </Menu.Target>
-      <Menu.Dropdown>
+      <Menu.Dropdown
+        className={clsx(colorScheme === "dark" && "bg-dark-900 border-0")}
+      >
         <Menu.Item
-          className="text-xs text-gray-500"
-          icon={<IconArrowBarDown size={12} className="text-violet-500" />}
+          className="text-xs"
+          icon={<IconShare3 size={12} />}
+          onClick={() => dispatch(collapseAllMessages(false))}
+        >
+          分享消息记录
+        </Menu.Item>
+        <Menu.Item
+          className="text-xs"
+          icon={<IconArrowBarDown size={12} />}
           onClick={() => dispatch(collapseAllMessages(false))}
         >
           {t("chat_menu_expandAll")}
         </Menu.Item>
         <Menu.Item
-          className="text-xs text-gray-500"
-          icon={<IconArrowBarUp size={12} className="text-violet-500" />}
+          className="text-xs"
+          icon={<IconArrowBarUp size={12} />}
           onClick={() => dispatch(collapseAllMessages(true))}
         >
           {t("chat_menu_collapseAll")}
         </Menu.Item>
         <Menu.Item
-          className="text-xs text-gray-500"
-          icon={<IconCloudOff size={12} className="text-violet-500" />}
+          className="text-xs"
+          icon={<IconCloudOff size={12} />}
           onClick={() => dispatch(setAllMessageInPromptsToFalse())}
         >
           {t("chat_menu_removeAll")}
         </Menu.Item>
         <Menu.Item
-          className="text-xs text-gray-500"
-          icon={<IconCalculator size={12} className="text-violet-500" />}
+          className="text-xs"
+          icon={<IconCalculator size={12} />}
           onClick={() => dispatch(recalMessages())}
         >
           {t("chat_menu_recalulator")}

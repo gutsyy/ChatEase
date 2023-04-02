@@ -62,7 +62,7 @@ export const SideNav = () => {
       className={clsx(
         "flex flex-col justify-between border-solid border-0 border-r",
         colorScheme === "dark"
-          ? "bg-dark-800 border-dark-600 text-dark-300"
+          ? "bg-dark-800 border-dark-800 text-dark-300"
           : "bg-white text-gray-400 border-gray-200"
       )}
     >

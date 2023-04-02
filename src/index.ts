@@ -30,7 +30,7 @@ const createBridage = (window: BrowserWindow) => {
   othersIpcMain(window);
 
   // database
-  dbInit();
+  dbInit(window);
 };
 
 const createWindow = (): BrowserWindow => {

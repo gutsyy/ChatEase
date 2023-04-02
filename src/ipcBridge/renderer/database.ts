@@ -38,6 +38,10 @@ export interface DatabaseIpcRenderer {
     field: keyof Chat
   ) => Promise<GetByKey<Chat, keyof Chat>>;
   getChatById: (id: number) => Promise<Chat>;
+  exportAllChats: () => Promise<null>;
+  exportAllPrompts: () => Promise<null>;
+  importAllChats: () => Promise<boolean>;
+  importAllPrompts: () => Promise<boolean>;
 }
 
 export const databaseIpcRenderer: DatabaseIpcRenderer = {
@@ -67,4 +71,8 @@ export const databaseIpcRenderer: DatabaseIpcRenderer = {
   getChatFieldById: (id, field) =>
     ipcRenderer.invoke("get-chat-field-by-id", id, field),
   getChatById: (id) => ipcRenderer.invoke("get-chat-by-id", id),
+  exportAllChats: () => ipcRenderer.invoke("export-all-chats"),
+  exportAllPrompts: () => ipcRenderer.invoke("export-all-prompts"),
+  importAllChats: () => ipcRenderer.invoke("import-all-chats"),
+  importAllPrompts: () => ipcRenderer.invoke("import-all-prompts"),
 };

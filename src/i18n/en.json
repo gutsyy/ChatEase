@@ -59,6 +59,13 @@
     "settings_cleanAppData_help": "This operation will delete all your local data and application settings, and cannot be undone, making the application return to its initial state.",
     "settings_cleanAppData_button": "Clean",
 
+    "settings_data_export": "Data Export",
+    "settings_data_chat_export": "All Chat Histories",
+    "settings_data_prompt_export": "All Prompt Actions",
+
+    "export": "Export",
+    "import": "Import",
+
     "chat_input_placeholder": "Type your message here",
     "message_actions_rawCopy": "Raw Copy",
     "message_actions_pin": "Fixed the message in prompt",
