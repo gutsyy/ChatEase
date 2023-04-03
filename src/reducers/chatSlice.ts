@@ -102,6 +102,33 @@ export const ChatSlice = createSlice({
       state.selectedChat = action.payload;
     },
 
+    updateSelectedChatCostTokens: (state, action: PayloadAction<number>) => {
+      const newV = state.selectedChat.costTokens + action.payload;
+      state.selectedChat = {
+        ...state.selectedChat,
+        costTokens: newV,
+      };
+      // Sync to Database
+      window.electronAPI.databaseIpcRenderer.updateChatFieldById(
+        state.selectedChat.id,
+        "costTokens",
+        newV
+      );
+    },
+
+    updateSelectedChatPinnedSetting: (state, acion: PayloadAction<string>) => {
+      state.selectedChat = {
+        ...state.selectedChat,
+        pinnedSetting: acion.payload,
+      };
+      // Sync to Database
+      window.electronAPI.databaseIpcRenderer.updateChatFieldById(
+        state.selectedChat.id,
+        "pinnedSetting",
+        state.selectedChat.pinnedSetting
+      );
+    },
+
     // Recalculate message tokens
     setMessages: (state, action: PayloadAction<Message[]>) => {
       state.messages = isMessageInPrompts(
@@ -130,6 +157,18 @@ export const ChatSlice = createSlice({
         state.selectedChat
       );
       state.totalPromptTokens = calPromptTokensByMessages([...state.messages]);
+
+      // Calculate cost tokens and Save
+      state.selectedChat = {
+        ...state.selectedChat,
+        costTokens:
+          state.selectedChat.costTokens +
+          window.electronAPI.othersIpcRenderer.calTokens(action.payload.text),
+      };
+      window.electronAPI.databaseIpcRenderer.updateChatCostTokens(
+        state.selectedChat.id,
+        state.selectedChat.costTokens
+      );
     },
 
     /** Add a new message when starting the stream. */
@@ -321,6 +360,7 @@ export const {
   newChat,
   setNewUserMessage,
   setTokensBoxWarningState,
+  updateSelectedChatCostTokens,
   toggleMessagePrompt,
   toggleMesageFixedInPrompt,
   setTokensBoxWarningStateToFalse,
@@ -340,6 +380,7 @@ export const {
   collapseAllMessages,
   setAllMessageInPromptsToFalse,
   setShareImageDialog,
+  updateSelectedChatPinnedSetting,
 } = ChatSlice.actions;
 
 /** Update chats history after created a new chat */
@@ -369,6 +410,7 @@ export const switchingChatSession = (
     }
     window.electronAPI.databaseIpcRenderer.getChatById(chatId).then((chat) => {
       dispatch(setSelectedChatId(chat));
+      dispatch(setSelectedChat(chat));
     });
     return window.electronAPI.databaseIpcRenderer
       .getMessages(chatId)
@@ -408,6 +450,11 @@ export const setStreamGPTMessageDone = (): ThunkAction<
       .then((message) => {
         dispatch(
           setMessages([...messages.slice(0, messages.length - 1), message])
+        );
+        dispatch(
+          updateSelectedChatCostTokens(
+            window.electronAPI.othersIpcRenderer.calTokens(message.text)
+          )
         );
       });
   };

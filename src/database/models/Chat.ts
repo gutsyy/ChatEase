@@ -1,4 +1,5 @@
 import { DataTypes } from "sequelize";
+import { OpenAIModels } from "../../services/openAI/data";
 
 export interface Chat {
   id?: number;
@@ -7,8 +8,9 @@ export interface Chat {
   tokensLimit?: number;
   messagesLimit?: number;
   temperature?: number;
-  model?: string;
+  model?: OpenAIModels;
   costTokens?: number;
+  pinnedSetting?: string;
 }
 
 const ChatDefine = {
@@ -36,11 +38,16 @@ const ChatDefine = {
     },
     model: {
       type: DataTypes.STRING,
+      defaultValue: "gpt-3.5-turbo",
       allowNull: true,
     },
     costTokens: {
       type: DataTypes.BIGINT,
       defaultValue: 0,
+    },
+    pinnedSetting: {
+      type: DataTypes.STRING,
+      defaultValue: "",
     },
   },
 };

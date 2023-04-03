@@ -1,3 +1,8 @@
-export type OpenAIModels = "gpt-3.5-turbo";
+export const openAIPricing = {
+  "gpt-3.5-turbo": 0.002,
+  "gpt-4": 0.03,
+};
 
-export const openAIModels = ["gpt-3.5-turbo"];
+export type OpenAIModels = keyof typeof openAIPricing;
+
+export const openAIModels = Object.keys(openAIPricing) as OpenAIModels[];

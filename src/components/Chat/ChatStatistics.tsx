@@ -7,6 +7,7 @@ import {
   setSelectedChat,
   setShareImageDialog,
   setTokensBoxWarningStateToFalse,
+  updateSelectedChatPinnedSetting,
 } from "../../reducers/chatSlice";
 import {
   ActionIcon,
@@ -20,13 +21,19 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { storeRendererUtils } from "../../store/storeRendererUtils";
-import { openAIModels } from "../../services/openAI/data";
+import { openAIModels, openAIPricing } from "../../services/openAI/data";
 import {
   IconArrowBarDown,
   IconArrowBarUp,
   IconCalculator,
+  IconCircleLetterT,
   IconCloudOff,
+  IconCoin,
+  IconHistory,
   IconMenu2,
+  IconPin,
+  IconPinned,
+  IconPinnedOff,
   IconShare3,
   IconX,
 } from "@tabler/icons-react";
@@ -45,9 +52,16 @@ export const ChatStatistics = ({
     (state) => state.chat.tokensBoxWarningState
   );
   const chatId = useAppSelector((state) => state.chat.selectedChatId);
+  const selectedChat = useAppSelector((state) => state.chat.selectedChat);
   const [opened, { close, open }] = useDisclosure();
   const { scrollToBottom } = useContext(ChatContext);
   const { colorScheme } = useMantineTheme();
+
+  useEffect(() => {
+    if (selectedChat && selectedChat.pinnedSetting) {
+      open();
+    }
+  }, [selectedChat]);
 
   useEffect(() => {
     if (warningState) {
@@ -66,14 +80,14 @@ export const ChatStatistics = ({
   return (
     <div
       className={clsx(
-        "sticky bg-transparent flex gap-2 justify-center items-end bottom-2 z-50 transition-all h-4",
+        "sticky bg-transparent flex gap-2 justify-center items-end bottom-2 z-50 transition-all h-14",
         chatId === -1 ? "max-h-0 overflow-hidden" : "overflow-visible"
       )}
     >
       <ChatMenu />
       <div
         className={clsx(
-          "px-3 py-1 shadow overflow-hidden",
+          "px-3 py-1 shadow overflow-hidden flex items-center",
           warningState && "outline outline-2 outline-red-500",
           opened ? "rounded-lg" : "rounded-full hover:cursor-pointer",
           colorScheme === "dark"
@@ -81,8 +95,13 @@ export const ChatStatistics = ({
             : "bg-white text-gray-900"
         )}
         style={{
-          display: "inline-block",
-          height: opened ? "258px" : warningState ? "42.59px" : "26.59px",
+          height: opened
+            ? selectedChat && selectedChat.pinnedSetting
+              ? "80px"
+              : "258px"
+            : warningState
+            ? "42.59px"
+            : "26.59px",
           transition: "height 0.15s ease-in-out",
         }}
         onClick={openChatSetting}
@@ -96,6 +115,7 @@ export const ChatStatistics = ({
           />
         )}
       </div>
+      <CountTokens />
     </div>
   );
 };
@@ -118,34 +138,43 @@ const Statistics = ({ warningState, messagesInPromptNum }: StatisticsProps) => {
     window.electronAPI.storeIpcRenderer.get("max_tokens");
 
   return (
-    <>
-      {warningState && (
-        <div className="text-red-500 font-semibold text-xs flex justify-center items-center">
-          Operation failed: Exceeding limit!
+    <div className="flex gap-1">
+      <div className="flex flex-col justify-center items-center">
+        {warningState && (
+          <div className="text-red-500 font-semibold text-xs flex justify-center items-center">
+            Operation failed: Exceeding limit!
+          </div>
+        )}
+        <div className="flex gap-2">
+          <div className="flex items-center gap-1">
+            <IconCircleLetterT size={13} />
+            <Text
+              size="xs"
+              className={
+                warningState === "tokens_limit" ? "text-red-500 font-bold" : ""
+              }
+            >
+              {`${promptTokens + messageTokens} Tokens ${
+                warningState && `Max: ${tokens_limit}`
+              }`}
+            </Text>
+          </div>
+          <div className="flex items-center gap-1">
+            <IconHistory size={13} />
+            <Text
+              size="xs"
+              className={clsx(
+                warningState === "messages_limit" && "text-red-500 font-bold"
+              )}
+            >
+              {`${messagesInPromptNum} Messages ${
+                warningState && `Max: ${messages_limit}`
+              }`}
+            </Text>
+          </div>
         </div>
-      )}
-      <div className="flex justify-center items-center">
-        <Text
-          size="xs"
-          className={
-            warningState === "tokens_limit" ? "text-red-500 font-bold" : ""
-          }
-        >
-          {`Tokens in prompt: ${
-            promptTokens + messageTokens
-          } (max: ${tokens_limit})`}
-        </Text>
-        <Text
-          size="xs"
-          className={clsx(
-            "ml-2",
-            warningState === "messages_limit" && "text-red-500 font-bold"
-          )}
-        >
-          {`Messages in prompt: ${messagesInPromptNum} (max: ${messages_limit})`}
-        </Text>
       </div>
-    </>
+    </div>
   );
 };
 
@@ -154,15 +183,43 @@ interface ChatSettingsProps {
   onClose: () => void;
 }
 
+type ChatSettingsType =
+  | "settingHead"
+  | "messagesLimit"
+  | "tokensLimit"
+  | "model"
+  | "temperature";
+
 const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
+  const selectedChat = useAppSelector((state) => state.chat.selectedChat);
   const [messagesLimit, setMessagesLimit] = useState<number>(0);
   const [tokensLimit, setTokensLimit] = useState<number>(0);
   const [temperature, setTemperature] = useState<number>(0);
   const [model, setModel] = useState<string>("");
   const [mounted, setMounted] = useState<boolean>(false);
+
+  const isSettingVisible = (settingName: ChatSettingsType) => {
+    if (selectedChat) {
+      if (settingName === "settingHead") {
+        return !selectedChat.pinnedSetting;
+      }
+      if (!selectedChat.pinnedSetting) {
+        return true;
+      }
+      return selectedChat.pinnedSetting === settingName;
+    }
+    return true;
+  };
+
+  const isSettingPinned = (settingName: ChatSettingsType) => {
+    if (selectedChat) {
+      return selectedChat.pinnedSetting === settingName;
+    }
+    return false;
+  };
 
   useEffect(() => {
     window.electronAPI.databaseIpcRenderer.getChatById(chatId).then((chat) => {
@@ -224,60 +281,126 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
   };
 
   return (
-    <div className="p-1" style={{ width: "420px" }}>
-      <div className="flex justify-between items-center">
-        <div className="font-greycliff font-bold">
-          {t("chat_settings_title")}
+    <div style={{ width: "420px" }}>
+      {isSettingVisible("settingHead") && (
+        <div className="flex justify-between items-center">
+          <div className="font-greycliff font-bold">
+            {t("chat_settings_title")}
+          </div>
+          <ActionIcon
+            size="sm"
+            onClick={() => {
+              onClose();
+            }}
+          >
+            <IconX size={14} />
+          </ActionIcon>
         </div>
-        <ActionIcon
-          size="sm"
-          onClick={() => {
-            onClose();
-          }}
-        >
-          <IconX size={14} />
-        </ActionIcon>
-      </div>
+      )}
       <form>
-        <NumberInput
-          onChange={onMessagesLimitChange}
-          value={messagesLimit}
-          variant="filled"
-          size="xs"
-          label={t("chat_settings_maxMessages")}
-        />
-        <NumberInput
-          onChange={onTokensLimitChange}
-          value={tokensLimit}
-          variant="filled"
-          className="mt-1"
-          size="xs"
-          label={t("chat_settings_maxTokens")}
-        />
-        <Text className="mt-2 text-xs font-medium">
-          {t("chat_settings_temperature")}
-        </Text>
-        <Slider
-          onChange={onTemperatureChange}
-          value={temperature}
-          color="violet"
-          className="mt-1"
-          defaultValue={1}
-          min={0}
-          size="xs"
-          max={2}
-          label={(value) => value.toFixed(1)}
-          step={0.1}
-        ></Slider>
-        <Select
-          onChange={onModelChange}
-          value={model}
-          className="mt-1"
-          size="xs"
-          variant="filled"
-          label={t("chat_settings_model")}
-          data={openAIModels.map((model) => ({ label: model, value: model }))}
-        ></Select>
+        {isSettingVisible("messagesLimit") && (
+          <div
+            className={clsx(
+              "flex items-end",
+              selectedChat && selectedChat.pinnedSetting && "h-11"
+            )}
+          >
+            <NumberInput
+              className="flex-1"
+              onChange={onMessagesLimitChange}
+              value={messagesLimit}
+              variant="filled"
+              size="xs"
+              label={t("chat_settings_maxMessages")}
+            />
+            <div style={{ transform: "translateY(-7px)" }}>
+              <ChatSettingsPinButton
+                pinned={isSettingPinned("messagesLimit")}
+                setting="messagesLimit"
+              />
+            </div>
+          </div>
+        )}
+
+        {isSettingVisible("tokensLimit") && (
+          <div
+            className={clsx(
+              "flex items-end",
+              selectedChat && selectedChat.pinnedSetting && "h-11"
+            )}
+          >
+            <NumberInput
+              onChange={onTokensLimitChange}
+              value={tokensLimit}
+              variant="filled"
+              className="mt-1 flex-1"
+              size="xs"
+              label={t("chat_settings_maxTokens")}
+            />
+            <div style={{ transform: "translateY(-7px)" }}>
+              <ChatSettingsPinButton
+                pinned={isSettingPinned("tokensLimit")}
+                setting="tokensLimit"
+              />
+            </div>
+          </div>
+        )}
+
+        {isSettingVisible("temperature") && (
+          <div className="flex w-full items-end mt-2 first:mt-0">
+            <div className="flex-1">
+              <Text className="text-xs font-medium">
+                {t("chat_settings_temperature")}
+              </Text>
+              <Slider
+                onChange={onTemperatureChange}
+                value={temperature}
+                color="violet"
+                className="mt-1"
+                defaultValue={1}
+                min={0}
+                size="xs"
+                max={2}
+                label={(value) => value.toFixed(1)}
+                step={0.1}
+              ></Slider>
+            </div>
+            <div style={{ transform: "translateY(4px)" }}>
+              <ChatSettingsPinButton
+                pinned={isSettingPinned("temperature")}
+                setting="temperature"
+              />
+            </div>
+          </div>
+        )}
+
+        {isSettingVisible("model") && (
+          <div
+            className={clsx(
+              "flex items-end",
+              selectedChat && selectedChat.pinnedSetting && "h-11"
+            )}
+          >
+            <Select
+              onChange={onModelChange}
+              value={model}
+              className="mt-1 flex-1"
+              size="xs"
+              variant="filled"
+              label={t("chat_settings_model")}
+              data={openAIModels.map((model) => ({
+                label: model,
+                value: model,
+              }))}
+            ></Select>
+            <div style={{ transform: "translateY(-7px)" }}>
+              <ChatSettingsPinButton
+                pinned={isSettingPinned("model")}
+                setting="model"
+              />
+            </div>
+          </div>
+        )}
       </form>
     </div>
   );
@@ -291,8 +414,18 @@ const ChatMenu = () => {
   return (
     <Menu shadow="md" position="top-start" radius="md">
       <Menu.Target>
-        <ActionIcon variant="filled" size="md" radius="lg" color="dark">
-          <IconMenu2 size={16} className="text-dark-100" />
+        <ActionIcon
+          variant="filled"
+          size="md"
+          radius="lg"
+          color={colorScheme === "dark" ? "dark" : ""}
+        >
+          <IconMenu2
+            size={16}
+            className={clsx(
+              colorScheme === "dark" ? "text-dark-100" : "text-white"
+            )}
+          />
         </ActionIcon>
       </Menu.Target>
       <Menu.Dropdown
@@ -335,5 +468,60 @@ const ChatMenu = () => {
         </Menu.Item>
       </Menu.Dropdown>
     </Menu>
+  );
+};
+
+const CountTokens = () => {
+  const selectedChat = useAppSelector((state) => state.chat.selectedChat);
+  const { colorScheme } = useMantineTheme();
+
+  selectedChat &&
+    console.log(
+      selectedChat.costTokens / 1000,
+      openAIPricing[selectedChat.model],
+      selectedChat.model
+    );
+
+  return (
+    <div
+      className={clsx(
+        "flex gap-1 rounded-full px-3 py-1 items-center shadow",
+        colorScheme === "dark" ? "bg-dark-900" : "bg-white"
+      )}
+    >
+      <IconCoin size={12} />
+      <Text size="xs">
+        {selectedChat &&
+          (
+            (selectedChat.costTokens / 1000) *
+            openAIPricing[selectedChat.model]
+          ).toFixed(4)}
+      </Text>
+    </div>
+  );
+};
+
+const ChatSettingsPinButton = ({
+  pinned,
+  setting,
+}: {
+  pinned: boolean;
+  setting: ChatSettingsType;
+}) => {
+  const dispatch = useAppDispatch();
+
+  return (
+    <ActionIcon
+      className="ml-3"
+      color="violet"
+      onClick={() =>
+        dispatch(updateSelectedChatPinnedSetting(pinned ? "" : setting))
+      }
+      size="xs"
+      radius="lg"
+      variant="filled"
+    >
+      {pinned ? <IconPinnedOff size={14} /> : <IconPin size={14} />}
+    </ActionIcon>
   );
 };

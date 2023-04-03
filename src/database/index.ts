@@ -416,6 +416,18 @@ const dbInit = async (window: BrowserWindow) => {
       return;
     }
   });
+
+  ipcMain.handle(
+    "update-chat-costTokens",
+    async (event, id: number, costTokens: number) => {
+      try {
+        await ChatIns.update({ costTokens: costTokens }, { where: { id: id } });
+        return costTokens;
+      } catch (err) {
+        throw new Error("failed");
+      }
+    }
+  );
 };
 
 export { dbInit };

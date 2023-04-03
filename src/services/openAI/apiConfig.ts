@@ -7,9 +7,11 @@ import {
   setIsResponsing,
   setIsWaitingRes,
   setNewGPTMessage,
+  setSelectedChat,
   setStreamGPTMessage,
   setStreamGPTMessageDone,
   setStreamGPTMessageStart,
+  updateSelectedChatCostTokens,
 } from "../../reducers/chatSlice";
 import { v4 as UUIDV4 } from "uuid";
 import {
@@ -161,38 +163,45 @@ export const requestApi = async (chatId: number, messages: Message[]) => {
       ? null
       : await window.electronAPI.databaseIpcRenderer.getChatById(chatId);
 
+  const gptMessages = messages.map((message) => ({
+    role: message.sender,
+    content: message.text,
+  }));
+
   window.electronAPI.axiosIpcRenderer
     .post(
-      axiosConfigChatGPT(
-        messages.map((message) => ({
-          role: message.sender,
-          content: message.text,
-        })),
-        chat.temperature
-      ),
+      axiosConfigChatGPT(gptMessages, chat.temperature),
       requestId,
       streamEnable
     )
     .then((res) => {
-      console.log(res);
-      if (!store.getState().chat.isWaitingRes) {
-        return;
-      }
-      store.dispatch(setIsWaitingRes(false));
-      if (streamEnable) return;
-      store.dispatch(setIsResponsing(false));
       if (!res) {
         store.dispatch(
           setNewGPTMessage(createNewGPTMessage("Network Error !!!", chatId))
         );
         return;
       }
+
+      // Calculate cost tokens and save
+      store.dispatch(
+        updateSelectedChatCostTokens(
+          window.electronAPI.othersIpcRenderer.calMessagesTokens(gptMessages)
+        )
+      );
+
+      if (!store.getState().chat.isWaitingRes) {
+        return;
+      }
+      store.dispatch(setIsWaitingRes(false));
+      if (streamEnable) return;
+      store.dispatch(setIsResponsing(false));
       if (res.choices && res.choices.length > 0) {
         const responseMessage = createNewGPTMessage(
           res.choices[0].message.content,
           chatId
         );
         delete responseMessage.id;
+        store.dispatch(setSelectedChat);
         window.electronAPI.databaseIpcRenderer
           .createMessage(responseMessage)
           .then((message) => {
