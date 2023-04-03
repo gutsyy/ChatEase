@@ -215,6 +215,10 @@
   height: 0px;
 }
 
+.h-11 {
+  height: 2.75rem;
+}
+
 .h-12 {
   height: 3rem;
 }
@@ -243,8 +247,8 @@
   height: 100%;
 }
 
-.h-11 {
-  height: 2.75rem;
+.h-9 {
+  height: 2.25rem;
 }
 
 .max-h-0 {
@@ -951,6 +955,10 @@ element-selector::-webkit-scrollbar {
 }
 
 .first\:mt-0:first-child {
+  margin-top: 0px;
+}
+
+.only\:mt-0:only-child {
   margin-top: 0px;
 }
 
