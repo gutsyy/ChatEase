@@ -5,7 +5,7 @@ import {
   recalMessages,
   setAllMessageInPromptsToFalse,
   setSelectedChat,
-  setShareImageOverlay,
+  setShareImageDialog,
   setTokensBoxWarningStateToFalse,
 } from "../../reducers/chatSlice";
 import {
@@ -301,7 +301,7 @@ const ChatMenu = () => {
         <Menu.Item
           className="text-xs"
           icon={<IconShare3 size={12} />}
-          onClick={() => dispatch(setShareImageOverlay(true))}
+          onClick={() => dispatch(setShareImageDialog(true))}
         >
           {t("chat_menu_share")}
         </Menu.Item>

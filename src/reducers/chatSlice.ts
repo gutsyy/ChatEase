@@ -61,8 +61,8 @@ export const ChatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
-    setShareImageOverlay: (state, action: PayloadAction<boolean>) => {
-      state.shareImageOverlay = action.payload;
+    setShareImageDialog: (state, action: PayloadAction<boolean>) => {
+      state.shareImageDialog = action.payload;
     },
 
     setNotiGenerate: (state, action: PayloadAction<boolean>) => {
@@ -332,7 +332,7 @@ export const {
   setSelectedChat,
   collapseAllMessages,
   setAllMessageInPromptsToFalse,
-  setShareImageOverlay,
+  setShareImageDialog,
 } = ChatSlice.actions;
 
 /** Update chats history after created a new chat */

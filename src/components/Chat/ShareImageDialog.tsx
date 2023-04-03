@@ -1,6 +1,6 @@
 import { ActionIcon, Dialog, Image } from "@mantine/core";
 import { IconCopy, IconX } from "@tabler/icons-react";
-import { setShareImageOverlay } from "../../reducers/chatSlice";
+import { setShareImageDialog } from "../../reducers/chatSlice";
 import { useAppDispatch } from "../../hooks/redux";
 
 export const ShareImageDialog = ({
@@ -19,12 +19,12 @@ export const ShareImageDialog = ({
           }),
         ]);
       });
-      dispatch(setShareImageOverlay(false));
+      dispatch(setShareImageDialog(false));
     }
   };
 
   const onClose = () => {
-    dispatch(setShareImageOverlay(false));
+    dispatch(setShareImageDialog(false));
   };
 
   return (
