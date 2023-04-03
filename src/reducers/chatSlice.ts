@@ -290,6 +290,12 @@ export const ChatSlice = createSlice({
       state.messages[action.payload].actionResult = "";
     },
 
+    toggleMessageCollapse: (state, action: PayloadAction<number>) => {
+      const messages = [...state.messages];
+      messages[action.payload].collapse = !messages[action.payload].collapse;
+      state.messages = messages;
+    },
+
     collapseAllMessages: (state, action: PayloadAction<boolean>) => {
       state.messages = state.messages.map((msg) => {
         if (!msg.fixedInPrompt) {
@@ -330,6 +336,7 @@ export const {
   clearMessageActionResultByIndex,
   recalMessages,
   setSelectedChat,
+  toggleMessageCollapse,
   collapseAllMessages,
   setAllMessageInPromptsToFalse,
   setShareImageDialog,

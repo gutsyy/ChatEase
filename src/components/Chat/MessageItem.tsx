@@ -11,13 +11,13 @@ import {
   Text,
   useMantineTheme,
 } from "@mantine/core";
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useCallback, useMemo, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import {
   setMessageActionResultByIndex,
+  toggleMessageCollapse,
   updateMessages,
 } from "../../reducers/chatSlice";
-import { useDisclosure } from "@mantine/hooks";
 import { v4 } from "uuid";
 import { setPromptIsResponsing } from "../../reducers/promptSlice";
 
@@ -26,18 +26,10 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const actionId = useMemo(() => v4(), [msg.id]);
-  const [opened, { toggle, open, close }] = useDisclosure(!msg.collapse);
-  const [renderContentState, setRenderContentState] = useState<boolean>(true);
   const { colorScheme } = useMantineTheme();
   const dark = colorScheme === "dark";
 
-  useEffect(() => {
-    if (msg.collapse) {
-      close();
-    } else {
-      open();
-    }
-  }, [msg.collapse]);
+  console.log(msg);
 
   const onDelete = useCallback(() => {
     if (containerRef.current && contentRef.current) {
@@ -64,25 +56,11 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
   }, [msg.id]);
 
   const onToggleCollapse = () => {
-    if (opened) {
-      toggle();
-      setTimeout(() => {
-        setRenderContentState(false);
-        window.electronAPI.databaseIpcRenderer.setMessageCollapseById(
-          msg.id,
-          true
-        );
-      }, 200);
-    } else {
-      setRenderContentState(true);
-      setTimeout(() => {
-        toggle();
-        window.electronAPI.databaseIpcRenderer.setMessageCollapseById(
-          msg.id,
-          false
-        );
-      });
-    }
+    dispatch(toggleMessageCollapse(index));
+    window.electronAPI.databaseIpcRenderer.setMessageCollapseById(
+      msg.id,
+      !msg.collapse
+    );
   };
 
   const onRemoveActionResult = () => {
@@ -147,49 +125,47 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
             index={index}
             actionId={actionId}
             onDelete={onDelete}
-            expanded={opened}
+            expanded={!msg.collapse}
             onToggleExpanded={() => onToggleCollapse()}
           />
         </div>
         <Collapse
-          in={opened}
+          in={!msg.collapse}
           transitionDuration={200}
           transitionTimingFunction="ease-out"
         >
-          {renderContentState && (
-            <div className="overflow-x-auto">
-              <RenderContent msg={msg} msgKey={"text"} />
-              {msg.actionResult && (
-                <>
-                  <Divider
-                    label={
-                      <div className="font-greycliff font-bold flex justify-center items-center">
-                        <div style={{ lineHeight: "18px" }}>Action Result</div>
-                        <ActionIcon
-                          size="xs"
-                          className="ml-4"
-                          onClick={onRemoveActionResult}
-                        >
-                          <IconX size={12} />
-                        </ActionIcon>
-                      </div>
-                    }
-                    labelPosition="center"
-                    color="gray"
-                    variant="dashed"
-                    className="mx-4"
-                    styles={{
-                      label: {
-                        font: "Greycliff CF",
-                        fontWeight: 700,
-                      },
-                    }}
-                  />
-                  <RenderContent msg={msg} msgKey={"actionResult"} />
-                </>
-              )}
-            </div>
-          )}
+          <div className="overflow-x-auto">
+            <RenderContent msg={msg} msgKey={"text"} />
+            {msg.actionResult && (
+              <>
+                <Divider
+                  label={
+                    <div className="font-greycliff font-bold flex justify-center items-center">
+                      <div style={{ lineHeight: "18px" }}>Action Result</div>
+                      <ActionIcon
+                        size="xs"
+                        className="ml-4"
+                        onClick={onRemoveActionResult}
+                      >
+                        <IconX size={12} />
+                      </ActionIcon>
+                    </div>
+                  }
+                  labelPosition="center"
+                  color="gray"
+                  variant="dashed"
+                  className="mx-4"
+                  styles={{
+                    label: {
+                      font: "Greycliff CF",
+                      fontWeight: 700,
+                    },
+                  }}
+                />
+                <RenderContent msg={msg} msgKey={"actionResult"} />
+              </>
+            )}
+          </div>
         </Collapse>
         <StopGenerationButton actionId={actionId} />
       </div>

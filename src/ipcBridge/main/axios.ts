@@ -44,6 +44,7 @@ export const axiosIpcMain = (window: BrowserWindow) => {
               }
             }
           });
+          console.log(res.data);
           return "stream";
         }
         return res.data;

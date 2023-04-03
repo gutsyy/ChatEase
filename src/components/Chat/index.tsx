@@ -29,6 +29,8 @@ export default function Chat() {
     null
   );
 
+  console.log("chat updated");
+
   useEffect(() => {
     if (messagesContainer.current && shareMessages) {
       html2canvas(messagesContainer.current as HTMLElement).then((canvas) => {

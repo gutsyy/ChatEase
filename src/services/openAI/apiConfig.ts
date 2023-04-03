@@ -122,13 +122,21 @@ export const requestApi = async (chatId: number, messages: Message[]) => {
     if (id !== requestId) {
       return;
     }
+
+    const isFinishReasonNotNull =
+      data &&
+      data.choices &&
+      data.choices.length > 0 &&
+      data.choices[0].finish_reason;
+
     const isResponsing = store.getState().chat.isResponsing;
-    if (data === "DONE" || !isResponsing) {
+    if (data === "DONE" || !isResponsing || isFinishReasonNotNull) {
       store.dispatch(setStreamGPTMessageDone());
       // remove Listener
       window.electronAPI.othersIpcRenderer.removeAllListeners(`axios-stream`);
       return;
     }
+    console.log(data);
     if (data.choices[0].delta.role) {
       store.dispatch(setStreamGPTMessageStart(createNewGPTMessage("", chatId)));
       return;
@@ -166,6 +174,7 @@ export const requestApi = async (chatId: number, messages: Message[]) => {
       streamEnable
     )
     .then((res) => {
+      console.log(res);
       if (!store.getState().chat.isWaitingRes) {
         return;
       }

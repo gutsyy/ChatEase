@@ -8,6 +8,7 @@ export interface Chat {
   messagesLimit?: number;
   temperature?: number;
   model?: string;
+  costTokens?: number;
 }
 
 const ChatDefine = {
@@ -36,6 +37,10 @@ const ChatDefine = {
     model: {
       type: DataTypes.STRING,
       allowNull: true,
+    },
+    costTokens: {
+      type: DataTypes.BIGINT,
+      defaultValue: 0,
     },
   },
 };

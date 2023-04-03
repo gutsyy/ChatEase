@@ -22,3 +22,7 @@ export const num_tokens_from_messages = (
   }
   return num_tokens;
 };
+
+export const tokens_from_string = (str: string) => {
+  return enc.encode(str).length;
+};
