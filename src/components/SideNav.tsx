@@ -17,13 +17,16 @@ import { clsx, useMantineTheme } from "@mantine/core";
 
 export const SideNav = () => {
   const dispatch = useAppDispatch();
+  const selectedAppModule = useAppSelector(
+    (state) => state.app.selectedAppModule
+  );
   const sideNavExpanded = useAppSelector((state) => state.app.sideNavExpanded);
   const { t } = useTranslation();
   const { colorScheme } = useMantineTheme();
 
   const topItems: ToolboxVerticalItem[] = [
     {
-      name: "Have chats with GPT3.5",
+      name: "chat",
       tooltip: t("sideNav_chat_tooltip"),
       icon: IconMessageCircle2,
       onClick: () => {
@@ -31,7 +34,7 @@ export const SideNav = () => {
       },
     },
     {
-      name: "Prompt Action Library",
+      name: "action",
       tooltip: t("sideNav_prompt_tooltip"),
       icon: IconPrompt,
       onClick: () => {
@@ -66,8 +69,16 @@ export const SideNav = () => {
           : "bg-white text-gray-400 border-gray-200"
       )}
     >
-      <ToolboxVertical items={topItems} defaultSelected={0}></ToolboxVertical>
-      <ToolboxVertical items={bottomItems} keepClicked={false} />
+      <ToolboxVertical
+        items={topItems}
+        selectedField="name"
+        selectedValue={selectedAppModule}
+      ></ToolboxVertical>
+      <ToolboxVertical
+        items={bottomItems}
+        selectedField="name"
+        selectedValue=""
+      />
     </div>
   );
 };

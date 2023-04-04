@@ -108,11 +108,11 @@ export const ChatStatistics = ({
                   selectedChat.pinnedSetting === "temperature")
                 ? "2.82rem"
                 : "4.625rem"
-              : "15rem"
+              : "16.5rem"
             : warningState
             ? "2.67rem"
             : "1.67rem",
-          transition: "height 0.15s ease-in-out",
+          transition: "height 0.2s ease-in-out",
         }}
         onClick={openChatSetting}
       >

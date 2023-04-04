@@ -25,24 +25,18 @@ const SettedTooltip = (props: TooltipProps) => {
   );
 };
 
+export interface ToolboxVerticalProps {
+  items: ToolboxVerticalItem[];
+  selectedField: keyof ToolboxVerticalItem;
+  selectedValue?: string;
+}
+
 export const ToolboxVertical = memo(
-  ({
-    items,
-    keepClicked = true,
-    defaultSelected = -1,
-  }: {
-    items: ToolboxVerticalItem[];
-    keepClicked?: boolean;
-    defaultSelected?: number;
-  }) => {
-    const [selected, setSelected] = useState<number>(defaultSelected);
+  ({ items, selectedField, selectedValue }: ToolboxVerticalProps) => {
     const { colorScheme } = useMantineTheme();
 
-    const onItemClick = (key: number) => {
-      if (keepClicked) {
-        setSelected(key);
-      }
-      items[key].onClick();
+    const onItemClick = (item: ToolboxVerticalItem) => {
+      item.onClick();
     };
 
     return (
@@ -51,14 +45,16 @@ export const ToolboxVertical = memo(
           <SettedTooltip key={i} label={item.tooltip}>
             <div
               className={clsx(
-                "p-1 px-2 flex justify-center items-center my-2",
+                "p-1 px-2 flex justify-center items-center my-2 hover:cursor-pointer",
                 colorScheme === "dark" && "hover:text-dark-100",
-                selected === i &&
+                item[selectedField] === selectedValue &&
                   colorScheme === "light" &&
                   "text-gray-700 border-0 border-solid border-l border-violet-600 hover:text-gray-700",
-                selected === i && colorScheme === "dark" && "text-white"
+                item[selectedField] === selectedValue &&
+                  colorScheme === "dark" &&
+                  "text-white"
               )}
-              onClick={() => onItemClick(i)}
+              onClick={() => onItemClick(item)}
             >
               {iconSetProps(item.icon)}
             </div>

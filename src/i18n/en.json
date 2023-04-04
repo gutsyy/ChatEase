@@ -38,7 +38,7 @@
     "settings_general_markdownScope": "Scope of languages in Markdown",
     "settings_general_markdownScope_help": "Supported Languages",
 
-    "settings_appearance_title": "Appearance settings",
+    "settings_appearance_title": "Appearance",
     "settings_appearance_language": "Language",
     "settings_appearance_theme": "Dark Mode", 
     "settings_appearance_fontSize": "Font Size",
