@@ -307,156 +307,154 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
           </ActionIcon>
         </div>
       )}
-      <form>
-        {isSettingVisible("messagesLimit") && (
-          <div className="flex items-end mt-2 only:mt-0">
-            <div className="flex-1">
-              <Text
-                className={clsx(
-                  "text-xs font-medium",
-                  selectedChat && selectedChat.pinnedSetting && "text-center"
-                )}
-              >
-                {t("chat_settings_maxMessages")}
-              </Text>
-              <Slider
-                onChange={onMessagesLimitChange}
-                value={messagesLimit}
-                color="violet"
-                className="mt-1"
-                defaultValue={1}
-                min={0}
-                size="xs"
-                max={10}
-                step={1}
-              ></Slider>
-            </div>
-            <div
-              style={{
-                transform:
-                  selectedChat && selectedChat.pinnedSetting
-                    ? "translate(-2px)"
-                    : "translateY(4px)",
-              }}
+      {isSettingVisible("messagesLimit") && (
+        <div className="flex items-end mt-2 only:mt-0">
+          <div className="flex-1">
+            <Text
+              className={clsx(
+                "text-xs font-medium",
+                selectedChat && selectedChat.pinnedSetting && "text-center"
+              )}
             >
-              <ChatSettingsPinButton
-                pinned={isSettingPinned("messagesLimit")}
-                setting="messagesLimit"
-              />
-            </div>
+              {t("chat_settings_maxMessages")}
+            </Text>
+            <Slider
+              onChange={onMessagesLimitChange}
+              value={messagesLimit}
+              color="violet"
+              className="mt-1"
+              defaultValue={1}
+              min={0}
+              size="xs"
+              max={10}
+              step={1}
+            ></Slider>
           </div>
-        )}
-
-        {isSettingVisible("tokensLimit") && (
           <div
-            className={clsx(
-              "flex items-end mt-2 first:mt-0",
-              selectedChat && selectedChat.pinnedSetting && "h-11"
-            )}
+            style={{
+              transform:
+                selectedChat && selectedChat.pinnedSetting
+                  ? "translate(-2px)"
+                  : "translateY(4px)",
+            }}
           >
-            <div className="flex-1">
-              <Text
-                className={clsx(
-                  "text-xs font-medium",
-                  selectedChat && selectedChat.pinnedSetting && "text-center"
-                )}
-              >
-                {t("chat_settings_maxTokens")}
-              </Text>
-              <NumberInput
-                className="mt-1"
-                onChange={onTokensLimitChange}
-                value={tokensLimit}
-                variant="filled"
-                size="xs"
-              />
-            </div>
-            <div style={{ transform: "translateY(-7px)" }}>
-              <ChatSettingsPinButton
-                pinned={isSettingPinned("tokensLimit")}
-                setting="tokensLimit"
-              />
-            </div>
+            <ChatSettingsPinButton
+              pinned={isSettingPinned("messagesLimit")}
+              setting="messagesLimit"
+            />
           </div>
-        )}
+        </div>
+      )}
 
-        {isSettingVisible("temperature") && (
-          <div className="flex w-full items-end mt-2 first:mt-0">
-            <div className="flex-1">
-              <Text
-                className={clsx(
-                  "text-xs font-medium",
-                  selectedChat && selectedChat.pinnedSetting && "text-center"
-                )}
-              >
-                {t("chat_settings_temperature")}
-              </Text>
-              <Slider
-                onChange={onTemperatureChange}
-                value={temperature}
-                color="violet"
-                className="mt-1"
-                defaultValue={1}
-                min={0}
-                size="xs"
-                max={2}
-                label={(value) => value.toFixed(1)}
-                step={0.1}
-              ></Slider>
-            </div>
-            <div
-              style={{
-                transform:
-                  selectedChat && selectedChat.pinnedSetting
-                    ? "translate(-2px)"
-                    : "translateY(4px)",
-              }}
+      {isSettingVisible("tokensLimit") && (
+        <div
+          className={clsx(
+            "flex items-end mt-2 first:mt-0",
+            selectedChat && selectedChat.pinnedSetting && "h-11"
+          )}
+        >
+          <div className="flex-1">
+            <Text
+              className={clsx(
+                "text-xs font-medium",
+                selectedChat && selectedChat.pinnedSetting && "text-center"
+              )}
             >
-              <ChatSettingsPinButton
-                pinned={isSettingPinned("temperature")}
-                setting="temperature"
-              />
-            </div>
+              {t("chat_settings_maxTokens")}
+            </Text>
+            <NumberInput
+              className="mt-1"
+              onChange={onTokensLimitChange}
+              value={tokensLimit}
+              variant="filled"
+              size="xs"
+            />
           </div>
-        )}
+          <div style={{ transform: "translateY(-7px)" }}>
+            <ChatSettingsPinButton
+              pinned={isSettingPinned("tokensLimit")}
+              setting="tokensLimit"
+            />
+          </div>
+        </div>
+      )}
 
-        {isSettingVisible("model") && (
-          <div
-            className={clsx(
-              "flex items-end mt-2 first:mt-0",
-              selectedChat && selectedChat.pinnedSetting && "h-11"
-            )}
-          >
-            <div className="flex-1">
-              <Text
-                className={clsx(
-                  "text-xs font-medium",
-                  selectedChat && selectedChat.pinnedSetting && "text-center"
-                )}
-              >
-                {t("chat_settings_model")}
-              </Text>
-              <Select
-                onChange={onModelChange}
-                value={model}
-                className="mt-1"
-                size="xs"
-                variant="filled"
-                data={openAIModels.map((model) => ({
-                  label: model,
-                  value: model,
-                }))}
-              ></Select>
-            </div>
-            <div style={{ transform: "translateY(-7px)" }}>
-              <ChatSettingsPinButton
-                pinned={isSettingPinned("model")}
-                setting="model"
-              />
-            </div>
+      {isSettingVisible("temperature") && (
+        <div className="flex w-full items-end mt-2 first:mt-0">
+          <div className="flex-1">
+            <Text
+              className={clsx(
+                "text-xs font-medium",
+                selectedChat && selectedChat.pinnedSetting && "text-center"
+              )}
+            >
+              {t("chat_settings_temperature")}
+            </Text>
+            <Slider
+              onChange={onTemperatureChange}
+              value={temperature}
+              color="violet"
+              className="mt-1"
+              defaultValue={1}
+              min={0}
+              size="xs"
+              max={2}
+              label={(value) => value.toFixed(1)}
+              step={0.1}
+            ></Slider>
           </div>
-        )}
-      </form>
+          <div
+            style={{
+              transform:
+                selectedChat && selectedChat.pinnedSetting
+                  ? "translate(-2px)"
+                  : "translateY(4px)",
+            }}
+          >
+            <ChatSettingsPinButton
+              pinned={isSettingPinned("temperature")}
+              setting="temperature"
+            />
+          </div>
+        </div>
+      )}
+
+      {isSettingVisible("model") && (
+        <div
+          className={clsx(
+            "flex items-end mt-2 first:mt-0",
+            selectedChat && selectedChat.pinnedSetting && "h-11"
+          )}
+        >
+          <div className="flex-1">
+            <Text
+              className={clsx(
+                "text-xs font-medium",
+                selectedChat && selectedChat.pinnedSetting && "text-center"
+              )}
+            >
+              {t("chat_settings_model")}
+            </Text>
+            <Select
+              onChange={onModelChange}
+              value={model}
+              className="mt-1"
+              size="xs"
+              variant="filled"
+              data={openAIModels.map((model) => ({
+                label: model,
+                value: model,
+              }))}
+            ></Select>
+          </div>
+          <div style={{ transform: "translateY(-7px)" }}>
+            <ChatSettingsPinButton
+              pinned={isSettingPinned("model")}
+              setting="model"
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -529,13 +527,6 @@ const ChatMenu = () => {
 const CountTokens = () => {
   const selectedChat = useAppSelector((state) => state.chat.selectedChat);
   const { colorScheme } = useMantineTheme();
-
-  selectedChat &&
-    console.log(
-      selectedChat.costTokens / 1000,
-      openAIPricing[selectedChat.model],
-      selectedChat.model
-    );
 
   return (
     <div

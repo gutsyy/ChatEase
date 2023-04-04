@@ -9,6 +9,7 @@ import { ChatInputBox } from "./ChatInputBox";
 import { clsx, useMantineTheme } from "@mantine/core";
 import html2canvas from "html2canvas";
 import { ShareImageDialog } from "./ShareImageDialog";
+import { PinnedMessages } from "./PinnedMessages";
 
 export const ChatContext = createContext<{
   scrollToBottom: () => void;
@@ -63,6 +64,7 @@ export default function Chat() {
           )}
           ref={chatsContainer}
         >
+          <PinnedMessages messages={messages} />
           {messages.length === 0 && <NoMessages />}
           <div
             className={clsx(

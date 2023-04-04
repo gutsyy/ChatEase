@@ -1,4 +1,10 @@
-import { IconBrandOpenai, IconUserCircle, IconX } from "@tabler/icons-react";
+import {
+  IconBrandOpenai,
+  IconPin,
+  IconPinned,
+  IconUserCircle,
+  IconX,
+} from "@tabler/icons-react";
 import { Markdown } from "../../pureComponents/Markdown";
 import { Message } from "../../database/models/Message";
 import MessageItemBar from "./MessageItemBar";
@@ -68,15 +74,20 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
   };
 
   return (
-    <div ref={containerRef}>
+    <div className="relative overflow-visible" ref={containerRef}>
+      {msg.fixedInPrompt && (
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1 z-10 bg-violet-500 rounded-full w-4 h-4 flex justify-center items-center">
+          <IconPin size={12} className="text-white" />
+        </div>
+      )}
       <div
         className={clsx(
           "p-3 mb-4 rounded-lg relative",
           msg.sender === "user" &&
             (colorScheme === "light" ? "bg-white" : "bg-dark-750"),
           msg.sender === "assistant" &&
-            (colorScheme === "light" ? "bg-gray-100" : "bg-dark-700"),
-          msg.fixedInPrompt && "outline outline-1 outline-violet-500"
+            (colorScheme === "light" ? "bg-gray-100" : "bg-dark-700")
+          // msg.fixedInPrompt && "outline outline-1 outline-violet-500"
         )}
         ref={contentRef}
       >

@@ -1,0 +1,91 @@
+import { ActionIcon, clsx, useMantineTheme } from "@mantine/core";
+import { useClickOutside, useDisclosure } from "@mantine/hooks";
+import { IconPin, IconX } from "@tabler/icons-react";
+import { Message } from "../../database/models/Message";
+import MessageItem from "./MessageItem";
+
+export const PinnedMessages = ({ messages }: { messages: Message[] }) => {
+  const { colorScheme } = useMantineTheme();
+  const [opened, { open, close }] = useDisclosure(false);
+  const ref = useClickOutside<HTMLDivElement>(() => {
+    close();
+    ref.current.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  });
+
+  const pinnedMessages: { msg: Message; index: number }[] = messages.reduce(
+    (pms, msg, index) => {
+      if (msg.fixedInPrompt) {
+        return [...pms, { msg: msg, index: index }];
+      } else {
+        return [...pms];
+      }
+    },
+    []
+  );
+
+  return (
+    <>
+      <div className="sticky w-full top-1 z-50 bg-transparent mb-2 transition-all ease-in">
+        <div className="flex justify-center">
+          <div
+            className={clsx(
+              "text-xs px-4 py-1 shadow-md transition-all ease-in-out duration-200 gap-2 hover:cursor-pointer shadow-dark-500 overflow-x-hidden",
+              colorScheme === "dark"
+                ? "bg-dark-800 shadow-dark-700"
+                : "bg-gray-50 shadow-gray-300",
+              opened && "w-full h-64 mx-3 items-start overflow-y-auto",
+              !opened && "w-44 overflow-y-hidden",
+              pinnedMessages.length && "h-7",
+              !pinnedMessages.length && "h-0 shadow-none"
+            )}
+            style={{
+              borderRadius: "1rem",
+            }}
+            onClick={open}
+            ref={ref}
+          >
+            <div
+              className={clsx(
+                "flex gap-2 justify-center items-center font-bold font-greycliff",
+                colorScheme === "dark" ? "text-dark-100" : "text-violet-500"
+              )}
+              style={{ marginTop: "2px" }}
+            >
+              <IconPin size={14} />
+              <div>Pinned Messages</div>
+              {opened && (
+                <ActionIcon size="xs" color="violet">
+                  <IconX
+                    className={clsx(
+                      colorScheme === "dark"
+                        ? "text-dark-200"
+                        : "text-violet-500"
+                    )}
+                    size={14}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      close();
+                    }}
+                  />
+                </ActionIcon>
+              )}
+            </div>
+            <div className="mt-3">
+              {pinnedMessages.length === 0 && (
+                <div className="w-full mt-32 flex justify-center items-center">
+                  No Pinned Messages
+                </div>
+              )}
+              {pinnedMessages.map((msg) => (
+                <MessageItem key={msg.msg.id} msg={msg.msg} index={msg.index} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
