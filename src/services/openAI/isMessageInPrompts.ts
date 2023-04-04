@@ -33,33 +33,53 @@ export const isMessageInPrompts = (
     JSON.stringify([...messages].reverse())
   );
 
-  for (let i = 0; i < reverseMessages.length; i++) {
+  const pinnedMessages = reverseMessages.filter((msg) => msg.fixedInPrompt);
+  const unpinMessages = reverseMessages.filter((msg) => !msg.fixedInPrompt);
+  const pinnedMessagesTokens = pinnedMessages.length
+    ? window.electronAPI.othersIpcRenderer.calMessagesTokens(
+        pinnedMessages.map((msg) => ({
+          role: msg.sender,
+          content: msg.text,
+        }))
+      )
+    : 0;
+
+  for (let i = 0; i < unpinMessages.length; i++) {
     if (
-      reverseMessages[i].inPrompts === true ||
-      reverseMessages[i].inPrompts === undefined ||
+      unpinMessages[i].inPrompts === true ||
+      unpinMessages[i].inPrompts === undefined ||
       forceUpdate
     ) {
-      reverseMessages[i].inPrompts = true;
-      if (reverseMessages[i].fixedInPrompt) {
-        continue;
-      }
-      console.log("tokenLimit", tokensLimit);
+      unpinMessages[i].inPrompts = true;
+      // if (unpinMessages[i].fixedInPrompt) {
+      //   continue;
+      // }
+
       if (
         window.electronAPI.othersIpcRenderer.calMessagesTokens(
-          reverseMessages
+          unpinMessages
             .slice(0, i + 1)
-            .filter((msg) => msg.inPrompts || msg.fixedInPrompt)
+            .filter((msg) => msg.inPrompts)
             .map((msg) => ({ role: msg.sender, content: msg.text }))
-        ) > tokensLimit ||
+        ) +
+          pinnedMessagesTokens >
+          tokensLimit ||
         maxMessageBoolean(
-          reverseMessages.slice(0, i + 1).filter((msg) => msg.inPrompts)
-            .length + reverseMessages.filter((msg) => msg.fixedInPrompt).length
+          unpinMessages.slice(0, i + 1).filter((msg) => msg.inPrompts).length +
+            pinnedMessages.length
         )
       ) {
-        reverseMessages[i].inPrompts = false;
+        for (let j = i; j < unpinMessages.length; j++) {
+          unpinMessages[j].inPrompts = false;
+        }
+        break;
       }
     }
   }
+
+  pinnedMessages.forEach((msg) => {
+    msg.inPrompts = true;
+  });
 
   return reverseMessages.reverse();
 };
