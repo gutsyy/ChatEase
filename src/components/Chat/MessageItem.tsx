@@ -1,7 +1,6 @@
 import {
   IconBrandOpenai,
   IconPin,
-  IconPinned,
   IconUserCircle,
   IconX,
 } from "@tabler/icons-react";
@@ -34,8 +33,6 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
   const actionId = useMemo(() => v4(), [msg.id]);
   const { colorScheme } = useMantineTheme();
   const dark = colorScheme === "dark";
-
-  console.log(msg);
 
   const onDelete = useCallback(() => {
     if (containerRef.current && contentRef.current) {

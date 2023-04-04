@@ -85,7 +85,7 @@ export const ChatStatistics = ({
   return (
     <div
       className={clsx(
-        "sticky bg-transparent flex gap-2 justify-center items-end bottom-2 z-50 transition-all h-14",
+        "absolute w-full bg-transparent flex gap-2 justify-center items-end bottom-2 z-50 transition-all",
         chatId === -1 ? "max-h-0 overflow-hidden" : "overflow-visible"
       )}
     >
@@ -93,7 +93,7 @@ export const ChatStatistics = ({
       <div
         ref={ref}
         className={clsx(
-          "px-3 py-1 shadow flex items-center",
+          "px-3 py-1 shadow flex items-center overflow-hidden",
           warningState && "outline outline-2 outline-red-500",
           opened ? "rounded-lg" : "rounded-full hover:cursor-pointer",
           colorScheme === "dark"
@@ -108,7 +108,7 @@ export const ChatStatistics = ({
                   selectedChat.pinnedSetting === "temperature")
                 ? "2.82rem"
                 : "4.625rem"
-              : "16.5rem"
+              : "15rem"
             : warningState
             ? "2.67rem"
             : "1.67rem",
@@ -295,7 +295,7 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
   };
 
   return (
-    <div style={{ width: "420px" }}>
+    <div style={{ width: "27rem" }}>
       {isSettingVisible("settingHead") && (
         <div className="flex justify-between items-center">
           <div className="font-greycliff font-bold text-sm">

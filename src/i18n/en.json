@@ -88,8 +88,8 @@
     "chat_menu_share": "Share your messages",
 
     "chat_settings_title": "Custom This Chat Settings",
-    "chat_settings_maxMessages": "Limit the number of messages in the prompt context",
-    "chat_settings_maxTokens": "Limit the number of tokens in the prompt context",
+    "chat_settings_maxMessages": "Max messages in prompt",
+    "chat_settings_maxTokens": "Prompt max tokens",
     "chat_settings_temperature": "Temperature",
     "chat_settings_model": "Model",
 

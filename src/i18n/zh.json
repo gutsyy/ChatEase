@@ -89,8 +89,8 @@
     "chat_menu_share": "分享消息记录",
 
     "chat_settings_title": "会话设置",
-    "chat_settings_maxMessages": "Prompt上下文最大消息数限制",
-    "chat_settings_maxTokens": "Prompt上下文最大tokens限制",
+    "chat_settings_maxMessages": "最大消息数",
+    "chat_settings_maxTokens": "最大tokens",
     "chat_settings_temperature": "GPT Temperature",
     "chat_settings_model": "模型",
 
