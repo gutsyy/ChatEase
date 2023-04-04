@@ -152,7 +152,9 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
                 <Divider
                   label={
                     <div className="font-greycliff font-bold flex justify-center items-center">
-                      <div style={{ lineHeight: "18px" }}>Action Result</div>
+                      <div style={{ lineHeight: "1.125rem" }}>
+                        Action Result
+                      </div>
                       <ActionIcon
                         size="xs"
                         className="ml-4"

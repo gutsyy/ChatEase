@@ -26,8 +26,6 @@
     "settings_modal_name": "应用设置",
 
     "settings_general_title": "通用设置",
-    "settings_general_language": "语言",
-    "settings_general_theme": "暗黑模式", 
     "settings_general_apiKey": "OpenAI API Key",
     "settings_general_maxMessages": "Prompt中最大消息数",
     "settings_general_maxMessages_tooltip": "如果值为0，则根据最大tokens限制自动计算",
@@ -39,6 +37,14 @@
     "settings_general_stream": "ChatGPT流回答模式",
     "settings_general_markdownScope": "Markdown <Code /> 支持语言",
     "settings_general_markdownScope_help": "支持语言",
+
+    "settings_appearance_title": "外观设置",
+    "settings_appearance_language": "语言",
+    "settings_appearance_theme": "暗黑模式",    
+    "settings_appearance_fontSize": "字体大小",
+    "settings_appearance_fontSize_sm": "小号",
+    "settings_appearance_fontSize_md": "中号",
+    "settings_appearance_fontSize_lg": "大号",
 
     "settings_proxy_title": "代理设置",
     "settings_proxy_http_proxy": "HTTP 代理",
@@ -82,7 +88,7 @@
     "chat_menu_recalulator": "重新计算prompt上下文的消息",
     "chat_menu_share": "分享消息记录",
 
-    "chat_settings_title": "自定义会话设置",
+    "chat_settings_title": "会话设置",
     "chat_settings_maxMessages": "Prompt上下文最大消息数限制",
     "chat_settings_maxTokens": "Prompt上下文最大tokens限制",
     "chat_settings_temperature": "GPT Temperature",

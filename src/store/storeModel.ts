@@ -15,7 +15,8 @@ export type SettingsKey =
   | "chat_input_toolbar_items"
   | "message_toolbar_items"
   | "temperature"
-  | "theme";
+  | "theme"
+  | "fontSize";
 
 const defaultSettings: {
   [key in SettingsKey]: string | number | boolean | number[];
@@ -37,6 +38,7 @@ const defaultSettings: {
   message_toolbar_items: [],
   temperature: 1,
   theme: "light",
+  fontSize: "18",
 };
 
 export { defaultSettings };

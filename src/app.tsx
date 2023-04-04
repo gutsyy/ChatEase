@@ -60,6 +60,15 @@ export const App = () => {
   }, []);
 
   useEffect(() => {
+    const root = document.documentElement;
+    if (root) {
+      root.style.fontSize = `${window.electronAPI.storeIpcRenderer.get(
+        "fontSize"
+      )}px`;
+    }
+  }, []);
+
+  useEffect(() => {
     window.addEventListener("contextmenu", (event) => {
       event.preventDefault();
       window.electronAPI.othersIpcRenderer.showContextMenu();

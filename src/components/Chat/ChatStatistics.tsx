@@ -106,12 +106,12 @@ export const ChatStatistics = ({
               ? selectedChat &&
                 (selectedChat.pinnedSetting === "messagesLimit" ||
                   selectedChat.pinnedSetting === "temperature")
-                ? "45px"
-                : "74px"
-              : "240px"
+                ? "2.82rem"
+                : "4.625rem"
+              : "15rem"
             : warningState
-            ? "42.59px"
-            : "26.59px",
+            ? "1.66rem"
+            : "",
           transition: "height 0.15s ease-in-out",
         }}
         onClick={openChatSetting}
@@ -210,6 +210,10 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
   const [temperature, setTemperature] = useState<number>(0);
   const [model, setModel] = useState<string>("");
   const [mounted, setMounted] = useState<boolean>(false);
+  const totalPromptTokens = useAppSelector(
+    (state) => state.chat.totalPromptTokens
+  );
+  const inputBoxTokens = useAppSelector((state) => state.chat.inputBoxTokens);
 
   const isSettingVisible = (settingName: ChatSettingsType) => {
     if (selectedChat) {
@@ -294,7 +298,7 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
     <div style={{ width: "420px" }}>
       {isSettingVisible("settingHead") && (
         <div className="flex justify-between items-center">
-          <div className="font-greycliff font-bold">
+          <div className="font-greycliff font-bold text-sm">
             {t("chat_settings_title")}
           </div>
           <ActionIcon
@@ -310,14 +314,23 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
       {isSettingVisible("messagesLimit") && (
         <div className="flex items-end mt-2 only:mt-0">
           <div className="flex-1">
-            <Text
-              className={clsx(
-                "text-xs font-medium",
-                selectedChat && selectedChat.pinnedSetting && "text-center"
-              )}
-            >
-              {t("chat_settings_maxMessages")}
-            </Text>
+            <div className="flex justify-between items-center">
+              <Text
+                className={clsx(
+                  "text-xs font-medium",
+                  selectedChat && selectedChat.pinnedSetting && "text-center"
+                )}
+              >
+                {t("chat_settings_maxMessages")}
+                <span className="text-dark-400 ml-2 font-bold">
+                  {`[ current tokens: ${totalPromptTokens + inputBoxTokens} ]`}
+                </span>
+              </Text>
+              <ChatSettingsPinButton
+                pinned={isSettingPinned("messagesLimit")}
+                setting="messagesLimit"
+              />
+            </div>
             <Slider
               onChange={onMessagesLimitChange}
               value={messagesLimit}
@@ -330,19 +343,6 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
               step={1}
             ></Slider>
           </div>
-          <div
-            style={{
-              transform:
-                selectedChat && selectedChat.pinnedSetting
-                  ? "translate(-2px)"
-                  : "translateY(4px)",
-            }}
-          >
-            <ChatSettingsPinButton
-              pinned={isSettingPinned("messagesLimit")}
-              setting="messagesLimit"
-            />
-          </div>
         </div>
       )}
 
@@ -354,14 +354,23 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
           )}
         >
           <div className="flex-1">
-            <Text
-              className={clsx(
-                "text-xs font-medium",
-                selectedChat && selectedChat.pinnedSetting && "text-center"
-              )}
-            >
-              {t("chat_settings_maxTokens")}
-            </Text>
+            <div className="flex items-center justify-between">
+              <Text
+                className={clsx(
+                  "text-xs font-medium",
+                  selectedChat && selectedChat.pinnedSetting && "text-center"
+                )}
+              >
+                {t("chat_settings_maxTokens")}
+                <span className="text-dark-400 ml-2 font-bold">
+                  {`[ current tokens: ${totalPromptTokens + inputBoxTokens} ]`}
+                </span>
+              </Text>
+              <ChatSettingsPinButton
+                pinned={isSettingPinned("tokensLimit")}
+                setting="tokensLimit"
+              />
+            </div>
             <NumberInput
               className="mt-1"
               onChange={onTokensLimitChange}
@@ -370,26 +379,27 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
               size="xs"
             />
           </div>
-          <div style={{ transform: "translateY(-7px)" }}>
-            <ChatSettingsPinButton
-              pinned={isSettingPinned("tokensLimit")}
-              setting="tokensLimit"
-            />
-          </div>
         </div>
       )}
 
       {isSettingVisible("temperature") && (
         <div className="flex w-full items-end mt-2 first:mt-0">
           <div className="flex-1">
-            <Text
-              className={clsx(
-                "text-xs font-medium",
-                selectedChat && selectedChat.pinnedSetting && "text-center"
-              )}
-            >
-              {t("chat_settings_temperature")}
-            </Text>
+            <div className="flex justify-between items-center">
+              <Text
+                className={clsx(
+                  "text-xs font-medium",
+                  selectedChat && selectedChat.pinnedSetting && "text-center"
+                )}
+              >
+                {t("chat_settings_temperature")}
+              </Text>
+
+              <ChatSettingsPinButton
+                pinned={isSettingPinned("temperature")}
+                setting="temperature"
+              />
+            </div>
             <Slider
               onChange={onTemperatureChange}
               value={temperature}
@@ -403,19 +413,6 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
               step={0.1}
             ></Slider>
           </div>
-          <div
-            style={{
-              transform:
-                selectedChat && selectedChat.pinnedSetting
-                  ? "translate(-2px)"
-                  : "translateY(4px)",
-            }}
-          >
-            <ChatSettingsPinButton
-              pinned={isSettingPinned("temperature")}
-              setting="temperature"
-            />
-          </div>
         </div>
       )}
 
@@ -427,14 +424,20 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
           )}
         >
           <div className="flex-1">
-            <Text
-              className={clsx(
-                "text-xs font-medium",
-                selectedChat && selectedChat.pinnedSetting && "text-center"
-              )}
-            >
-              {t("chat_settings_model")}
-            </Text>
+            <div className="flex justify-between items-center">
+              <Text
+                className={clsx(
+                  "text-xs font-medium",
+                  selectedChat && selectedChat.pinnedSetting && "text-center"
+                )}
+              >
+                {t("chat_settings_model")}
+              </Text>
+              <ChatSettingsPinButton
+                pinned={isSettingPinned("model")}
+                setting="model"
+              />
+            </div>
             <Select
               onChange={onModelChange}
               value={model}
@@ -446,12 +449,6 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
                 value: model,
               }))}
             ></Select>
-          </div>
-          <div style={{ transform: "translateY(-7px)" }}>
-            <ChatSettingsPinButton
-              pinned={isSettingPinned("model")}
-              setting="model"
-            />
           </div>
         </div>
       )}
@@ -564,10 +561,12 @@ const ChatSettingsPinButton = ({
         dispatch(updateSelectedChatPinnedSetting(pinned ? "" : setting))
       }
       size="xs"
-      radius="lg"
-      variant="filled"
     >
-      {pinned ? <IconPinnedOff size={14} /> : <IconPin size={14} />}
+      {pinned ? (
+        <IconPinnedOff className="text-violet-500" size={14} />
+      ) : (
+        <IconPin className="text-violet-500" size={12} />
+      )}
     </ActionIcon>
   );
 };

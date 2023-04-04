@@ -26,8 +26,6 @@
     "settings_modal_name": "Settings",
 
     "settings_general_title": "General settings",
-    "settings_general_language": "Language",
-    "settings_general_theme": "Dark Mode", 
     "settings_general_apiKey": "OpenAI API Key",
     "settings_general_maxMessages": "Maximum number of messages in prompt",
     "settings_general_maxMessages_tooltip": "If the value is 0, it will be automatically calculated based on the max_tokens",
@@ -39,6 +37,14 @@
     "settings_general_stream": "ChatGPT stream response mode",
     "settings_general_markdownScope": "Scope of languages in Markdown",
     "settings_general_markdownScope_help": "Supported Languages",
+
+    "settings_appearance_title": "Appearance settings",
+    "settings_appearance_language": "Language",
+    "settings_appearance_theme": "Dark Mode", 
+    "settings_appearance_fontSize": "Font Size",
+    "settings_appearance_fontSize_sm": "small",
+    "settings_appearance_fontSize_md": "medium",
+    "settings_appearance_fontSize_lg": "large",
 
     "settings_proxy_title": "Proxy settings",
     "settings_proxy_http_proxy": "HTTP Proxy",

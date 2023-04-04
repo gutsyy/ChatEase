@@ -6,6 +6,7 @@ import {
   IconTools,
   IconTrash,
   IconFileExport,
+  IconMoonStars,
 } from "@tabler/icons-react";
 import { useState } from "react";
 import GeneralSettings from "./GeneralSettings";
@@ -17,6 +18,7 @@ import { useTranslation } from "react-i18next";
 import { t } from "i18next";
 import { clsx, useMantineTheme } from "@mantine/core";
 import { DataExport } from "./DataExportSettings";
+import AppearanceSettings from "./AppearanceSettings";
 
 type SettingItem = {
   name: string;
@@ -40,6 +42,12 @@ const Settings = () => {
       onClick: () => null,
       icon: IconKey,
       panel: <GeneralSettings />,
+    },
+    {
+      name: t("settings_appearance_title"),
+      onClick: () => null,
+      icon: IconMoonStars,
+      panel: <AppearanceSettings />,
     },
     {
       name: t("settings_proxy_title"),

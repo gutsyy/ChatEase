@@ -187,7 +187,7 @@ const MessageItemBar = ({
             <Tooltip
               label={item.description}
               key={i}
-              styles={{ tooltip: { fontSize: "12px" } }}
+              styles={{ tooltip: { fontSize: "0.75rem" } }}
               withArrow
               openDelay={1000}
             >
@@ -243,7 +243,7 @@ const RenderActionButton = ({
   <Tooltip
     styles={{
       tooltip: {
-        fontSize: "12px",
+        fontSize: "0.75rem",
       },
     }}
     openDelay={1000}
