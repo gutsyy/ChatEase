@@ -325,6 +325,22 @@
   max-height: 16rem;
 }
 
+.max-h-12 {
+  max-height: 3rem;
+}
+
+.max-h-20 {
+  max-height: 5rem;
+}
+
+.max-h-60 {
+  max-height: 15rem;
+}
+
+.max-h-7 {
+  max-height: 1.75rem;
+}
+
 .w-36 {
   width: 9rem;
 }
@@ -1083,6 +1099,10 @@
 
 .duration-200 {
   transition-duration: 200ms;
+}
+
+.duration-150 {
+  transition-duration: 150ms;
 }
 
 .ease-in-out {

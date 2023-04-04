@@ -43,20 +43,20 @@ export const isMessageInPrompts = (
       if (reverseMessages[i].fixedInPrompt) {
         continue;
       }
+      console.log("tokenLimit", tokensLimit);
       if (
         window.electronAPI.othersIpcRenderer.calMessagesTokens(
           reverseMessages
             .slice(0, i + 1)
             .filter((msg) => msg.inPrompts || msg.fixedInPrompt)
             .map((msg) => ({ role: msg.sender, content: msg.text }))
-        ) >= tokensLimit ||
+        ) > tokensLimit ||
         maxMessageBoolean(
           reverseMessages.slice(0, i + 1).filter((msg) => msg.inPrompts)
             .length + reverseMessages.filter((msg) => msg.fixedInPrompt).length
         )
       ) {
         reverseMessages[i].inPrompts = false;
-        // break;
       }
     }
   }

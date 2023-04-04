@@ -7,13 +7,7 @@ import MessageItem from "./MessageItem";
 export const PinnedMessages = ({ messages }: { messages: Message[] }) => {
   const { colorScheme } = useMantineTheme();
   const [opened, { open, close }] = useDisclosure(false);
-  const ref = useClickOutside<HTMLDivElement>(() => {
-    close();
-    ref.current.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  });
+  const ref = useClickOutside<HTMLDivElement>(() => null);
 
   const pinnedMessages: { msg: Message; index: number }[] = messages.reduce(
     (pms, msg, index) => {
@@ -36,10 +30,10 @@ export const PinnedMessages = ({ messages }: { messages: Message[] }) => {
               colorScheme === "dark"
                 ? "bg-dark-800 shadow-dark-700"
                 : "bg-gray-50 shadow-gray-300",
-              opened && "w-full h-64 mx-3 items-start overflow-y-auto",
-              !opened && "w-44 overflow-y-hidden",
-              pinnedMessages.length && "h-7",
-              !pinnedMessages.length && "h-0 shadow-none"
+              opened && "w-full max-h-64 mx-3 items-start overflow-y-auto",
+              !opened && "w-44 overflow-y-hidden max-h-7",
+              // pinnedMessages.length && "max-h-7",
+              !pinnedMessages.length && "max-h-0 h-0 shadow-none"
             )}
             style={{
               borderRadius: "1rem",
@@ -57,7 +51,15 @@ export const PinnedMessages = ({ messages }: { messages: Message[] }) => {
               <IconPin size={14} />
               <div>Pinned Messages</div>
               {opened && (
-                <ActionIcon size="xs" color="violet">
+                <ActionIcon
+                  size="xs"
+                  color="violet"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    ref.current.scrollTo({ top: 0, behavior: "smooth" });
+                    close();
+                  }}
+                >
                   <IconX
                     className={clsx(
                       colorScheme === "dark"
@@ -65,10 +67,6 @@ export const PinnedMessages = ({ messages }: { messages: Message[] }) => {
                         : "text-violet-500"
                     )}
                     size={14}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      close();
-                    }}
                   />
                 </ActionIcon>
               )}

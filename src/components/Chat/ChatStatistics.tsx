@@ -110,8 +110,8 @@ export const ChatStatistics = ({
                 : "4.625rem"
               : "15rem"
             : warningState
-            ? "1.66rem"
-            : "",
+            ? "2.67rem"
+            : "1.67rem",
           transition: "height 0.15s ease-in-out",
         }}
         onClick={openChatSetting}
