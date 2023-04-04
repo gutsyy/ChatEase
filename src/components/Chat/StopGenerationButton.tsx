@@ -1,5 +1,5 @@
 import { Button } from "@mantine/core";
-import { IconCircleX } from "@tabler/icons-react";
+import { IconX } from "@tabler/icons-react";
 import { setIsResponsing, setNotiGenerate } from "../../reducers/chatSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { useEffect } from "react";
@@ -20,7 +20,7 @@ export const RenderStopGenerationButton = () => {
   }, [notiStopGenerate]);
 
   return (
-    <div className="sticky w-40 z-50 bottom-0 -translate-x-1/2 left-1/2 bg-transparent">
+    <div className="absolute bottom-1 w-40 z-50 -translate-x-1/2 left-1/2 bg-transparent">
       <Button
         className={
           notiStopGenerate
@@ -31,8 +31,8 @@ export const RenderStopGenerationButton = () => {
         fullWidth
         radius="lg"
         variant="light"
-        color="red"
-        leftIcon={<IconCircleX size={14} />}
+        color="violet"
+        leftIcon={<IconX size={14} />}
         onClick={() => dispatch(setIsResponsing(false))}
       >
         Stop Generation

@@ -66,7 +66,7 @@ export default function Chat() {
           {messages.length === 0 && <NoMessages />}
           <div
             className={clsx(
-              "pb-4 pt-2 flex-1 px-4 absolute top-1 bottom-0 w-full overflow-y-scroll",
+              "pb-7 pt-2 flex-1 px-4 absolute top-1 bottom-0 w-full overflow-y-scroll",
               colorScheme === "dark" && "bg-dark-800",
               colorScheme === "light" && "bg-gray-50"
             )}

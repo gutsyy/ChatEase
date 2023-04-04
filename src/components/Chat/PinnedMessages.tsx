@@ -26,14 +26,14 @@ export const PinnedMessages = ({ messages }: { messages: Message[] }) => {
         <div className="flex justify-center">
           <div
             className={clsx(
-              "text-xs px-4 py-1 shadow-md transition-all ease-in-out duration-200 gap-2 hover:cursor-pointer shadow-dark-500 overflow-x-hidden",
+              "text-xs px-4 py-1 shadow-md transition-all ease-in-out duration-500 gap-2 hover:cursor-pointer shadow-dark-300 overflow-x-hidden relative justify-center",
               colorScheme === "dark"
                 ? "bg-dark-800 shadow-dark-700"
                 : "bg-gray-50 shadow-gray-300",
               opened && "w-full max-h-64 mx-3 items-start overflow-y-auto",
-              !opened && "w-44 overflow-y-hidden max-h-7",
-              // pinnedMessages.length && "max-h-7",
-              !pinnedMessages.length && "max-h-0 h-0 shadow-none"
+              !opened && "w-44 overflow-y-hidden max-h-6",
+              //   pinnedMessages.length && "",
+              !pinnedMessages.length && "max-h-0 h-0 shadow-none opacity-0"
             )}
             style={{
               borderRadius: "1rem",
@@ -43,10 +43,9 @@ export const PinnedMessages = ({ messages }: { messages: Message[] }) => {
           >
             <div
               className={clsx(
-                "flex gap-2 justify-center items-center font-bold font-greycliff",
+                "flex gap-2 justify-center items-center font-bold font-greycliff sticky w-full top-0 z-50",
                 colorScheme === "dark" ? "text-dark-100" : "text-violet-500"
               )}
-              style={{ marginTop: "2px" }}
             >
               <IconPin size={14} />
               <div>Pinned Messages</div>
@@ -71,7 +70,7 @@ export const PinnedMessages = ({ messages }: { messages: Message[] }) => {
                 </ActionIcon>
               )}
             </div>
-            <div className="mt-3">
+            <div className="w-full mt-3 flex-1">
               {pinnedMessages.length === 0 && (
                 <div className="w-full mt-32 flex justify-center items-center">
                   No Pinned Messages

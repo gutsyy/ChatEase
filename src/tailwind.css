@@ -164,6 +164,10 @@
   bottom: 1rem;
 }
 
+.top-8 {
+  top: 2rem;
+}
+
 .z-10 {
   z-index: 10;
 }
@@ -257,6 +261,10 @@
   margin-bottom: 0.5rem;
 }
 
+.mt-8 {
+  margin-top: 2rem;
+}
+
 .\!inline {
   display: inline !important;
 }
@@ -347,6 +355,10 @@
 
 .max-h-7 {
   max-height: 1.75rem;
+}
+
+.max-h-6 {
+  max-height: 1.5rem;
 }
 
 .w-36 {
@@ -783,6 +795,18 @@
   padding-top: 0.5rem;
 }
 
+.pb-6 {
+  padding-bottom: 1.5rem;
+}
+
+.pb-8 {
+  padding-bottom: 2rem;
+}
+
+.pb-7 {
+  padding-bottom: 1.75rem;
+}
+
 .text-center {
   text-align: center;
 }
@@ -1111,6 +1135,10 @@
 
 .duration-150 {
   transition-duration: 150ms;
+}
+
+.duration-500 {
+  transition-duration: 500ms;
 }
 
 .ease-in-out {
