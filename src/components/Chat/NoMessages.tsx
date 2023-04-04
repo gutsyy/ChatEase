@@ -3,7 +3,7 @@ import { IconBrandOpenai } from "@tabler/icons-react";
 export const NoMessages = () => {
   return (
     <div
-      className="w-full flex justify-center items-center"
+      className="w-full flex justify-center items-center absolute z-50"
       style={{ height: "calc(100% - 37px)" }}
     >
       <div className="flex flex-col items-center">

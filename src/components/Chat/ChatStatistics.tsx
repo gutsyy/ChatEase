@@ -334,7 +334,7 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
             <Slider
               onChange={onMessagesLimitChange}
               value={messagesLimit}
-              color="violet"
+              color="violet.4"
               className="mt-1"
               defaultValue={1}
               min={0}
@@ -403,7 +403,7 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
             <Slider
               onChange={onTemperatureChange}
               value={temperature}
-              color="violet"
+              color="violet.4"
               className="mt-1"
               defaultValue={1}
               min={0}
@@ -556,17 +556,13 @@ const ChatSettingsPinButton = ({
   return (
     <ActionIcon
       className="ml-3"
-      color="violet"
+      color="violet.5"
       onClick={() =>
         dispatch(updateSelectedChatPinnedSetting(pinned ? "" : setting))
       }
       size="xs"
     >
-      {pinned ? (
-        <IconPinnedOff className="text-violet-500" size={14} />
-      ) : (
-        <IconPin className="text-violet-500" size={12} />
-      )}
+      {pinned ? <IconPinnedOff size={14} /> : <IconPin size={12} />}
     </ActionIcon>
   );
 };
