@@ -84,8 +84,8 @@ export default function Chat() {
                   <MessageItem msg={message} index={i} />
                 </div>
               ))}
+              <WaitingResponse />
             </div>
-            <WaitingResponse />
           </div>
           <ChatBottomStatusBar messagesInPromptsNum={messagesInPromptsNum} />
         </div>
