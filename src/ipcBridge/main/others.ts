@@ -56,8 +56,8 @@ export const othersIpcMain = (window: BrowserWindow) => {
     menu.popup({ window: window });
   });
 
-  ipcMain.on("clean-app-data", (event) => {
-    store.clear();
+  ipcMain.on("clean-app-data", () => {
+    // store.clear();
     db.getIns()
       .drop()
       .then(() => {

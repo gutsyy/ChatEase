@@ -62,7 +62,7 @@
     "settings_message_SelectedActions_help": "If you want to remove it, drag it to the top toolbar",
 
     "settings_cleanAppData_title": "Clean App Data",
-    "settings_cleanAppData_help": "This operation will delete all your local data and application settings, and cannot be undone, making the application return to its initial state.",
+    "settings_cleanAppData_help": "This operation will delete all your local data, and cannot be undone",
     "settings_cleanAppData_button": "Clean",
 
     "settings_data_export": "Data Export",

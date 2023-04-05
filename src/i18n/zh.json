@@ -62,7 +62,7 @@
     "settings_message_SelectedActions_help": "如要移除，请拖动Prompt到上方工具栏",
 
     "settings_cleanAppData_title": "清除应用数据",
-    "settings_cleanAppData_help": "该操作会删除所有的App数据和设置，使应用重置",
+    "settings_cleanAppData_help": "该操作会删除所有的App数据",
     "settings_cleanAppData_button": "清除",
 
     "settings_data_export": "数据导出",
