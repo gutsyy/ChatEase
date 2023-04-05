@@ -13,6 +13,7 @@ import { num_tokens_from_messages } from "../../services/openAI/numTokensFromMes
 import fs from "fs";
 import path from "path";
 import { store } from "./store";
+import { db } from "../../database";
 
 export const othersIpcMain = (window: BrowserWindow) => {
   ipcMain.on("cal-tokens", (event, str: string) => {
@@ -56,22 +57,13 @@ export const othersIpcMain = (window: BrowserWindow) => {
   });
 
   ipcMain.on("clean-app-data", (event) => {
-    const userDataDir = app.getPath("userData");
-    const dbFilePath = path.join(userDataDir, "database.db");
-
     store.clear();
-
-    fs.unlink(dbFilePath, (err) => {
-      if (err) {
-        console.error(err);
-        event.reply("delete-db-file-reply", { success: false, error: err });
-      } else {
-        console.log(`Database file "${dbFilePath}" has been deleted`);
-        event.reply("delete-db-file-reply", { success: true });
+    db.getIns()
+      .drop()
+      .then(() => {
         app.relaunch();
         app.quit();
-      }
-    });
+      });
   });
 
   ipcMain.on("color-scheme", (event, colorScheme) => {
