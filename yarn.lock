@@ -445,15 +445,16 @@
   optionalDependencies:
     electron-winstaller "^5.0.0"
 
-"@electron-forge/maker-zip@^6.0.5":
-  version "6.0.5"
-  resolved "https://registry.npmjs.org/@electron-forge/maker-zip/-/maker-zip-6.0.5.tgz"
-  integrity sha512-Yg256nGQUWT35EZyRIALpgtdM8WSvgZc0O4aA6Wy0S6ektaxyM2a+tO2ug/Vl+RgYA6oIeAADfkU2RxLiGnhbA==
+"@electron-forge/maker-zip@^6.1.1":
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/@electron-forge/maker-zip/-/maker-zip-6.1.1.tgz#fba5cd18b6f33497f3aadbdade5c0a2142ca9e9a"
+  integrity sha512-3T2bIbYhKl3Z/VyeN+X7+7U+HhgaCtBCfDi0k/Ga7CoUpge2uJS/+yjfGJdwFk4TbWhS3sNkZV2mFMKhx/rlmQ==
   dependencies:
-    "@electron-forge/maker-base" "6.0.5"
-    "@electron-forge/shared-types" "6.0.5"
+    "@electron-forge/maker-base" "6.1.1"
+    "@electron-forge/shared-types" "6.1.1"
     cross-zip "^4.0.0"
     fs-extra "^10.0.0"
+    got "^11.8.5"
 
 "@electron-forge/plugin-base@6.0.5":
   version "6.0.5"
@@ -505,6 +506,15 @@
   version "6.0.5"
   resolved "https://registry.npmjs.org/@electron-forge/shared-types/-/shared-types-6.0.5.tgz"
   integrity sha512-FrJI11afw/Cxk0JwgWyKg9aPoHOdmMi4JHTY6pnmi95MjarQ1d0SIqKJUzX7q2lXPUAxqPKA2Wmykg6F2CThlg==
+  dependencies:
+    "@electron/rebuild" "^3.2.10"
+    electron-packager "^17.1.1"
+    listr2 "^5.0.3"
+
+"@electron-forge/shared-types@6.1.1":
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/@electron-forge/shared-types/-/shared-types-6.1.1.tgz#f08cf783bf0a086331784b9f13110b4fade84846"
+  integrity sha512-sFQQ2ldMq5mlNv4m7lZOZLf9aOn6MLNc8QVeTzOBQ+psxI3mVTDjb+/Lhs/jU8dm2igVfEqAmlj57Gi+C4u4Vw==
   dependencies:
     "@electron/rebuild" "^3.2.10"
     electron-packager "^17.1.1"

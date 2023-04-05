@@ -29,7 +29,7 @@ export const SideExtend = () => {
         colorScheme === "dark" && "bg-dark-750 border-dark-750"
       )}
       style={{
-        width: sideNavExpanded ? "256px" : "0px",
+        width: sideNavExpanded ? "16rem" : "0px",
         paddingLeft: sideNavExpanded ? "0.25rem" : "",
         paddingRight: sideNavExpanded ? "0.25rem" : "",
         opacity: sideNavExpanded ? "1" : "0",

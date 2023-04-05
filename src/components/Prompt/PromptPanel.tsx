@@ -1,4 +1,12 @@
-import { ActionIcon, Textarea, Loader, Button } from "@mantine/core";
+import {
+  ActionIcon,
+  Textarea,
+  Loader,
+  Button,
+  useMantineTheme,
+  clsx,
+  Text,
+} from "@mantine/core";
 import { IconBrandTelegram } from "@tabler/icons-react";
 import { Markdown } from "../../pureComponents";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
@@ -25,6 +33,7 @@ export const PromptPanel = () => {
   const [inputContent, setInputContent] = useState<string>("");
   const textAreaInputRef = useRef<HTMLTextAreaElement>(null);
   const [selectedPrompt, setSelectedPrompt] = useState<Prompt>(null);
+  const { colorScheme } = useMantineTheme();
 
   useEffect(() => {
     setInputContent("");
@@ -78,7 +87,7 @@ export const PromptPanel = () => {
               autosize
               radius="md"
               value={inputContent}
-              size="sm"
+              size="xs"
               className="mt-2"
               variant="filled"
               onKeyDown={handleKeyDown}
@@ -105,9 +114,21 @@ export const PromptPanel = () => {
               </div>
             </div>
           </form>
-          <div className="p-2 flex-1">
-            <div className="text-sm">
+          <div
+            className={clsx(
+              "p-2 flex-1 rounded-lg mt-1",
+              colorScheme === "dark" ? "bg-dark-750" : "bg-gray-100",
+              !answerContent && "bg-transparent"
+            )}
+          >
+            {answerContent && (
+              <Text size="xs" weight="bold">
+                Output:{" "}
+              </Text>
+            )}
+            <div className="text-xs">
               <Markdown
+                colorScheme={colorScheme}
                 text={answerContent}
                 codeScope={(
                   window.electronAPI.storeIpcRenderer.get(

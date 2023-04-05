@@ -138,7 +138,6 @@ export const requestApi = async (chatId: number, messages: Message[]) => {
       window.electronAPI.othersIpcRenderer.removeAllListeners(`axios-stream`);
       return;
     }
-    console.log(data);
     if (data.choices[0].delta.role) {
       store.dispatch(setStreamGPTMessageStart(createNewGPTMessage("", chatId)));
       return;
