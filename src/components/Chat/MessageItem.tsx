@@ -81,7 +81,7 @@ const MessageItem = ({ msg, index }: { msg: Message; index: number }) => {
         className={clsx(
           "p-3 mb-4 rounded-lg relative",
           msg.sender === "user" &&
-            (colorScheme === "light" ? "bg-white" : "bg-dark-750"),
+            (colorScheme === "light" ? "bg-gray-50" : "bg-dark-750"),
           msg.sender === "assistant" &&
             (colorScheme === "light" ? "bg-gray-100" : "bg-dark-700")
           // msg.fixedInPrompt && "outline outline-1 outline-violet-500"

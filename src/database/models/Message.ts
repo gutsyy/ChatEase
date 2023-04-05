@@ -30,6 +30,8 @@ const MessageDefine = {
     chatId: {
       type: DataTypes.NUMBER,
       allowNull: false,
+      unique: false,
+      index: true,
     },
     collapse: {
       type: DataTypes.BOOLEAN,

@@ -73,7 +73,7 @@ export const PromptPanel = () => {
   return (
     <>
       {selectedPrompt && (
-        <div className="flex flex-1 flex-col p-2 px-4 overflow-y-scroll chat-messages-view overflow-x-hidden relative h-full">
+        <div className="flex flex-1 flex-col p-2 pb-4 px-4 overflow-y-scroll chat-messages-view overflow-x-hidden relative h-full">
           <div className="w-full text-center font-bold font-greycliff text-lg">
             {selectedPrompt.name}
           </div>
@@ -116,7 +116,7 @@ export const PromptPanel = () => {
           </form>
           <div
             className={clsx(
-              "p-2 flex-1 rounded-lg mt-1",
+              "p-3 flex-1 rounded-lg mt-1",
               colorScheme === "dark" ? "bg-dark-750" : "bg-gray-100",
               !answerContent && "bg-transparent"
             )}
@@ -150,7 +150,7 @@ export const PromptPanel = () => {
                 dispatch(setPromptIsResponsing(false));
               }}
             >
-              <Button radius="lg" size="xs" color="red">
+              <Button radius="lg" size="xs" color="violet">
                 Stop Generation
               </Button>
             </div>

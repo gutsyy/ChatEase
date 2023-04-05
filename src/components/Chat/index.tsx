@@ -58,7 +58,7 @@ export default function Chat() {
           className={clsx(
             "flex-1 relative h-full w-full",
             colorScheme === "dark" && "bg-dark-800 scrollbar-custom-dark",
-            colorScheme === "light" && "bg-gray-50 scrollbar-custom"
+            colorScheme === "light" && "bg-white scrollbar-custom"
           )}
           ref={chatsContainer}
         >
@@ -68,7 +68,7 @@ export default function Chat() {
             className={clsx(
               "flex-1 absolute top-1 bottom-0 w-full overflow-y-scroll",
               colorScheme === "dark" && "bg-dark-800",
-              colorScheme === "light" && "bg-gray-50"
+              colorScheme === "light" && "bg-white"
             )}
           >
             <div
@@ -76,7 +76,7 @@ export default function Chat() {
               className={clsx(
                 "pb-20 pt-2 px-4",
                 colorScheme === "dark" && "bg-dark-800",
-                colorScheme === "light" && "bg-gray-50"
+                colorScheme === "light" && "bg-white"
               )}
             >
               {messages.map((message, i) => (

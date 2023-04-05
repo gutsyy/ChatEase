@@ -167,7 +167,7 @@ export const ChatInputBox = forwardRef(
           className={clsx(
             "p-4 flex items-center border-solid border-0 border-t",
             colorScheme === "dark" && "bg-dark-900 border-dark-900",
-            colorScheme === "light" && "bg-gray-100 border-gray-200"
+            colorScheme === "light" && "bg-white border-gray-200"
           )}
         >
           <form
@@ -177,6 +177,7 @@ export const ChatInputBox = forwardRef(
             <Textarea
               ref={_textAreaRef}
               value={message}
+              variant="filled"
               onChange={(event) => {
                 setMessage(event.target.value);
                 dispatch(setMessageTokens(event.target.value.trim()));
