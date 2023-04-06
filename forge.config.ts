@@ -26,7 +26,7 @@ const config: ForgeConfig = {
   ],
 
   packagerConfig: {
-    icon: "./appIcon/ChatEase.icns",
+    icon: "./appIcon/ChatEase",
   },
 
   rebuildConfig: {},
