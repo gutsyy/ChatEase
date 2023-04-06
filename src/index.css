@@ -28,6 +28,17 @@
   font-style: normal; /* 字体样式 */
 }
 
+@font-face {
+  font-family: "MiSans";
+  src: url("./fonts/MiSans-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "MiSans";
+  src: url("./fonts/MiSans-SemiBold.woff2") format("woff2");
+  font-weight: 700;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif;

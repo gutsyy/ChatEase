@@ -23,7 +23,7 @@ export const PromptsList = () => {
       <Button
         styles={{
           root: {
-            fontFamily: "Greycliff CF, sans serif",
+            fontFamily: "Greycliff CF, MiSans",
             fontWeight: 700,
           },
         }}

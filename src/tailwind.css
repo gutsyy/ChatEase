@@ -596,16 +596,6 @@
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.bg-dark-100 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(193 194 197 / var(--tw-bg-opacity));
-}
-
-.bg-violet-50 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(245 243 255 / var(--tw-bg-opacity));
-}
-
 .p-1 {
   padding: 0.25rem;
 }
@@ -666,6 +656,10 @@
   padding-bottom: 5rem;
 }
 
+.pb-4 {
+  padding-bottom: 1rem;
+}
+
 .pl-2 {
   padding-left: 0.5rem;
 }
@@ -678,16 +672,12 @@
   padding-top: 0.5rem;
 }
 
-.pb-4 {
-  padding-bottom: 1rem;
-}
-
 .text-center {
   text-align: center;
 }
 
 .font-greycliff {
-  font-family: Greycliff CF, -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
+  font-family: Greycliff CF,MiSans;
 }
 
 .font-monaco {
@@ -987,6 +977,20 @@
   font-style: normal;
 
   /* 字体样式 */
+}
+
+@font-face {
+  font-family: "MiSans";
+
+  src: url("./fonts/MiSans-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "MiSans";
+
+  src: url("./fonts/MiSans-SemiBold.woff2") format("woff2");
+
+  font-weight: 700;
 }
 
 body {

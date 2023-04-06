@@ -47,9 +47,7 @@ export const PromptListItem = (prompt: Prompt) => {
           colorScheme === "light" ? "text-gray-500" : "text-dark-100"
         )}
       >
-        <div
-          style={{ fontFamily: "Greycliff CF, sans serif", fontWeight: 400 }}
-        >
+        <div style={{ fontFamily: "Greycliff CF, MiSans", fontWeight: 400 }}>
           {prompt.name}
         </div>
       </div>

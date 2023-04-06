@@ -8,10 +8,7 @@ module.exports = {
   content: ["./src/**/*.{html,js,tsx}"],
   theme: {
     fontFamily: {
-      greycliff: [
-        "Greycliff CF",
-        "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji",
-      ],
+      greycliff: ["Greycliff CF,MiSans"],
       monaco: [
         "Monaco",
         "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji",

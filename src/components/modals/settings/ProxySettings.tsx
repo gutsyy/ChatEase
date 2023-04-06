@@ -137,7 +137,7 @@ const ProxySettings = () => {
           style={{
             fontSize: "0.9rem",
             fontWeight: 600,
-            fontFamily: "Greycliff CF, sans serif",
+            fontFamily: "Greycliff CF, MiSans",
           }}
         >
           {t("settings_proxy_title")}
