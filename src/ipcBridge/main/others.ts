@@ -8,11 +8,8 @@ import {
   shell,
 } from "electron";
 import { encode } from "gpt-3-encoder";
-import { ChatGPTMessageType } from "../../services/openAI/apiConfig";
-import { num_tokens_from_messages } from "../../services/openAI/numTokensFromMessages";
-import fs from "fs";
-import path from "path";
-import { store } from "./store";
+import { ChatGPTMessageType } from "@/webview/services/openAI/apiConfig";
+import { num_tokens_from_messages } from "./utils/numTokensFromMessages";
 import { db } from "../../database";
 
 export const othersIpcMain = (window: BrowserWindow) => {

@@ -1,5 +1,5 @@
 import { ipcRenderer } from "electron";
-import { ChatGPTMessageType } from "../../services/openAI/apiConfig";
+import { ChatGPTMessageType } from "@/webview/services/openAI/apiConfig";
 
 export interface OthersIpcRenderer {
   calTokens: (str: string) => number;

@@ -8,7 +8,7 @@
   "repository": "https://github.com/gyuannn/ChatEase",
   "scripts": {
     "start": "electron-forge start",
-    "tailwindcss": "tailwindcss -i ./src/index.css -o ./src/tailwind.css --watch",
+    "tailwindcss": "tailwindcss -i ./src/webview/index.css -o ./src/webview/tailwind.css --watch",
     "test": "jest",
     "package": "electron-forge package",
     "make": "electron-forge make",

@@ -1,5 +1,5 @@
 import { app, ipcMain } from "electron";
-import { stopV2ray, startV2ray } from "../../services/proxy/v2ray";
+import { stopV2ray, startV2ray } from "@/webview/services/proxy/v2ray";
 
 export const v2rayIpcMain = () => {
   ipcMain.on("v2ray-start", (event) => {

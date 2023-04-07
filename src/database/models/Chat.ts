@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize";
-import { OpenAIModels } from "../../services/openAI/data";
+import { OpenAIModels } from "@/webview/services/openAI/data";
 
 export interface Chat {
   id?: number;

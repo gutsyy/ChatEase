@@ -1,6 +1,6 @@
 import { app, BrowserWindow, dialog, ipcMain, shell } from "electron";
 import { Op, Sequelize } from "sequelize";
-import sqlite3 from "sqlite3";
+import sqlite3, { Database } from "sqlite3";
 import { initialPrompts } from "./initialDatas";
 import { Chat, ChatDefine } from "./models/Chat";
 import { Message, MessageDefine } from "./models/Message";
@@ -16,7 +16,7 @@ const database = () => {
 
   const init = async (window: BrowserWindow) => {
     const sqlitePath = app.getPath("userData") + "/database.db";
-    new sqlite3.Database(sqlitePath);
+    new Database(sqlitePath);
     sequelize = new Sequelize({
       dialect: "sqlite",
       dialectModule: sqlite3,
@@ -83,7 +83,7 @@ const database = () => {
     });
 
     // Get all chats sory by timestamp, recent date first
-    ipcMain.handle("get-all-chats", async (event) => {
+    ipcMain.handle("get-all-chats", async () => {
       try {
         const chats = await ChatIns.findAll({
           order: [["timestamp", "DESC"]],
@@ -123,7 +123,7 @@ const database = () => {
     });
 
     // Delete all chats
-    ipcMain.handle("delete-all-chats", async (event) => {
+    ipcMain.handle("delete-all-chats", async () => {
       try {
         const result = await ChatIns.destroy({ where: {} });
         return result;
@@ -171,7 +171,7 @@ const database = () => {
       }
     });
     // Get all prompts
-    ipcMain.handle("get-all-prompts", async (event) => {
+    ipcMain.handle("get-all-prompts", async () => {
       try {
         const prompts = await PromptIns.findAll();
         return prompts.map((prompt) => prompt.dataValues);
@@ -433,7 +433,7 @@ const database = () => {
 
     ipcMain.handle(
       "update-chat-costTokens",
-      async (event, id: number, costTokens: number) => {
+      async (_, id: number, costTokens: number) => {
         try {
           await ChatIns.update(
             { costTokens: costTokens },
