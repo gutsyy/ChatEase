@@ -76,6 +76,7 @@ export const ChatInputBox = forwardRef(
     useEffect(() => {
       setActionsBarVisible(focused);
     }, [focused]);
+
     useEffect(() => {
       if (runningActionId === "chat-action") {
         setMessage(answerContent);
@@ -107,7 +108,8 @@ export const ChatInputBox = forwardRef(
 
       // Check limits
       if (
-        promptTokens > window.electronAPI.storeIpcRenderer.get("max_tokens")
+        promptTokens >
+        (window.electronAPI.storeIpcRenderer.get("max_tokens") as number)
       ) {
         dispatch(setTokensBoxWarningStateTo("tokens_limit"));
         return;
@@ -165,7 +167,7 @@ export const ChatInputBox = forwardRef(
         />
         <div
           className={clsx(
-            "p-4 flex items-center border-solid border-0 border-t",
+            "p-3 flex items-center border-solid border-0 border-t",
             colorScheme === "dark" && "bg-dark-900 border-dark-900",
             colorScheme === "light" && "bg-white border-gray-200"
           )}

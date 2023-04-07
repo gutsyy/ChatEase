@@ -1,7 +1,7 @@
 {
   "name": "chatease",
   "productName": "ChatEase(Dev)",
-  "version": "0.0.5-alpha",
+  "version": "0.1.0",
   "main": ".webpack/main",
   "licenses": "GPL-3.0",
   "description": "ChatEase Desktop App",
@@ -46,6 +46,7 @@
     "electron": "23.1.1",
     "electron-builder": "^23.6.0",
     "eslint": "^8.0.1",
+    "eslint-import-resolver-typescript": "^3.5.5",
     "eslint-plugin-import": "^2.25.0",
     "fork-ts-checker-webpack-plugin": "^7.2.13",
     "jest": "^29.4.3",

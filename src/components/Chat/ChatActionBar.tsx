@@ -34,38 +34,37 @@ export const ChatActionBar = ({ visible, onClick }: ChatActionBarProps) => {
   }, [selectedChatId]);
 
   return (
-    <div
-      className={clsx(
-        "border-solid border-0 border-t gap-1 w-full flex items-center justify-center px-4 transition-all ease-linear duration-100 overflow-y-hidden",
-        visible ? "h-8 py-1 opacity-100" : "h-0 py-0 opacity-0",
-        colorScheme === "dark"
-          ? "bg-dark-800 border-dark-600 border-b"
-          : "border-gray-200 bg-white"
-      )}
-    >
-      {actions.length === 0 && (
-        <div className="w-full flex justify-center items-center font-greycliff text-sm text-gray-500">
-          {`No Actions settings, You can go to App Settings -> Chat Toolbar to add actions.`}
+    <>
+      {actions.length !== 0 && (
+        <div
+          className={clsx(
+            "border-solid border-0 border-t gap-1 w-full flex items-center justify-center px-4 transition-all ease-linear duration-100 overflow-y-hidden",
+            visible ? "h-8 py-1 opacity-100" : "h-0 py-0 opacity-0",
+            colorScheme === "dark"
+              ? "bg-dark-800 border-dark-600 border-b"
+              : "border-gray-200 bg-white"
+          )}
+        >
+          {actions.map((item, i) => (
+            <Button
+              loading={runningActionId === item.id}
+              key={i}
+              className="font-greycliff h-6"
+              radius="lg"
+              size="xs"
+              variant="gradient"
+              gradient={{ from: "#9B30FF", to: "#DA70D6", deg: 90 }}
+              onClick={() => {
+                if (onClick(item)) {
+                  setRunningActionId(item.id);
+                }
+              }}
+            >
+              {item.name}
+            </Button>
+          ))}
         </div>
       )}
-      {actions.map((item, i) => (
-        <Button
-          loading={runningActionId === item.id}
-          key={i}
-          className="font-greycliff h-6"
-          radius="lg"
-          size="xs"
-          variant="gradient"
-          gradient={{ from: "#9B30FF", to: "#DA70D6", deg: 90 }}
-          onClick={() => {
-            if (onClick(item)) {
-              setRunningActionId(item.id);
-            }
-          }}
-        >
-          {item.name}
-        </Button>
-      ))}
-    </div>
+    </>
   );
 };

@@ -3,7 +3,7 @@ import { createContext, useEffect, useMemo, useRef, useState } from "react";
 import { useAppSelector } from "../../hooks/redux";
 import WaitingResponse from "./WaitingResponse";
 import MessageItem from "./MessageItem";
-import { ChatBottomStatusBar } from "./ChatBottomStatusBar";
+import { ChatBottomBar } from "./ChatBottomBar";
 import { NoMessages } from "./NoMessages";
 import { ChatInputBox } from "./ChatInputBox";
 import { clsx, useMantineTheme } from "@mantine/core";
@@ -66,7 +66,7 @@ export default function Chat() {
           {messages.length === 0 && <NoMessages />}
           <div
             className={clsx(
-              "flex-1 absolute top-1 bottom-0 w-full overflow-y-scroll",
+              "flex-1 absolute top-1 bottom-1 w-full overflow-y-scroll",
               colorScheme === "dark" && "bg-dark-800",
               colorScheme === "light" && "bg-white"
             )}
@@ -74,20 +74,20 @@ export default function Chat() {
             <div
               ref={messagesContainer}
               className={clsx(
-                "pb-20 pt-2 px-4",
+                "pb-6 pt-2 px-4",
                 colorScheme === "dark" && "bg-dark-800",
                 colorScheme === "light" && "bg-white"
               )}
             >
               {messages.map((message, i) => (
                 <div key={message.id}>
-                  <MessageItem msg={message} index={i} />
+                  <MessageItem {...message} index={i} />
                 </div>
               ))}
               <WaitingResponse />
             </div>
           </div>
-          <ChatBottomStatusBar messagesInPromptsNum={messagesInPromptsNum} />
+          <ChatBottomBar messagesInPromptsNum={messagesInPromptsNum} />
         </div>
         <ChatInputBox messages={messages} chatId={chatId} />
       </div>

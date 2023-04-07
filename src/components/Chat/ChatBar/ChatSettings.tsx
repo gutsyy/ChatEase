@@ -1,192 +1,16 @@
-import { useContext, useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import {
-  collapseAllMessages,
-  recalMessages,
-  setAllMessageInPromptsToFalse,
   setSelectedChat,
-  setShareImageDialog,
-  setTokensBoxWarningStateToFalse,
+  recalMessages,
   updateSelectedChatPinnedSetting,
-} from "../../reducers/chatSlice";
-import {
-  ActionIcon,
-  clsx,
-  Menu,
-  NumberInput,
-  Select,
-  Slider,
-  Text,
-  useMantineTheme,
-} from "@mantine/core";
-import { useClickOutside, useDisclosure } from "@mantine/hooks";
-import { storeRendererUtils } from "../../store/storeRendererUtils";
-import { openAIModels, openAIPricing } from "../../services/openAI/data";
-import {
-  IconArrowBarDown,
-  IconArrowBarUp,
-  IconCalculator,
-  IconCircleLetterT,
-  IconCloudOff,
-  IconCoin,
-  IconHistory,
-  IconMenu2,
-  IconPin,
-  IconPinned,
-  IconPinnedOff,
-  IconShare3,
-  IconX,
-} from "@tabler/icons-react";
-import { ChatContext } from ".";
+} from "@/reducers/chatSlice";
+import { openAIModels } from "@/services/openAI/data";
+import { storeRendererUtils } from "@/store/storeRendererUtils";
+import { ActionIcon, Slider, NumberInput, Select, Text } from "@mantine/core";
+import { IconPin, IconPinnedOff, IconX } from "@tabler/icons-react";
+import clsx from "clsx";
+import { useState, useEffect, memo } from "react";
 import { useTranslation } from "react-i18next";
-
-interface ChatStatisticsProps {
-  messagesInPromptsNum: number;
-}
-
-export const ChatStatistics = ({
-  messagesInPromptsNum,
-}: ChatStatisticsProps) => {
-  const dispatch = useAppDispatch();
-  const warningState = useAppSelector(
-    (state) => state.chat.tokensBoxWarningState
-  );
-  const chatId = useAppSelector((state) => state.chat.selectedChatId);
-  const selectedChat = useAppSelector((state) => state.chat.selectedChat);
-  const [opened, { close, open }] = useDisclosure();
-  const ref = useClickOutside(() => {
-    if (selectedChat && !selectedChat.pinnedSetting) {
-      close();
-    }
-  });
-  const { scrollToBottom } = useContext(ChatContext);
-  const { colorScheme } = useMantineTheme();
-
-  useEffect(() => {
-    if (selectedChat && selectedChat.pinnedSetting) {
-      open();
-    }
-  }, [selectedChat]);
-
-  useEffect(() => {
-    if (warningState) {
-      setTimeout(() => {
-        dispatch(setTokensBoxWarningStateToFalse());
-      }, 2500);
-    }
-  }, [warningState]);
-
-  const openChatSetting = () => {
-    if (!warningState && !opened) {
-      open();
-    }
-  };
-
-  return (
-    <div
-      className={clsx(
-        "absolute w-full bg-transparent flex gap-2 justify-center items-end bottom-2 z-50 transition-all",
-        chatId === -1 ? "max-h-0 overflow-hidden" : "overflow-visible"
-      )}
-    >
-      <ChatMenu />
-      <div
-        ref={ref}
-        className={clsx(
-          "px-3 py-1 shadow flex items-center overflow-hidden",
-          warningState && "outline outline-2 outline-red-500",
-          opened ? "rounded-lg" : "rounded-full hover:cursor-pointer",
-          colorScheme === "dark"
-            ? "bg-dark-900 text-dark-100"
-            : "bg-white text-gray-900"
-        )}
-        style={{
-          height: opened
-            ? selectedChat && selectedChat.pinnedSetting
-              ? selectedChat &&
-                (selectedChat.pinnedSetting === "messagesLimit" ||
-                  selectedChat.pinnedSetting === "temperature")
-                ? "2.82rem"
-                : "4.625rem"
-              : "15rem"
-            : warningState
-            ? "2.67rem"
-            : "1.67rem",
-          transition: "height 0.2s ease-in-out",
-        }}
-        onClick={openChatSetting}
-      >
-        {opened ? (
-          <ChatSettings chatId={chatId} onClose={close} />
-        ) : (
-          <Statistics
-            messagesInPromptNum={messagesInPromptsNum}
-            warningState={warningState}
-          />
-        )}
-      </div>
-      <CountTokens />
-    </div>
-  );
-};
-
-interface StatisticsProps {
-  warningState: "tokens_limit" | "messages_limit" | "";
-  messagesInPromptNum: number;
-}
-
-const Statistics = ({ warningState, messagesInPromptNum }: StatisticsProps) => {
-  const messageTokens = useAppSelector((state) => state.chat.inputBoxTokens);
-  const promptTokens = useAppSelector((state) => state.chat.totalPromptTokens);
-  const selectedChat = useAppSelector((state) => state.chat.selectedChat);
-
-  const messages_limit =
-    (selectedChat && selectedChat.messagesLimit) ??
-    window.electronAPI.storeIpcRenderer.get("max_messages_num");
-  const tokens_limit =
-    (selectedChat && selectedChat.tokensLimit) ??
-    window.electronAPI.storeIpcRenderer.get("max_tokens");
-
-  return (
-    <div className="flex gap-1">
-      <div className="flex flex-col justify-center items-center">
-        {warningState && (
-          <div className="text-red-500 font-semibold text-xs flex justify-center items-center">
-            Operation failed: Exceeding limit!
-          </div>
-        )}
-        <div className="flex gap-2">
-          <div className="flex items-center gap-1">
-            <IconCircleLetterT size={13} />
-            <Text
-              size="xs"
-              className={
-                warningState === "tokens_limit" ? "text-red-500 font-bold" : ""
-              }
-            >
-              {`${promptTokens + messageTokens} Tokens ${
-                warningState && `Max: ${tokens_limit}`
-              }`}
-            </Text>
-          </div>
-          <div className="flex items-center gap-1">
-            <IconHistory size={13} />
-            <Text
-              size="xs"
-              className={clsx(
-                warningState === "messages_limit" && "text-red-500 font-bold"
-              )}
-            >
-              {`${messagesInPromptNum} Messages ${
-                warningState && `Max: ${messages_limit}`
-              }`}
-            </Text>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 interface ChatSettingsProps {
   chatId: number;
@@ -322,8 +146,8 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
                 )}
               >
                 {t("chat_settings_maxMessages")}
-                <span className="text-dark-400 ml-2 font-bold">
-                  {`[ current tokens: ${totalPromptTokens + inputBoxTokens} ]`}
+                <span className="ml-2">
+                  {`[current tokens: ${totalPromptTokens + inputBoxTokens}]`}
                 </span>
               </Text>
               <ChatSettingsPinButton
@@ -332,13 +156,14 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
               />
             </div>
             <Slider
+              labelAlwaysOn
               onChange={onMessagesLimitChange}
               value={messagesLimit}
+              size="sm"
               color="violet.4"
               className="mt-1"
               defaultValue={1}
               min={0}
-              size="xs"
               max={10}
               step={1}
             ></Slider>
@@ -362,8 +187,8 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
                 )}
               >
                 {t("chat_settings_maxTokens")}
-                <span className="text-dark-400 ml-2 font-bold">
-                  {`[ current tokens: ${totalPromptTokens + inputBoxTokens} ]`}
+                <span className="ml-2">
+                  {`[current tokens: ${totalPromptTokens + inputBoxTokens}]`}
                 </span>
               </Text>
               <ChatSettingsPinButton
@@ -401,13 +226,14 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
               />
             </div>
             <Slider
+              labelAlwaysOn
               onChange={onTemperatureChange}
               value={temperature}
               color="violet.4"
               className="mt-1"
               defaultValue={1}
               min={0}
-              size="xs"
+              size="sm"
               max={2}
               label={(value) => value.toFixed(1)}
               step={0.1}
@@ -456,94 +282,6 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
   );
 };
 
-const ChatMenu = () => {
-  const dispatch = useAppDispatch();
-  const { t } = useTranslation();
-  const { colorScheme } = useMantineTheme();
-
-  return (
-    <Menu shadow="md" position="top-start" radius="md">
-      <Menu.Target>
-        <ActionIcon
-          variant="filled"
-          size="md"
-          radius="lg"
-          color={colorScheme === "dark" ? "dark" : ""}
-        >
-          <IconMenu2
-            size={16}
-            className={clsx(
-              colorScheme === "dark" ? "text-dark-100" : "text-white"
-            )}
-          />
-        </ActionIcon>
-      </Menu.Target>
-      <Menu.Dropdown
-        className={clsx(colorScheme === "dark" && "bg-dark-900 border-0")}
-      >
-        <Menu.Item
-          className="text-xs"
-          icon={<IconShare3 size={12} />}
-          onClick={() => dispatch(setShareImageDialog(true))}
-        >
-          {t("chat_menu_share")}
-        </Menu.Item>
-        <Menu.Item
-          className="text-xs"
-          icon={<IconArrowBarDown size={12} />}
-          onClick={() => dispatch(collapseAllMessages(false))}
-        >
-          {t("chat_menu_expandAll")}
-        </Menu.Item>
-        <Menu.Item
-          className="text-xs"
-          icon={<IconArrowBarUp size={12} />}
-          onClick={() => dispatch(collapseAllMessages(true))}
-        >
-          {t("chat_menu_collapseAll")}
-        </Menu.Item>
-        <Menu.Item
-          className="text-xs"
-          icon={<IconCloudOff size={12} />}
-          onClick={() => dispatch(setAllMessageInPromptsToFalse())}
-        >
-          {t("chat_menu_removeAll")}
-        </Menu.Item>
-        <Menu.Item
-          className="text-xs"
-          icon={<IconCalculator size={12} />}
-          onClick={() => dispatch(recalMessages())}
-        >
-          {t("chat_menu_recalulator")}
-        </Menu.Item>
-      </Menu.Dropdown>
-    </Menu>
-  );
-};
-
-const CountTokens = () => {
-  const selectedChat = useAppSelector((state) => state.chat.selectedChat);
-  const { colorScheme } = useMantineTheme();
-
-  return (
-    <div
-      className={clsx(
-        "flex gap-1 rounded-full px-3 py-1 items-center shadow",
-        colorScheme === "dark" ? "bg-dark-900" : "bg-white"
-      )}
-    >
-      <IconCoin size={12} />
-      <Text size="xs">
-        {selectedChat &&
-          (
-            (selectedChat.costTokens / 1000) *
-            openAIPricing[selectedChat.model]
-          ).toFixed(4)}
-      </Text>
-    </div>
-  );
-};
-
 const ChatSettingsPinButton = ({
   pinned,
   setting,
@@ -566,3 +304,5 @@ const ChatSettingsPinButton = ({
     </ActionIcon>
   );
 };
+
+export default memo(ChatSettings);

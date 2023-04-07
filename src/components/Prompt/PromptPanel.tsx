@@ -116,7 +116,7 @@ export const PromptPanel = () => {
           </form>
           <div
             className={clsx(
-              "p-3 flex-1 rounded-lg mt-1",
+              "p-3 rounded-lg mt-1",
               colorScheme === "dark" ? "bg-dark-750" : "bg-gray-100",
               !answerContent && "bg-transparent"
             )}
@@ -142,19 +142,19 @@ export const PromptPanel = () => {
             {isPromptResponsing ? (
               <Loader variant="dots" color="violet" size="sm" />
             ) : null}
+            {isPromptResponsing && (
+              <div
+                className="sticky bottom-0 z-10 bg-transparent flex justify-center"
+                onClick={() => {
+                  dispatch(setPromptIsResponsing(false));
+                }}
+              >
+                <Button radius="lg" size="xs" color="violet">
+                  Stop Generation
+                </Button>
+              </div>
+            )}
           </div>
-          {isPromptResponsing && (
-            <div
-              className="sticky bottom-0 z-10 bg-transparent flex justify-center"
-              onClick={() => {
-                dispatch(setPromptIsResponsing(false));
-              }}
-            >
-              <Button radius="lg" size="xs" color="violet">
-                Stop Generation
-              </Button>
-            </div>
-          )}
         </div>
       )}
     </>
