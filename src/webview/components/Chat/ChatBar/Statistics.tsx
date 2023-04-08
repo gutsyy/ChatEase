@@ -13,13 +13,17 @@ const Statistics = ({ warningState, messagesInPromptNum }: StatisticsProps) => {
   const promptTokens = useAppSelector((state) => state.chat.totalPromptTokens);
   const selectedChat = useAppSelector((state) => state.chat.selectedChat);
 
-  const messages_limit =
-    (selectedChat && selectedChat.messagesLimit) ??
-    window.electronAPI.storeIpcRenderer.get("max_messages_num");
-  const tokens_limit =
-    (selectedChat && selectedChat.tokensLimit) ??
-    window.electronAPI.storeIpcRenderer.get("max_tokens");
+  const globalMessageLimit = useAppSelector(
+    (state) => state.settings.max_messages_num
+  );
+  const globalTokensLimit = useAppSelector(
+    (state) => state.settings.max_tokens
+  );
 
+  const messages_limit =
+    (selectedChat && selectedChat.messagesLimit) ?? globalMessageLimit;
+  const tokens_limit =
+    (selectedChat && selectedChat.tokensLimit) ?? globalTokensLimit;
   return (
     <div className="flex gap-1">
       <div className="flex flex-col justify-center items-center">

@@ -9,19 +9,22 @@ import { clsx, Textarea, useMantineTheme } from "@mantine/core";
 import { Prompt } from "@/database/models/Prompt";
 import { IconBrandTelegram, IconMessage2 } from "@tabler/icons-react";
 import { useTranslation } from "react-i18next";
+import { useAppDispatch, useAppSelector } from "@/webview/hooks/redux";
+import { setChatInputToolbarItems } from "@/webview/reducers/settingSlice";
 
 export const ChatToolbarSettings = () => {
+  const dispatch = useAppDispatch();
   const [allActions, setAllActions] = useState<Prompt[]>([]);
   const [selectedActions, setSelectedActions] = useState<Prompt[]>([]);
   const { t } = useTranslation();
   const { colorScheme } = useMantineTheme();
+  const ids = useAppSelector(
+    (state) => state.settings.chat_input_toolbar_items
+  );
 
   useEffect(() => {
-    const selectedActionIds = window.electronAPI.storeIpcRenderer.get(
-      "chat_input_toolbar_items"
-    ) as number[];
     window.electronAPI.databaseIpcRenderer
-      .getPromptsByIds(selectedActionIds)
+      .getPromptsByIds(ids)
       .then((prompts) => {
         setSelectedActions(prompts);
         window.electronAPI.databaseIpcRenderer
@@ -32,7 +35,7 @@ export const ChatToolbarSettings = () => {
             );
           });
       });
-  }, []);
+  }, [ids]);
 
   const onDragEnd: OnDragEndResponder = (e) => {
     if (!e.source || !e.destination) {
@@ -56,10 +59,8 @@ export const ChatToolbarSettings = () => {
           ...prev.slice(e.destination.index),
         ];
 
-        window.electronAPI.storeIpcRenderer.set(
-          "chat_input_toolbar_items",
-          newArr.map((p) => p.id)
-        );
+        dispatch(setChatInputToolbarItems(newArr.map((p) => p.id)));
+
         return newArr;
       });
     }
@@ -73,10 +74,9 @@ export const ChatToolbarSettings = () => {
           ...prev.slice(0, e.source.index),
           ...prev.slice(e.source.index + 1),
         ];
-        window.electronAPI.storeIpcRenderer.set(
-          "chat_input_toolbar_items",
-          newArr.map((p) => p.id)
-        );
+
+        dispatch(setChatInputToolbarItems(newArr.map((p) => p.id)));
+
         return newArr;
       });
       setAllActions((prev) => {
@@ -95,10 +95,7 @@ export const ChatToolbarSettings = () => {
         const arr = [...prev];
         const [removed] = arr.splice(e.source.index, 1);
         arr.splice(e.destination.index, 0, removed);
-        window.electronAPI.storeIpcRenderer.set(
-          "chat_input_toolbar_items",
-          arr.map((p) => p.id)
-        );
+        dispatch(setChatInputToolbarItems(arr.map((p) => p.id)));
         return arr;
       });
     }

@@ -4,7 +4,7 @@
 import { contextBridge } from "electron";
 import { axiosIpcRenderer } from "./ipcBridge/renderer/axios";
 import { notificationIpcRenderer } from "./ipcBridge/renderer/notification";
-import { storeIpcRenderer } from "./ipcBridge/renderer/store";
+import { SettingsIpcRenderer } from "./ipcBridge/renderer/settings";
 import { v2rayIpcRenderer } from "./ipcBridge/renderer/v2ray";
 import { databaseIpcRenderer } from "./ipcBridge/renderer/database";
 import { othersIpcRenderer } from "./ipcBridge/renderer/others";
@@ -12,7 +12,7 @@ import { othersIpcRenderer } from "./ipcBridge/renderer/others";
 contextBridge.exposeInMainWorld("electronAPI", {
   axiosIpcRenderer,
   notificationIpcRenderer,
-  storeIpcRenderer,
+  settingsIpcRenderer: SettingsIpcRenderer,
   v2rayIpcRenderer,
   databaseIpcRenderer,
   othersIpcRenderer,

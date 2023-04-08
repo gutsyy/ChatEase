@@ -1,5 +1,6 @@
 import { Chat } from "@/database/models/Chat";
 import { Message } from "@/database/models/Message";
+import { appSettings } from "@/webview/utils/settings";
 
 /** Calculate the Message.inPrompts attribute for each message based on the limitations on tokens and the number of messages. */
 export const isMessageInPrompts = (
@@ -10,7 +11,7 @@ export const isMessageInPrompts = (
 ) => {
   // TODO: what maxMessageLengthInPrompts is used for?
   const _maxMessageLengthInPrompts = Math.max(
-    window.electronAPI.storeIpcRenderer.get("max_messages_num") as number,
+    appSettings.get("max_messages_num") as number,
     maxMessageLengthInPrompts
   );
 
@@ -19,7 +20,7 @@ export const isMessageInPrompts = (
 
   const tokensLimit =
     (currentChat && currentChat.tokensLimit) ??
-    (window.electronAPI.storeIpcRenderer.get("max_tokens") as number);
+    (appSettings.get("max_tokens") as number);
 
   const maxMessageBoolean = (n: number) => {
     if (messagesLimit) {

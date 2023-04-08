@@ -2,6 +2,7 @@ import { useMantineTheme, Text, clsx } from "@mantine/core";
 import { Markdown } from "@/webview//pureComponents/Markdown";
 import { Message } from "@/database/models/Message";
 import { memo } from "react";
+import { useAppSelector } from "@/webview/hooks/redux";
 
 export interface MessageContentProps
   extends Pick<Message, "text" | "inPrompts" | "sender" | "actionResult"> {
@@ -17,8 +18,8 @@ const MessageContent = ({
 }: MessageContentProps) => {
   const { colorScheme } = useMantineTheme();
 
-  const codeScope = (
-    window.electronAPI.storeIpcRenderer.get("markdown_code_scope") as string
+  const codeScope = useAppSelector(
+    (state) => state.settings.markdown_code_scope
   )
     .split(",")
     .map((language) => language.trim());

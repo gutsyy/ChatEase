@@ -14,6 +14,7 @@ import { Prompt } from "@/database/models/Prompt";
 import { ModalTitle } from "../../../pureComponents/ModalTitle";
 import { useTranslation } from "react-i18next";
 import { t } from "i18next";
+import { appSettings } from "@/webview/utils/settings";
 
 const PromptForm = (initialValues: Prompt) => {
   const theme = useMantineTheme();
@@ -109,9 +110,7 @@ export const openPromptFormModal = (initialValues?: Prompt) => {
       name: "",
       prompt: "",
       description: "",
-      temperature: window.electronAPI.storeIpcRenderer.get(
-        "temperature"
-      ) as number,
+      temperature: appSettings.get("temperature") as number,
     };
   }
 

@@ -8,7 +8,7 @@ import { AxiosIpcRenderer } from "@/ipcBridge/renderer/axios";
 import { ModalsProvider } from "@mantine/modals";
 import { NotificationIpcRenderer } from "@/ipcBridge/renderer/notification";
 import { V2rayIpcRenderer } from "@/ipcBridge/renderer/v2ray";
-import { StoreIpcRenderer } from "@/ipcBridge/renderer/store";
+import { SettingsIpcRenderer } from "@/ipcBridge/renderer/settings";
 import { DatabaseIpcRenderer } from "@/ipcBridge/renderer/database";
 import { OthersIpcRenderer } from "@/ipcBridge/renderer/others";
 import { SpotlightAction, SpotlightProvider } from "@mantine/spotlight";
@@ -26,7 +26,7 @@ declare global {
       axiosIpcRenderer: AxiosIpcRenderer;
       notificationIpcRenderer: NotificationIpcRenderer;
       v2rayIpcRenderer: V2rayIpcRenderer;
-      storeIpcRenderer: StoreIpcRenderer;
+      settingsIpcRenderer: SettingsIpcRenderer;
       databaseIpcRenderer: DatabaseIpcRenderer;
       othersIpcRenderer: OthersIpcRenderer;
     };
@@ -35,6 +35,9 @@ declare global {
 
 export const App = () => {
   const theme = useAppSelector((state) => state.app.theme);
+  const openApiKey = useAppSelector((state) => state.settings.open_api_key);
+  const fontSize = useAppSelector((state) => state.settings.fontSize);
+  const colorScheme = useAppSelector((state) => state.settings.theme);
 
   useEffect(() => {
     window.electronAPI.notificationIpcRenderer.show((event, data) => {
@@ -54,7 +57,7 @@ export const App = () => {
   }, []);
 
   useEffect(() => {
-    if (!window.electronAPI.storeIpcRenderer.get("open_api_key")) {
+    if (!openApiKey) {
       openApiKeysSetupModal();
     }
   }, []);
@@ -62,9 +65,7 @@ export const App = () => {
   useEffect(() => {
     const root = document.documentElement;
     if (root) {
-      root.style.fontSize = `${window.electronAPI.storeIpcRenderer.get(
-        "fontSize"
-      )}px`;
+      root.style.fontSize = `${fontSize}px`;
     }
   }, []);
 
@@ -73,9 +74,7 @@ export const App = () => {
       event.preventDefault();
       window.electronAPI.othersIpcRenderer.showContextMenu();
     });
-    window.electronAPI.othersIpcRenderer.colorScheme(
-      window.electronAPI.storeIpcRenderer.get("theme") as "light" | "dark"
-    );
+    window.electronAPI.othersIpcRenderer.colorScheme(colorScheme);
   }, []);
 
   // const dispatch = useAppDispatch();

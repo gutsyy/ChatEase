@@ -8,19 +8,20 @@ import {
 import { clsx, Skeleton, useMantineTheme } from "@mantine/core";
 import { Prompt } from "@/database/models/Prompt";
 import { useTranslation } from "react-i18next";
+import { useAppDispatch, useAppSelector } from "@/webview/hooks/redux";
+import { setMessageToolbarItems } from "@/webview/reducers/settingSlice";
 
 export const MessageToolbarSettings = () => {
+  const dispatch = useAppDispatch();
   const [allActions, setAllActions] = useState<Prompt[]>([]);
   const [selectedActions, setSelectedActions] = useState<Prompt[]>([]);
   const { t } = useTranslation();
   const { colorScheme } = useMantineTheme();
+  const ids = useAppSelector((state) => state.settings.message_toolbar_items);
 
   useEffect(() => {
-    const selectedActionIds = window.electronAPI.storeIpcRenderer.get(
-      "message_toolbar_items"
-    ) as number[];
     window.electronAPI.databaseIpcRenderer
-      .getPromptsByIds(selectedActionIds)
+      .getPromptsByIds(ids)
       .then((prompts) => {
         setSelectedActions(prompts);
         window.electronAPI.databaseIpcRenderer
@@ -55,10 +56,8 @@ export const MessageToolbarSettings = () => {
           ...prev.slice(e.destination.index),
         ];
 
-        window.electronAPI.storeIpcRenderer.set(
-          "message_toolbar_items",
-          newArr.map((p) => p.id)
-        );
+        dispatch(setMessageToolbarItems(newArr.map((p) => p.id)));
+
         return newArr;
       });
     }
@@ -72,10 +71,7 @@ export const MessageToolbarSettings = () => {
           ...prev.slice(0, e.source.index),
           ...prev.slice(e.source.index + 1),
         ];
-        window.electronAPI.storeIpcRenderer.set(
-          "message_toolbar_items",
-          newArr.map((p) => p.id)
-        );
+        dispatch(setMessageToolbarItems(newArr.map((p) => p.id)));
         return newArr;
       });
       setAllActions((prev) => {
@@ -94,10 +90,7 @@ export const MessageToolbarSettings = () => {
         const arr = [...prev];
         const [removed] = arr.splice(e.source.index, 1);
         arr.splice(e.destination.index, 0, removed);
-        window.electronAPI.storeIpcRenderer.set(
-          "message_toolbar_items",
-          arr.map((p) => p.id)
-        );
+        dispatch(setMessageToolbarItems(arr.map((p) => p.id)));
         return arr;
       });
     }

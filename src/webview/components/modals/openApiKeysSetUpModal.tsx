@@ -1,33 +1,27 @@
+import { SettingsKey } from "@/settings/settingsModel";
+import { useAppDispatch, useAppSelector } from "@/webview/hooks/redux";
+import { setApiKey } from "@/webview/reducers/settingSlice";
 import { Button, TextInput, Text } from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { closeAllModals, openModal } from "@mantine/modals";
+import { openModal } from "@mantine/modals";
 import { t } from "i18next";
-import { useEffect } from "react";
+import { useRef, useState } from "react";
 
 interface FormProps {
-  onConfirm: (values: any) => void;
   explanation: string;
   buttonName: string;
-  defaultValue?: string;
+  setupKey: SettingsKey;
+  submitted?: () => void;
 }
 const Form = ({
-  onConfirm,
   explanation,
   buttonName,
-  defaultValue = "",
+  setupKey,
+  submitted = () => null,
 }: FormProps) => {
-  const form = useForm({
-    initialValues: {
-      value: defaultValue,
-    },
-    validate: {
-      value: (value) => (value.trim() ? null : "Please enter your key"),
-    },
-  });
-
-  useEffect(() => {
-    form.setFieldValue("value", defaultValue);
-  }, [defaultValue]);
+  const dispatch = useAppDispatch();
+  const value = useAppSelector((state) => state.settings[setupKey]);
+  const [error, setError] = useState<string | null>(null);
+  const ref = useRef<HTMLInputElement>();
 
   return (
     <>
@@ -36,14 +30,22 @@ const Form = ({
       </Text>
       <form
         className="mt-2"
-        onSubmit={form.onSubmit((value) => {
-          onConfirm(value);
-        })}
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (ref.current.value) {
+            dispatch(setApiKey(ref.current.value.trim()));
+            submitted();
+          } else {
+            setError("");
+          }
+        }}
       >
         <TextInput
+          ref={ref}
+          error={error}
+          value={value as string}
           variant="filled"
           size="xs"
-          {...form.getInputProps("value")}
         ></TextInput>
         <div className="flex justify-end mt-4">
           <Button
@@ -72,17 +74,8 @@ const openSetHostModal = () => {
     withCloseButton: false,
     children: (
       <Form
-        defaultValue={
-          window.electronAPI.storeIpcRenderer.get("openai_api_origin") as string
-        }
+        setupKey="openai_api_origin"
         buttonName={t("setup_modal_setHost_button")}
-        onConfirm={(value) => {
-          window.electronAPI.storeIpcRenderer.set(
-            "openai_api_origin",
-            value.value.trim()
-          );
-          closeAllModals();
-        }}
         explanation={t("setup_modal_setHost_help")}
       />
     ),
@@ -102,14 +95,9 @@ export const openApiKeysSetupModal = () =>
     children: (
       <Form
         buttonName={t("setup_modal_setKey_button")}
-        onConfirm={(value) => {
-          window.electronAPI.storeIpcRenderer.set(
-            "open_api_key",
-            value.value.trim()
-          );
-          openSetHostModal();
-        }}
+        setupKey="open_api_key"
         explanation={t("setup_modal_setKey_help")}
+        submitted={() => openSetHostModal()}
       />
     ),
   });

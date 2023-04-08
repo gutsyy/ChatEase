@@ -5,7 +5,7 @@ import {
   updateSelectedChatPinnedSetting,
 } from "@/webview/reducers/chatSlice";
 import { openAIModels } from "@/webview/services/openAI/data";
-import { storeRendererUtils } from "@/store/storeRendererUtils";
+import { appSettings } from "@/webview/utils/settings";
 import {
   ActionIcon,
   Slider,
@@ -35,7 +35,16 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
   const { t } = useTranslation();
 
   const selectedChat = useAppSelector((state) => state.chat.selectedChat);
-  const [messagesLimit, setMessagesLimit] = useState<number>(0);
+  const [chatMessagesLimit, setChatMessagesLimit] = useState<number>(0);
+  const globalMessageLimit = useAppSelector(
+    (state) => state.settings.max_messages_num
+  );
+  const globalTokensLimit = useAppSelector(
+    (state) => state.settings.max_tokens
+  );
+  const globalTemperature = useAppSelector(
+    (state) => state.settings.temperature
+  );
   const [tokensLimit, setTokensLimit] = useState<number>(0);
   const [temperature, setTemperature] = useState<number>(0);
   const [model, setModel] = useState<string>("");
@@ -67,16 +76,12 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
 
   useEffect(() => {
     window.electronAPI.databaseIpcRenderer.getChatById(chatId).then((chat) => {
-      setMessagesLimit(
-        chat.messagesLimit ?? storeRendererUtils.get<number>("max_messages_num")
-      );
-      setTokensLimit(
-        chat.tokensLimit ?? storeRendererUtils.get<number>("max_tokens")
-      );
-      setTemperature(chat.temperature ?? 1);
+      setChatMessagesLimit(chat.messagesLimit ?? globalMessageLimit);
+      setTokensLimit(chat.tokensLimit ?? globalTokensLimit);
+      setTemperature(chat.temperature ?? globalTemperature);
       setModel(chat.model ?? "gpt-3.5-turbo");
     });
-  }, []);
+  }, [globalMessageLimit, globalTokensLimit]);
 
   useEffect(() => {
     if (mounted) {
@@ -87,7 +92,7 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
   }, [chatId]);
 
   const onMessagesLimitChange = (value: number) => {
-    setMessagesLimit(value);
+    setChatMessagesLimit(value);
     window.electronAPI.databaseIpcRenderer
       .updateChatFieldById(chatId, "messagesLimit", value)
       .then((chat) => {
@@ -162,9 +167,8 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
               />
             </div>
             <Slider
-              labelAlwaysOn
               onChange={onMessagesLimitChange}
-              value={messagesLimit}
+              value={chatMessagesLimit}
               size="sm"
               color="violet.4"
               className="mt-1"
@@ -207,6 +211,8 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
               onChange={onTokensLimitChange}
               value={tokensLimit}
               variant="filled"
+              min={0}
+              max={4000}
               size="xs"
             />
           </div>
@@ -232,7 +238,6 @@ const ChatSettings = ({ chatId, onClose }: ChatSettingsProps) => {
               />
             </div>
             <Slider
-              labelAlwaysOn
               onChange={onTemperatureChange}
               value={temperature}
               color="violet.4"

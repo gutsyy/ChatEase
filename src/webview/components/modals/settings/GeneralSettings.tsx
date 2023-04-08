@@ -1,52 +1,55 @@
 import { Switch } from "@mantine/core";
 import { IconRotateClockwise } from "@tabler/icons-react";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import InputSetStyles from "./InputSetStyles";
 import NumberInputSetStyles from "./NumberInputSetStyles";
 import SettingItem, { SettingItemProps } from "./SettingItem";
 import TextareaSetStyles from "./TextareaSetStyles";
 import TooltipSetStyles from "./TooltipSetStyles";
+import { useAppDispatch, useAppSelector } from "@/webview/hooks/redux";
+import {
+  setApiKey,
+  setMarkdownCodeScope,
+  setMaxMessagesNum,
+  setMaxTokens,
+  setOpenaiApiOrigin,
+  setStreamEnable,
+  setTemperature,
+} from "@/webview/reducers/settingSlice";
+import { appSettings } from "@/webview/utils/settings";
 
 const GeneralSettings = () => {
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
   const settings: SettingItemProps[] = [
     {
       label: t("settings_general_apiKey"),
-      input: () => (
-        <InputSetStyles
-          defaultValue={
-            window.electronAPI.storeIpcRenderer.get("open_api_key") as string
-          }
-          width="400px"
-          onChange={(event) =>
-            window.electronAPI.storeIpcRenderer.set(
-              "open_api_key",
-              event.currentTarget.value
-            )
-          }
-        />
-      ),
+      input: () => {
+        const apiKey = useAppSelector((state) => state.settings.open_api_key);
+        return (
+          <InputSetStyles
+            defaultValue={apiKey}
+            width="400px"
+            onChange={(event) => dispatch(setApiKey(event.currentTarget.value))}
+          />
+        );
+      },
     },
 
     {
       label: t("settings_general_host"),
       questionInfo: t("settings_general_host_tooltip"),
       input: () => {
-        const [origin, setOrigin] = useState(
-          window.electronAPI.storeIpcRenderer.get("openai_api_origin") as string
+        const openaiApiOrigin = useAppSelector(
+          (state) => state.settings.openai_api_origin
         );
         return (
           <InputSetStyles
-            value={origin}
+            defaultValue={openaiApiOrigin}
             width="360px"
             onChange={(event) => {
-              window.electronAPI.storeIpcRenderer.set(
-                "openai_api_origin",
-                event.currentTarget.value
-              );
-              setOrigin(event.currentTarget.value);
+              dispatch(setOpenaiApiOrigin(event.currentTarget.value));
             }}
             rightSection={
               <TooltipSetStyles label="reset">
@@ -54,13 +57,10 @@ const GeneralSettings = () => {
                   className="hover:cursor-pointer text-gray-400"
                   size={14}
                   onClick={() => {
-                    window.electronAPI.storeIpcRenderer.reset(
-                      "openai_api_origin"
-                    );
-                    setOrigin(
-                      window.electronAPI.storeIpcRenderer.get(
-                        "openai_api_origin"
-                      ) as string
+                    dispatch(
+                      setOpenaiApiOrigin(
+                        appSettings.reset("openai_api_origin") as string
+                      )
                     );
                   }}
                 />
@@ -82,94 +82,92 @@ const GeneralSettings = () => {
     },
     {
       label: t("settings_general_temperature"),
-      input: () => (
-        <NumberInputSetStyles
-          min={0}
-          max={2}
-          defaultValue={
-            window.electronAPI.storeIpcRenderer.get("temperature") as number
-          }
-          step={0.1}
-          precision={1}
-          width={60}
-          onChange={(value) =>
-            window.electronAPI.storeIpcRenderer.set("temperature", value)
-          }
-        ></NumberInputSetStyles>
-      ),
+      input: () => {
+        const temperature = useAppSelector(
+          (state) => state.settings.temperature
+        );
+        return (
+          <NumberInputSetStyles
+            min={0}
+            max={2}
+            defaultValue={temperature}
+            step={0.1}
+            width={60}
+            precision={1}
+            onChange={(value: number) => dispatch(setTemperature(value))}
+          ></NumberInputSetStyles>
+        );
+      },
     },
     {
       label: t("settings_general_maxMessages"),
       questionInfo: t("settings_general_maxMessages_tooltip"),
-      input: () => (
-        <NumberInputSetStyles
-          defaultValue={
-            window.electronAPI.storeIpcRenderer.get(
-              "max_messages_num"
-            ) as number
-          }
-          width="60px"
-          onChange={(value) =>
-            window.electronAPI.storeIpcRenderer.set("max_messages_num", value)
-          }
-        />
-      ),
+      input: () => {
+        const maxMessagesNum = useAppSelector(
+          (state) => state.settings.max_messages_num
+        );
+        return (
+          <NumberInputSetStyles
+            defaultValue={maxMessagesNum}
+            width="60px"
+            onChange={(value: number) => dispatch(setMaxMessagesNum(value))}
+          />
+        );
+      },
     },
     {
       label: t("settings_general_maxTokens"),
-      input: () => (
-        <NumberInputSetStyles
-          max={4000}
-          width="65px"
-          defaultValue={
-            window.electronAPI.storeIpcRenderer.get("max_tokens") as number
-          }
-          onChange={(value) =>
-            window.electronAPI.storeIpcRenderer.set("max_tokens", value)
-          }
-        />
-      ),
+      input: () => {
+        const tokensLimit = useAppSelector(
+          (state) => state.settings.max_tokens
+        );
+        return (
+          <NumberInputSetStyles
+            max={4000}
+            min={0}
+            width="65px"
+            defaultValue={tokensLimit}
+            onChange={(value: number) => dispatch(setMaxTokens(value))}
+          />
+        );
+      },
     },
     {
       label: t("settings_general_stream"),
-      input: () => (
-        <Switch
-          onLabel="ON"
-          color="green"
-          offLabel="OFF"
-          size="sm"
-          defaultChecked={
-            window.electronAPI.storeIpcRenderer.get("stream_enable") as boolean
-          }
-          onChange={(event) =>
-            window.electronAPI.storeIpcRenderer.set(
-              "stream_enable",
-              event.currentTarget.checked
-            )
-          }
-        ></Switch>
-      ),
+      input: () => {
+        const stream = useAppSelector((state) => state.settings.stream_enable);
+        return (
+          <Switch
+            onLabel="ON"
+            color="green"
+            offLabel="OFF"
+            size="sm"
+            defaultChecked={stream}
+            onChange={(event) =>
+              dispatch(setStreamEnable(event.currentTarget.checked))
+            }
+          ></Switch>
+        );
+      },
     },
     {
       label: t("settings_general_markdownScope"),
-      input: () => (
-        <TextareaSetStyles
-          w={350}
-          minRows={3}
-          maxRows={3}
-          defaultValue={
-            window.electronAPI.storeIpcRenderer.get(
-              "markdown_code_scope"
-            ) as string
-          }
-          onChange={(event) =>
-            window.electronAPI.storeIpcRenderer.set(
-              "markdown_code_scope",
-              event.currentTarget.value
-            )
-          }
-        ></TextareaSetStyles>
-      ),
+      input: () => {
+        const markdownCodeScope = useAppSelector(
+          (state) => state.settings.markdown_code_scope
+        );
+        return (
+          <TextareaSetStyles
+            w={350}
+            minRows={3}
+            maxRows={3}
+            defaultValue={markdownCodeScope}
+            onChange={(event) =>
+              dispatch(setMarkdownCodeScope(event.currentTarget.value))
+            }
+          ></TextareaSetStyles>
+        );
+      },
       moreinfo: (
         <>
           <a href="https://github.com/highlightjs/highlight.js/blob/main/SUPPORTED_LANGUAGES.md">

@@ -77,6 +77,13 @@ const ChatInputBox = forwardRef(
     const { t } = useTranslation();
     const _textAreaRef = useMergedRef(textAreaRef, ref);
     const { colorScheme } = useMantineTheme();
+    const tokensLimit = useAppSelector((state) =>
+      Math.min(
+        (state.chat.selectedChat && state.chat.selectedChat.tokensLimit) ??
+          Number.MAX_SAFE_INTEGER,
+        state.settings.max_tokens
+      )
+    );
 
     useEffect(() => {
       setActionsBarVisible(focused);
@@ -112,10 +119,7 @@ const ChatInputBox = forwardRef(
       }
 
       // Check limits
-      if (
-        promptTokens >
-        (window.electronAPI.storeIpcRenderer.get("max_tokens") as number)
-      ) {
+      if (promptTokens > tokensLimit) {
         dispatch(setTokensBoxWarningStateTo("tokens_limit"));
         return;
       }

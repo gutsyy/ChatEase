@@ -10,10 +10,12 @@ interface ChatActionBarProps {
 
 export const InputActionBar = ({ visible, onClick }: ChatActionBarProps) => {
   const [runningActionId, setRunningActionId] = useState(-1);
-  const selectedChatId = useAppSelector((state) => state.chat.selectedChatId);
-  const [actions, setActions] = useState<Prompt[]>([]);
   const actionId = useAppSelector((state) => state.prompt.actionId);
   const { colorScheme } = useMantineTheme();
+  const actionsId = useAppSelector(
+    (state) => state.settings.chat_input_toolbar_items
+  );
+  const [promptActions, setPromptActions] = useState<Prompt[]>([]);
 
   useEffect(() => {
     if (actionId !== "chat-action" && runningActionId !== -1) {
@@ -22,19 +24,16 @@ export const InputActionBar = ({ visible, onClick }: ChatActionBarProps) => {
   }, [actionId]);
 
   useEffect(() => {
-    const actionIds = window.electronAPI.storeIpcRenderer.get(
-      "chat_input_toolbar_items"
-    ) as number[];
     window.electronAPI.databaseIpcRenderer
-      .getPromptsByIds(actionIds)
-      .then((prompts) => {
-        setActions(prompts);
+      .getPromptsByIds(actionsId)
+      .then((p) => {
+        setPromptActions(p);
       });
-  }, [selectedChatId]);
+  }, [actionsId]);
 
   return (
     <>
-      {actions.length !== 0 && (
+      {actionsId.length !== 0 && (
         <div
           className={clsx(
             "border-solid border-0 border-t gap-1 w-full flex items-center justify-center px-4 transition-all ease-linear duration-100 overflow-y-hidden",
@@ -44,7 +43,7 @@ export const InputActionBar = ({ visible, onClick }: ChatActionBarProps) => {
               : "border-gray-200 bg-white"
           )}
         >
-          {actions.map((item, i) => (
+          {promptActions.map((item, i) => (
             <Button
               loading={runningActionId === item.id}
               key={i}

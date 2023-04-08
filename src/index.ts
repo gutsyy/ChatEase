@@ -7,7 +7,7 @@ declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
 import { axiosIpcMain } from "./ipcBridge/main/axios";
 import Store from "electron-store";
-import { storeIpcMain } from "./ipcBridge/main/store";
+import { settingsIpcMain } from "./ipcBridge/main/settings";
 import { db } from "./database";
 import { othersIpcMain } from "./ipcBridge/main/others";
 
@@ -24,7 +24,7 @@ const createBridage = (window: BrowserWindow) => {
 
   // ipcMain
   axiosIpcMain(window);
-  storeIpcMain();
+  settingsIpcMain();
   othersIpcMain(window);
 
   // database

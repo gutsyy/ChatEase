@@ -70,6 +70,10 @@ export const PromptPanel = () => {
     }
   };
 
+  const codeScope = useAppSelector(
+    (state) => state.settings.markdown_code_scope
+  );
+
   return (
     <>
       {selectedPrompt && (
@@ -130,11 +134,7 @@ export const PromptPanel = () => {
               <Markdown
                 colorScheme={colorScheme}
                 text={answerContent}
-                codeScope={(
-                  window.electronAPI.storeIpcRenderer.get(
-                    "markdown_code_scope"
-                  ) as string
-                )
+                codeScope={codeScope
                   .split(",")
                   .map((language) => language.trim())}
               />

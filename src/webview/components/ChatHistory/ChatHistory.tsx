@@ -53,6 +53,10 @@ export const ChatHistory = () => {
     );
   };
 
+  useEffect(() => {
+    renderDate.date = "";
+  }, [chats]);
+
   const { render: RenderDate } = renderDate;
 
   return (

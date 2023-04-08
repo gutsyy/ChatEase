@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { appSettings } from "../utils/settings";
 
 type AppModule = "chat" | "action";
 
@@ -11,9 +12,7 @@ interface AppState {
 const initialState: AppState = {
   selectedAppModule: "chat",
   sideNavExpanded: true,
-  theme:
-    (window.electronAPI.storeIpcRenderer.get("theme") as "light" | "dark") ??
-    "light",
+  theme: (appSettings.get("theme") as "light" | "dark") ?? "light",
 };
 
 export const appSlice = createSlice({
@@ -33,7 +32,7 @@ export const appSlice = createSlice({
     /** Toggle theme */
     toggleAppTheme: (state, action: PayloadAction<"light" | "dark">) => {
       state.theme = action.payload;
-      window.electronAPI.storeIpcRenderer.set("theme", action.payload);
+      appSettings.set("theme", action.payload);
       window.electronAPI.othersIpcRenderer.colorScheme(action.payload);
     },
   },

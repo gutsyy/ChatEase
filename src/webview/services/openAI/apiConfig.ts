@@ -20,6 +20,7 @@ import {
 } from "../../reducers/promptSlice";
 import { Prompt } from "@/database/models/Prompt";
 import { Chat } from "@/database/models/Chat";
+import { appSettings } from "@/webview/utils/settings";
 
 export type ChatGPTMessageType = {
   role: string;
@@ -50,10 +51,8 @@ export const axiosConfigChatGPT = (
   // chat: Chat | null
   temperature?: number
 ): PostRequest => {
-  const key = window.electronAPI.storeIpcRenderer.get("open_api_key");
-  const origin =
-    window.electronAPI.storeIpcRenderer.get("openai_api_origin") +
-    "v1/chat/completions";
+  const key = appSettings.get("open_api_key");
+  const origin = appSettings.get("openai_api_origin") + "v1/chat/completions";
 
   if (!key) {
     handleNotis({
@@ -69,9 +68,8 @@ export const axiosConfigChatGPT = (
     body: {
       model: "gpt-3.5-turbo",
       messages: message,
-      stream: window.electronAPI.storeIpcRenderer.get("stream_enable"),
-      temperature:
-        temperature ?? window.electronAPI.storeIpcRenderer.get("temperature"),
+      stream: appSettings.get("stream_enable"),
+      temperature: temperature ?? appSettings.get("temperature"),
     },
     config: {
       headers: {
@@ -115,9 +113,7 @@ export const requestApi = async (chatId: number, messages: Message[]) => {
 
   store.dispatch(setIsResponsing(true));
   // const dispatch = useAppDispatch();
-  const streamEnable = window.electronAPI.storeIpcRenderer.get(
-    "stream_enable"
-  ) as boolean;
+  const streamEnable = appSettings.get("stream_enable") as boolean;
   // if Stream, open Listener
 
   const streamCallback = (event: any, data: any, id: string) => {
@@ -217,9 +213,7 @@ export const requestPromptApi = (prompt: Prompt, message: string) => {
 
   store.dispatch(setPromptIsResponsing(true));
   // const dispatch = useAppDispatch();
-  const streamEnable = window.electronAPI.storeIpcRenderer.get(
-    "stream_enable"
-  ) as boolean;
+  const streamEnable = appSettings.get("stream_enable") as boolean;
   // if Stream, open Listener
 
   const streamCallback = (event: any, data: any, id: string) => {

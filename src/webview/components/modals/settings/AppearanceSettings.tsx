@@ -2,15 +2,19 @@ import { Select, Switch, useMantineTheme } from "@mantine/core";
 import { IconMoonStars, IconSun } from "@tabler/icons-react";
 import { changeLanguage } from "i18next";
 import { useTranslation } from "react-i18next";
-import { useAppDispatch } from "../../../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { lans } from "@/webview/i18n/i18n";
 import SettingItem, { SettingItemProps } from "./SettingItem";
 import { toggleAppTheme } from "@/webview/reducers/appSlice";
+import { setFontSize, setLanguage } from "@/webview/reducers/settingSlice";
 
 const AppearanceSettings = () => {
   const { t } = useTranslation();
   const theme = useMantineTheme();
   const dispatch = useAppDispatch();
+
+  const language = useAppSelector((state) => state.settings.language);
+  const fontSize = useAppSelector((state) => state.settings.fontSize);
 
   const settings: SettingItemProps[] = [
     {
@@ -28,14 +32,12 @@ const AppearanceSettings = () => {
               width: "80px",
             },
           }}
-          defaultValue={
-            window.electronAPI.storeIpcRenderer.get("language") as string
-          }
+          value={language}
           size="xs"
           variant="filled"
           data={lans.map((lan) => ({ label: lan, value: lan }))}
           onChange={(value) => {
-            window.electronAPI.storeIpcRenderer.set("language", value);
+            dispatch(setLanguage(value as "en"));
             changeLanguage(value);
           }}
         ></Select>
@@ -80,9 +82,7 @@ const AppearanceSettings = () => {
               width: "100px",
             },
           }}
-          defaultValue={
-            window.electronAPI.storeIpcRenderer.get("fontSize") as string
-          }
+          value={fontSize}
           size="xs"
           variant="filled"
           data={[
@@ -91,7 +91,7 @@ const AppearanceSettings = () => {
             { label: t("settings_appearance_fontSize_lg"), value: "20" },
           ]}
           onChange={(value) => {
-            window.electronAPI.storeIpcRenderer.set("fontSize", value);
+            dispatch(setFontSize(value));
             const root = document.documentElement;
             if (root) {
               root.style.fontSize = `${value}px`;

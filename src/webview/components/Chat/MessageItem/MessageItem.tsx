@@ -133,7 +133,7 @@ const MessageItem = ({
                     },
                   }}
                 />
-                <MessageContent {...msg} />
+                <MessageContent {...msg} isActionResult={true} />
               </>
             )}
           </div>

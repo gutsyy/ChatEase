@@ -53,6 +53,9 @@ const MessageBar = ({
   ...msg
 }: MessageBarProps) => {
   const dispatch = useAppDispatch();
+  const actionIds = useAppSelector(
+    (state) => state.settings.message_toolbar_items
+  );
   const [actionItems, setActionItems] = useState<Prompt[]>([]);
   const [runningActionName, setRunningActionName] = useState("");
   const answerContent = useAppSelector((state) => state.prompt.answerContent);
@@ -125,15 +128,11 @@ const MessageBar = ({
 
   useEffect(() => {
     window.electronAPI.databaseIpcRenderer
-      .getPromptsByIds(
-        window.electronAPI.storeIpcRenderer.get(
-          "message_toolbar_items"
-        ) as number[]
-      )
+      .getPromptsByIds(actionIds)
       .then((prompts) => {
         setActionItems(prompts);
       });
-  }, []);
+  }, [actionIds]);
 
   useEffect(() => {
     if (answerContent && runningActionId === actionId) {

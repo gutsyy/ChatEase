@@ -9,6 +9,7 @@ import { isMessageInPrompts } from "../services/openAI/isMessageInPrompts";
 import { Chat } from "@/database/models/Chat";
 import { Message } from "@/database/models/Message";
 import { RootState } from "../store";
+import { appSettings } from "../utils/settings";
 
 interface ChatModuleState {
   selectedChatId: number;
@@ -216,7 +217,7 @@ export const ChatSlice = createSlice({
 
     setIsResponsing: (state, action: PayloadAction<boolean>) => {
       state.isWaitingRes = action.payload;
-      if (window.electronAPI.storeIpcRenderer.get("stream_enable")) {
+      if (appSettings.get("stream_enable")) {
         state.isResponsing = action.payload;
       }
     },
@@ -233,10 +234,10 @@ export const ChatSlice = createSlice({
       // limitation settings
       const MessagesLimit =
         (state.selectedChat && state.selectedChat.messagesLimit) ??
-        (window.electronAPI.storeIpcRenderer.get("max_messages_num") as number);
+        (appSettings.get("max_messages_num") as number);
       const tokensLimit =
         (state.selectedChat && state.selectedChat.tokensLimit) ??
-        (window.electronAPI.storeIpcRenderer.get("max_tokens") as number);
+        (appSettings.get("max_tokens") as number);
 
       // current tokens in limitation
       const messagesInPrompts = messages.filter(
@@ -268,11 +269,11 @@ export const ChatSlice = createSlice({
       // Get limitation
       const messagesLimit =
         (state.selectedChat && state.selectedChat.messagesLimit) ??
-        (window.electronAPI.storeIpcRenderer.get("max_messages_num") as number);
+        (appSettings.get("max_messages_num") as number);
 
       const tokensLimit =
         (state.selectedChat && state.selectedChat.tokensLimit) ??
-        (window.electronAPI.storeIpcRenderer.get("max_tokens") as number);
+        (appSettings.get("max_tokens") as number);
 
       // Judge
       const fixedMessages = messages.filter((msg) => msg.fixedInPrompt);

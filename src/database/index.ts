@@ -406,7 +406,7 @@ const database = () => {
           delete prompt.id;
           return prompt;
         });
-        return PromptIns.bulkCreate(prompts)
+        PromptIns.bulkCreate(prompts)
           .then(() => {
             dialog.showMessageBox(window, {
               message: "Import successful！",

@@ -42,7 +42,7 @@ const ChatDefine = {
       allowNull: true,
     },
     costTokens: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.FLOAT,
       defaultValue: 0,
     },
     pinnedSetting: {

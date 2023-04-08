@@ -7,6 +7,7 @@ import {
 import { RootState } from "../store";
 import { Prompt } from "@/database/models/Prompt";
 import { appSlice } from "./appSlice";
+import { appSettings } from "../utils/settings";
 
 interface PromptState {
   prompts: Prompt[];
@@ -49,7 +50,7 @@ const PromptSlice = createSlice({
     },
     // setAnswerContent
     setAnswerContent: (state, action: PayloadAction<string>) => {
-      if (window.electronAPI.storeIpcRenderer.get("stream_enable")) {
+      if (appSettings.get("stream_enable")) {
         state.answerContent = state.answerContent + action.payload;
       } else {
         state.answerContent = action.payload;
