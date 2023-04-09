@@ -7,9 +7,8 @@ declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
 import { axiosIpcMain } from "./ipcBridge/main/axios";
 import Store from "electron-store";
-import { storeIpcMain } from "./ipcBridge/main/store";
-import { v2rayIpcMain } from "./ipcBridge/main/v2ray";
-import { dbInit } from "./database";
+import { settingsIpcMain } from "./ipcBridge/main/settings";
+import { db } from "./database";
 import { othersIpcMain } from "./ipcBridge/main/others";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -25,12 +24,11 @@ const createBridage = (window: BrowserWindow) => {
 
   // ipcMain
   axiosIpcMain(window);
-  storeIpcMain();
-  v2rayIpcMain();
+  settingsIpcMain();
   othersIpcMain(window);
 
   // database
-  dbInit();
+  db.init(window);
 };
 
 const createWindow = (): BrowserWindow => {

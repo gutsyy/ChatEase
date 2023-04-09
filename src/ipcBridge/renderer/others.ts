@@ -1,5 +1,5 @@
 import { ipcRenderer } from "electron";
-import { ChatGPTMessageType } from "../../services/openAI/apiConfig";
+import { ChatGPTMessageType } from "@/webview/services/openAI/apiConfig";
 
 export interface OthersIpcRenderer {
   calTokens: (str: string) => number;
@@ -11,6 +11,8 @@ export interface OthersIpcRenderer {
   getAppVersion: () => string;
   removeAllListeners: (channel: string) => void;
   showContextMenu: () => void;
+  cleanAppData: () => void;
+  colorScheme: (colorScheme: "light" | "dark") => void;
 }
 
 export const othersIpcRenderer: OthersIpcRenderer = {
@@ -35,5 +37,11 @@ export const othersIpcRenderer: OthersIpcRenderer = {
   },
   showContextMenu: () => {
     ipcRenderer.invoke("show-context-menu");
+  },
+  cleanAppData: () => {
+    ipcRenderer.sendSync("clean-app-data");
+  },
+  colorScheme: (colorScheme) => {
+    ipcRenderer.sendSync("color-scheme", colorScheme);
   },
 };

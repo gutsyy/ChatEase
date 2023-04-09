@@ -1,0 +1,108 @@
+{
+  "translation": {
+    "sideNav_chat_tooltip": "Chat with GPT",
+    "sideNav_prompt_tooltip": "Prompt Library",
+    "sideNav_settings_tooltip": "Settings",
+
+    "sideExtend_chat_newChat": "New Chat",
+    "sideExtend_chat_searching": "Searching...",
+    "sideExtend_chat_clear": "Clear All Chats",
+    "sideExtent_chat_edit_title": "Set Chat Name",
+    "sideExtent_chat_edit_chatName_label": "Chat Name",
+    "sideExtend_chat_delete_title": "Delete Chat",
+    "sideExtend_chat_delete_prompt": "Are you sure you want to delete?",
+
+    "sideExtend_prompt_newPrompt": "New Action",
+    "sideExtend_prompt_new_title": "New Action",
+    "sideExtend_prompt_edit_title": "Edit Action",
+    "sideExtend_prompt_form_name": "Action Name",
+    "sideExtend_prompt_form_description": "Action Description",
+    "sideExtend_prompt_form_temperature": "GPT Temperature",
+    "sideExtend_prompt_form_prompt": "Action Prompt",
+    "sideExtend_prompt_form_create_button": "Create",
+    "sideExtend_prompt_form_save_button": "Save",
+    "sideExtend_prompt_delete_title": "Delete Action",
+
+    "settings_modal_name": "Settings",
+
+    "settings_general_title": "General settings",
+    "settings_general_apiKey": "OpenAI API Key",
+    "settings_general_maxMessages": "Maximum number of messages in prompt",
+    "settings_general_maxMessages_tooltip": "If the value is 0, it will be automatically calculated based on the max_tokens",
+    "settings_general_host": "OpenAI API Host",
+    "settings_general_host_tooltip": "Used for reverse proxy",
+    "settings_general_host_help": "How to set up reverse proxy?",
+    "settings_general_temperature": "GPT Temperature",
+    "settings_general_maxTokens": "Maximum number of tokens in prompt",
+    "settings_general_stream": "ChatGPT stream response mode",
+    "settings_general_markdownScope": "Scope of languages in Markdown",
+    "settings_general_markdownScope_help": "Supported Languages",
+
+    "settings_appearance_title": "Appearance",
+    "settings_appearance_language": "Language",
+    "settings_appearance_theme": "Dark Mode", 
+    "settings_appearance_fontSize": "Font Size",
+    "settings_appearance_fontSize_sm": "small",
+    "settings_appearance_fontSize_md": "medium",
+    "settings_appearance_fontSize_lg": "large",
+
+    "settings_proxy_title": "Proxy settings",
+    "settings_proxy_http_proxy": "HTTP Proxy",
+
+    "settings_chatToolbar_title": "Chat Toolbar",
+    "settings_chatToolbar_selectableActions": "Selectable Actions",
+    "settings_chatToolbar_selectableActions_help": "If you want to select, drag it to the lower toolbar.",
+    "settings_chatToolbar_SelectedActions": "Selected Actions on Chat Input Toolbar",
+    "settings_chatToolbar_SelectedActions_help": "If you want to remove it, drag it to the top toolbar",
+
+    "settings_message_title": "Message Toolbar",
+    "settings_message_selectableActions": "Selectable Actions",
+    "settings_message_selectableActions_help": "If you want to select, drag it to the lower toolbar.",
+    "settings_message_SelectedActions": "Selected Actions on Message Box Toolbar",
+    "settings_message_SelectedActions_help": "If you want to remove it, drag it to the top toolbar",
+
+    "settings_cleanAppData_title": "Clean App Data",
+    "settings_cleanAppData_help": "This operation will delete all your local data, and cannot be undone",
+    "settings_cleanAppData_button": "Clean",
+
+    "settings_data_export": "Data Export",
+    "settings_data_chat_export": "All Chat Histories",
+    "settings_data_prompt_export": "All Prompt Actions",
+
+    "export": "Export",
+    "import": "Import",
+
+    "chat_input_placeholder": "Type your message here",
+    "message_actions_rawCopy": "Raw Copy",
+    "message_actions_pin": "Fixed the message in prompt",
+    "message_actions_unPin": "Cancal fixed the message in prompt",
+    "message_actions_addPrompt": "Add to prompt",
+    "message_actions_removePrompt": "Remove from prompt",
+    "message_actions_promptToggleButtonDisable": "Button disabled: This message was fixed in prompt",
+    "message_actions_delete": "Delete",
+
+    "chat_menu_expandAll": "Expand all messages",
+    "chat_menu_collapseAll": "Collapse all messages",
+    "chat_menu_removeAll": "Remove all messages from prompt",
+    "chat_menu_recalulator": "Recalculate which message in prompt",
+    "chat_menu_share": "Share your messages",
+
+    "chat_settings_title": "Custom This Chat Settings",
+    "chat_settings_maxMessages": "Max messages in prompt",
+    "chat_settings_maxTokens": "Prompt max tokens",
+    "chat_settings_temperature": "Temperature",
+    "chat_settings_model": "Model",
+
+    "setup_modal_setKey_title": "First, Set your openAI API Key",
+    "setup_modal_setKey_help": "Before using the application, please set the OpenAI API Key first, This application stores the key locally and will not upload it.",
+    "setup_modal_setKey_button": "Next",
+    "setup_modal_setHost_title": "Second, Set your openAI API Host",
+    "setup_modal_setHost_help": "For some reasons, you can customize the API Host of the application or use the default value directly.",
+    "setup_modal_setHost_button": "Start Journey",
+
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "expand": "expand",
+    "collapse": "collapse"
+  }
+}

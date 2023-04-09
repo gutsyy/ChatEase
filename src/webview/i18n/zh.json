@@ -1,0 +1,110 @@
+{
+  "translation": {
+    "sideNav_chat_tooltip": "与GPT会话",
+    "sideNav_prompt_tooltip": "Prompt仓库",
+    "sideNav_settings_tooltip": "设置",
+
+    "sideExtend_chat_newChat": "新建会话",
+    "sideExtend_chat_searching": "搜索...",
+    "sideExtend_chat_clear": "删除所有会话",
+    "sideExtent_chat_edit_title": "修改会话名称",
+    "sideExtent_chat_edit_chatName_label": "会话名称",
+    "sideExtend_chat_delete_title": "删除会话",
+    "sideExtend_chat_delete_prompt": "确认您的删除",
+
+    "sideExtend_prompt_newPrompt": "新建 Prompt",
+    "sideExtend_prompt_new_title": "新建 Prompt",
+    "sideExtend_prompt_edit_title": "修改 Prompt",
+    "sideExtend_prompt_form_name": "Prompt 名称",
+    "sideExtend_prompt_form_description": "Prompt 描述",
+    "sideExtend_prompt_form_temperature": "GPT Temperature",
+    "sideExtend_prompt_form_prompt": "Prompt 内容",
+    "sideExtend_prompt_form_create_button": "创建",
+    "sideExtend_prompt_form_save_button": "保存",
+    "sideExtend_prompt_delete_title": "删除 Prompt",
+
+    "settings_modal_name": "应用设置",
+
+    "settings_general_title": "通用设置",
+    "settings_general_apiKey": "OpenAI API Key",
+    "settings_general_maxMessages": "Prompt中最大消息数",
+    "settings_general_maxMessages_tooltip": "如果值为0，则根据最大tokens限制自动计算",
+    "settings_general_host": "OpenAI API Host",
+    "settings_general_host_tooltip": "可用作反向代理",
+    "settings_general_host_help": "如何设置反向代理?",
+    "settings_general_temperature": "GPT Temperature",
+    "settings_general_maxTokens": "Prompt中最大tokens数",
+    "settings_general_stream": "ChatGPT流回答模式",
+    "settings_general_markdownScope": "Markdown <Code /> 支持语言",
+    "settings_general_markdownScope_help": "支持语言",
+
+    "settings_appearance_title": "外观设置",
+    "settings_appearance_language": "语言",
+    "settings_appearance_theme": "暗黑模式",    
+    "settings_appearance_fontSize": "字体大小",
+    "settings_appearance_fontSize_sm": "小号",
+    "settings_appearance_fontSize_md": "中号",
+    "settings_appearance_fontSize_lg": "大号",
+
+    "settings_proxy_title": "代理设置",
+    "settings_proxy_http_proxy": "HTTP 代理",
+
+    "settings_chatToolbar_title": "会话工具栏",
+    "settings_chatToolbar_selectableActions": "可选择的Prompt",
+    "settings_chatToolbar_selectableActions_help": "如要选择，请拖动Prompt到下方工具栏",
+    "settings_chatToolbar_SelectedActions": "已选择的Prompt",
+    "settings_chatToolbar_SelectedActions_help": "如要移除，请拖动Prompt到上方工具栏",
+
+    "settings_message_title": "消息工具栏",
+    "settings_message_selectableActions": "可选择的Prompt",
+    "settings_message_selectableActions_help": "如要选择，请拖动Prompt到下方工具栏",
+    "settings_message_SelectedActions": "已选择的Prompt",
+    "settings_message_SelectedActions_help": "如要移除，请拖动Prompt到上方工具栏",
+
+    "settings_cleanAppData_title": "清除应用数据",
+    "settings_cleanAppData_help": "该操作会删除所有的App数据",
+    "settings_cleanAppData_button": "清除",
+
+    "settings_data_export": "数据导出",
+    "settings_data_chat_export": "会话所有历史",
+    "settings_data_prompt_export": "全部Prompt操作",
+
+    "export": "导出",
+    "import": "导入",
+    
+
+    "chat_input_placeholder": "请输入...",
+    "message_actions_rawCopy": "原生拷贝",
+    "message_actions_pin": "将该条信息固定在prompt上下文中",
+    "message_actions_unPin": "取消固定",
+    "message_actions_addPrompt": "加入prompt上下文",
+    "message_actions_removePrompt": "从prompt上下文中移除",
+    "message_actions_promptToggleButtonDisable": "该条信息已被固定在prompt上下文中",
+    "message_actions_delete": "删除",
+
+    "chat_menu_expandAll": "展开所有信息",
+    "chat_menu_collapseAll": "收起所有信息",
+    "chat_menu_removeAll": "从Prompt上下文中移除所有信息",
+    "chat_menu_recalulator": "重新计算prompt上下文的消息",
+    "chat_menu_share": "分享消息记录",
+
+    "chat_settings_title": "会话设置",
+    "chat_settings_maxMessages": "最大消息数",
+    "chat_settings_maxTokens": "最大tokens",
+    "chat_settings_temperature": "GPT Temperature",
+    "chat_settings_model": "模型",
+
+    "setup_modal_setKey_title": "请先设置你的OpenAI API Key",
+    "setup_modal_setKey_help": "OpenAI API Key不可或缺，本应用本地存储该key，不会进行任何上传操作",
+    "setup_modal_setKey_button": "下一步",
+    "setup_modal_setHost_title": "自定义API Host",
+    "setup_modal_setHost_help": "出于某些众所周知的原因，你可以使用值得信懒的反向代理服务，或者什么也不做",
+    "setup_modal_setHost_button": "开启会话",
+
+    "cancel": "取消",
+    "confirm": "确认",
+
+    "expand": "展开",
+    "collapse": "收起"
+  }
+}

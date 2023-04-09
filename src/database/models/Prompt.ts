@@ -4,6 +4,7 @@ export interface Prompt {
   id?: number;
   name: string;
   prompt: string;
+  temperature: number;
   description: string;
 }
 
@@ -15,8 +16,12 @@ const PromptDefine = {
       allowNull: false,
     },
     prompt: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.TEXT,
       allowNull: false,
+    },
+    temperature: {
+      type: DataTypes.NUMBER,
+      defautlValue: 1,
     },
     description: {
       type: DataTypes.STRING,

@@ -2,7 +2,7 @@ import axios from "axios";
 import { BrowserWindow, ipcMain } from "electron";
 import { PostRequest } from "../types";
 import t from "tunnel";
-import { store } from "./store";
+import { store } from "./settings";
 
 export const axiosIpcMain = (window: BrowserWindow) => {
   ipcMain.handle(
