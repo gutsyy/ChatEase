@@ -77,12 +77,10 @@ const ChatInputBox = forwardRef(
     const { t } = useTranslation();
     const _textAreaRef = useMergedRef(textAreaRef, ref);
     const { colorScheme } = useMantineTheme();
-    const tokensLimit = useAppSelector((state) =>
-      Math.min(
+    const tokensLimit = useAppSelector(
+      (state) =>
         (state.chat.selectedChat && state.chat.selectedChat.tokensLimit) ??
-          Number.MAX_SAFE_INTEGER,
         state.settings.max_tokens
-      )
     );
 
     useEffect(() => {

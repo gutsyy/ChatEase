@@ -46,7 +46,7 @@ const GeneralSettings = () => {
         );
         return (
           <InputSetStyles
-            defaultValue={openaiApiOrigin}
+            value={openaiApiOrigin}
             width="360px"
             onChange={(event) => {
               dispatch(setOpenaiApiOrigin(event.currentTarget.value));
