@@ -1,6 +1,6 @@
 {
   "name": "chatease",
-  "productName": "ChatEase",
+  "productName": "ChatEase(Dev)",
   "version": "0.0.1",
   "main": ".webpack/main",
   "licenses": "GPL-3.0",
@@ -13,7 +13,8 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts,.tsx ."
+    "lint": "eslint --ext .ts,.tsx .",
+    "preReleaseCheck": "node run preReleaseCheck.js"
   },
   "keywords": [],
   "author": {

@@ -1,0 +1,29 @@
+name: Pre Release Check
+
+on:
+  pull-request:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: ESlint
+        run: npm run lint
+
+      - name: Check Script
+        run: |
+          npm run preReleaseCheck
