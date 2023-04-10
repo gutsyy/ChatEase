@@ -2,6 +2,7 @@ name: Pre Release Check
 
 on:
   pull-request:
+    types: [opened, reopened]
     branches:
       - dev
 
