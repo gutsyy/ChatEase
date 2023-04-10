@@ -16,7 +16,6 @@ const SearchingInput = () => {
 
   return (
     <TextInput
-      className="mt-2"
       size="xs"
       variant="filled"
       placeholder={t("sideExtend_chat_searching")}

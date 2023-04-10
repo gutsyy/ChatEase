@@ -39,7 +39,7 @@ const HistoryItem = memo(({ name, id }: Chat) => {
       >
         <div
           className={clsx(
-            "w-full py-2 rounded hover:cursor-pointer",
+            "w-full py-2 hover:cursor-pointer rounded",
             id !== selectedChatId && colorScheme === "light" && "text-gray-600",
             id !== selectedChatId && colorScheme === "dark" && "text-dark-300",
             id === selectedChatId &&

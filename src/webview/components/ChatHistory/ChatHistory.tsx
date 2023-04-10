@@ -62,22 +62,17 @@ export const ChatHistory = () => {
   return (
     <div className="w-full h-full flex justify-center p-1">
       <div className="flex flex-col justify-between w-full h-full">
-        <Button
-          styles={{
-            root: {
-              fontFamily: "Greycliff CF, MiSans",
-              fontWeight: 700,
-            },
-          }}
-          className="w-full"
-          variant="gradient"
-          gradient={{ from: "#7335ff", to: "#bf5ad9", deg: 35 }}
-          leftIcon={<IconPlus size={18} />}
-          onClick={() => onNewChat()}
-        >
-          {t("sideExtend_chat_newChat")}
-        </Button>
-        <SearchingInput />
+        <div className="flex items-center gap-1">
+          <div className="flex-1">
+            <SearchingInput />
+          </div>
+          <div
+            className="h-7 w-7 bg-violet-500 flex items-center justify-center rounded text-white hover:cursor-pointer hover:bg-violet-400"
+            onClick={() => onNewChat()}
+          >
+            <IconPlus size="1.25rem" />
+          </div>
+        </div>
         <div
           className="w-full flex-1 overflow-y-visible overflow-x-hidden my-2 mt-2"
           ref={historyContainerRef}
