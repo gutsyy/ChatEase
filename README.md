@@ -1,98 +1,95 @@
-
 # ChatEase
 
 <p align="center">
-    <a href="./README_EN.md">English</a> | <b>中文</b>
+    <br> English | <a href="./README_ZH.md">中文</a>
 </p>
 
->帮助你更好的管理与ChatGPT的对话
+> Helps you manage your conversations with ChatGPT more efficiently
 
-## 使用前
+## Prerequisites
 
-1. OpenAI API Key
+1. Open API Key
 
-2. 好的网络环境（能够自己保证不被封号）
+2. A stable internet connection (so that can manage to keep your account from getting blocked)
 
-## 一点小知识
+## A bit of knowledge
 
-### 什么是prompt？什么是tokens？他们如何影响你与GPT的对话？
+### What are prompts and tokens, and how do they influence your conversation with GPT?
 
-**什么是prompt？**
+**What are prompts?**
 
-与ChatGPT的每一句对话，都可以称作为prompt，并在每次回答时作为ChatGPT下次回答的上下文。你的每一次新提问，都会将你跟GPT的历史对话一起发给GPT来进行回答。但对prompt的长度有着限制，tokens是prompt的长度计算单位。
+Every conversation you have with ChatGPT can be referred to as a prompt, which is used as context for ChatGPT next response. Every time you ask a new question your conversation history with GPT is sent to it as context for to answer your question. However, there is a limit to the length of a prompt, and tokens are used to determine prompt length
 
-**什么是tokens？**
+**What are tokens?**
 
-tokens是ChatGPT模型对上下文长度的计算方法，在GPT-3.5中，对tokens的数量限制为4096，即如果你的上下文为4000个tokens，GPT最多只能回复96个tokens。
+Tokens are used by the ChatGPT model to measure the length of context. In GPT-3.5, there is a limit of 4096 tokens, meaning that if your context is 4000 tokens GPT can only respond with a maximum of 96 tokens.
 
-[OpenAI官方对tokens的说明文档](https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them)
+[Official OpenAI documentation on tokens](https://help.openai.com/en/4936856-what-are-tokens-and-how-to-count-them)
 
-## 基础功能
+## Basic Features
 
-1. 与GPT对话，代码显示
+1. Chatting GPT with code display
 
-2. Prompt Library（beta）
+2. Prompt Library (beta)
 
-3. 会话历史存储和搜索（本地）
+3. Session history storage and search (local)
 
-4. 对话分享
+4. Conversation sharing
 
-5. `tokens` 计算和花销统计 / en-zh / 暗黑模式 / 反代设置 / HTTP代理 / 字体大小调整 等其他基础功能
+5. `Tokens` calculation and expense statistics / En-Zh / Dark mode / Reverse proxy settings / HTTP proxy / Font adjustment, and other basic features
 
-6. 数据的导入和导出
+6. Data import and export
 
-## 进阶功能
+## Advanced Features
 
-### 每个会话的独立设置
+### Independent settings for each session
 
-每一个会话设置都是持久化的，你可以具体选择：
+All session are persistent, and you can choose the following:
 
-* 设置会话在prompt中的消息数量限制
+* a message limit in the for the session
 
-* 设置会话在prompt中的tokens数量限制
+* Setting a tokens limit in the prompt for the session
 
-* 设置会话的temperature
+* Setting the temperature for the session
 
-* 设置会话使用的模型
+* Setting the model for the session![chatSettings](./docs/gifs/chatSettings.gif)
 
-![chatSettings](./docs/gifs/chatSettings.gif)
+### Controlling whether the conversation is in the prompt
 
-### 控制对话是否在 prompt 之中
+By default, this is automatically calculated based on the order of the conversation and set limits, but you can also manually control whether the conversation is added to removed from the prompt.
 
-在默认情况下，该状态根据对话的先后顺序和设置限制自动进行计算，你也可以手动进行控制，将对话添加至  `prompt` 或从 `prompt` 中移除
+![Controlling](./docs/gifs/toggleMessageInPrompt.gif)
 
-![控制对话是否在prompt之中](./docs/gifs/toggleMessageInPrompt.gif)
+### Pinning messages in the prompt
 
-### 将消息固定在prompt中
+![Pin Message](./docs/gifs/pinMessage.gif)
 
-![pin Message](./docs/gifs/pinMessage.gif)
+### Using prompt actions in conversations (translation / language correction / optimization)
 
-### 配合prompt action来与GPT对话（翻译 / 纠正提问语法 / 优化提问）
+![Using Prompt Actions](./docs/gifs/useActionsInChat.gif)
 
-![在对话中使用Prompt Actions](./docs/gifs/useActionsInChat.gif)
+### More conversation menu functions
 
-### 更多对话菜单功能
-
-![chatMenu](./docs/gifs/chatMenu.gif)
+![chatMenu](docs/gifs/chatMenu.gif)
 
 ## Roadmap
 
-- [ ] 更好的对话体验（最终目的是让整个对话结构更为清晰，方便自动整理成笔记）
+* [ ] Improved conversational experience (the ultimate goal is to make the structure clearer and make it easier to automatically arrange into notes)
 
-- [ ] GPT4支持，目前还在 `waitlist` 中
+* [ ] Support for GPT4, which is still the `waitlist`
 
-- [ ] 满意的 Prompt Library 模块
+* [ ] A satisfactory Prompt Library module
 
-- [ ] 满意的 UI/UX
+* [ ] A satisfactory UI/UX
 
-## 贡献
+## Contributions
 
-本仓库是个人学习和实践的平台，仓库的代码质量在写 `README` 时，可能不在一个很高的水平（屎山），内部可能有很多不合理的设计，但会在后续的开发中，不断的重构以达到开源的要求，如果你想贡献代码，请酌情考虑。
+This repository is a personal platform for learning and practice, and the quality of the code may not be very high (it be a mess) when writing this README. The internal design may not be very reasonable, and the use of many functions may be unnecessary due to GPT's rapid advancement. The purpose of developing this application is to improve coding skills and provide unlimited possibilities in conversations with GPT, and also because the plus version is too expensive.
+
+If you want to contribute to the code, please consider it accordingly.
 
 ## Q/A
 
-1. `Electron` 架构 ”小而又美“，但暂时只初步掌握，希望有一天能够做到小而又美
+1. Many the functions used in this application are my own ideas. They may not only be poorly designed but also become unnecessary due to GPT's rapid advancements.
 
-2. 应用很多的功能使用是自己的想法，不仅可能本身就设计不合理，而且GPT的使用日新月异，很快成为多此一举。
-
-3. 开发本应用的目的，一是实践提升代码水平，二是让与GPT之间有无穷的使用可能，三是plus太贵
+2. The of developing this application is to improve coding skills, provide unlimited possibilities in conversations with GPT, and because the plus is too expensive.
