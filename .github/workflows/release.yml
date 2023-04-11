@@ -1,9 +1,12 @@
 name: Publish Release
 
 on:
-  push:
+  pull-request:
+    types: [closed]
     branches:
       - main
+    conditions:
+      - ${{ github.event.pull_request.merged == true }}
 
 jobs:
   build:
