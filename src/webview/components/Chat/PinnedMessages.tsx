@@ -30,7 +30,7 @@ export const PinnedMessages = ({ messages }: { messages: Message[] }) => {
               className={clsx(
                 "text-xs px-4 py-1 shadow-md transition-all ease-in-out duration-500 gap-2 hover:cursor-pointer overflow-x-hidden relative justify-center",
                 colorScheme === "dark" ? "bg-dark-800" : "bg-gray-50",
-                opened && "w-full max-h-64 mx-3 items-start overflow-y-auto",
+                opened && "w-full max-h-80 mx-3 items-start overflow-y-auto",
                 !opened && "w-44 overflow-y-hidden max-h-6"
               )}
               style={{
@@ -48,11 +48,16 @@ export const PinnedMessages = ({ messages }: { messages: Message[] }) => {
               >
                 <IconPin size={14} />
                 <div>Pinned Messages</div>
-                <div className="w-4 h-4 rounded-full bg-violet-500 flex items-center justify-center">
-                  <div style={{ fontSize: "10px" }} className="text-violet-200">
-                    {pinnedMessages.length}
+                {!opened && (
+                  <div className="w-4 h-4 rounded-full bg-violet-500 flex items-center justify-center">
+                    <div
+                      style={{ fontSize: "10px" }}
+                      className="text-violet-200"
+                    >
+                      {pinnedMessages.length}
+                    </div>
                   </div>
-                </div>
+                )}
                 {opened && (
                   <ActionIcon
                     size="xs"

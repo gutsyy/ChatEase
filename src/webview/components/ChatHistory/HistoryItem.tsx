@@ -39,7 +39,7 @@ const HistoryItem = memo(({ name, id }: Chat) => {
       >
         <div
           className={clsx(
-            "w-full py-2 rounded hover:cursor-pointer",
+            "w-full py-2 hover:cursor-pointer px-1",
             id !== selectedChatId && colorScheme === "light" && "text-gray-600",
             id !== selectedChatId && colorScheme === "dark" && "text-dark-300",
             id === selectedChatId &&
@@ -54,7 +54,7 @@ const HistoryItem = memo(({ name, id }: Chat) => {
           <div className="w-full h-full flex items-center justify-between pr-1 pl-2 whitespace-nowrap">
             <div
               className={clsx("text-xs flex-1 text-ellipsis overflow-hidden")}
-              style={{ maxWidth: "170px", marginRight: "5px" }}
+              style={{ marginRight: "5px" }}
             >
               {name}
             </div>

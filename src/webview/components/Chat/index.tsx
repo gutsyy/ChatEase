@@ -13,6 +13,7 @@ import { PinnedMessages } from "./PinnedMessages";
 
 export const ChatContext = createContext<{
   scrollToBottom: () => void;
+  scrollToTop: () => void;
 } | null>(null);
 
 export default function Chat() {
@@ -50,8 +51,17 @@ export default function Chat() {
     }
   };
 
+  const scrollToTop = () => {
+    if (chatsContainer.current) {
+      chatsContainer.current.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
-    <ChatContext.Provider value={{ scrollToBottom }}>
+    <ChatContext.Provider value={{ scrollToBottom, scrollToTop }}>
       <ShareImageDialog canvas={imageCanvas} />
       <div className="h-full flex flex-col overflow-hidden flex-1">
         <div
@@ -60,7 +70,6 @@ export default function Chat() {
             colorScheme === "dark" && "bg-dark-800 scrollbar-custom-dark",
             colorScheme === "light" && "bg-white scrollbar-custom"
           )}
-          ref={chatsContainer}
         >
           <PinnedMessages messages={messages} />
           {messages.length === 0 && <NoMessages />}
@@ -70,6 +79,7 @@ export default function Chat() {
               colorScheme === "dark" && "bg-dark-800",
               colorScheme === "light" && "bg-white"
             )}
+            ref={chatsContainer}
           >
             <div
               ref={messagesContainer}

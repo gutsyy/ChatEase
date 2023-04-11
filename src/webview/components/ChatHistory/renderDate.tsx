@@ -9,8 +9,8 @@ export const renderDate = {
       return (
         <div
           className={clsx(
-            "w-full flex justify-start ml-2 italic mt-2 mb-1",
-            colorScheme === "dark" ? "text-white" : "text-gray-500"
+            "w-full flex justify-start pl-3 italic pt-2 pb-1 font-bold",
+            colorScheme === "dark" ? "text-white" : "text-gray-300"
           )}
           style={{
             fontSize: "0.675rem",

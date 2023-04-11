@@ -29,8 +29,6 @@ export const SideExtend = () => {
       )}
       style={{
         width: sideNavExpanded ? "16rem" : "0px",
-        paddingLeft: sideNavExpanded ? "0.25rem" : "",
-        paddingRight: sideNavExpanded ? "0.25rem" : "",
         opacity: sideNavExpanded ? "1" : "0",
       }}
     >

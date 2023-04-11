@@ -19,7 +19,7 @@ import { appSettings } from "@/webview/utils/settings";
 const PromptForm = (initialValues: Prompt) => {
   const theme = useMantineTheme();
   const form = useForm({
-    initialValues,
+    initialValues: { ...initialValues },
   });
   const dispatch = useAppDispatch();
   const { t } = useTranslation();

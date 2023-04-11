@@ -13,13 +13,18 @@ import {
   IconArrowBarUp,
   IconCloudOff,
   IconCalculator,
+  IconArrowBigDownLines,
+  IconArrowBigUpLines,
 } from "@tabler/icons-react";
 import { useTranslation } from "react-i18next";
+import { ChatContext } from "..";
+import { useContext } from "react";
 
 const ChatMenu = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const { colorScheme } = useMantineTheme();
+  const { scrollToBottom, scrollToTop } = useContext(ChatContext);
 
   return (
     <Menu shadow="md" position="top-start" radius="md">
@@ -41,6 +46,24 @@ const ChatMenu = () => {
       <Menu.Dropdown
         className={clsx(colorScheme === "dark" && "bg-dark-900 border-0")}
       >
+        <Menu.Item
+          className="text-xs"
+          icon={<IconArrowBigDownLines size={12} />}
+          onClick={() => {
+            scrollToBottom();
+          }}
+        >
+          {t("chat_menu_scroll_bottom")}
+        </Menu.Item>
+        <Menu.Item
+          className="text-xs"
+          icon={<IconArrowBigUpLines size={12} />}
+          onClick={() => {
+            scrollToTop();
+          }}
+        >
+          {t("chat_menu_scroll_top")}
+        </Menu.Item>
         <Menu.Item
           className="text-xs"
           icon={<IconShare3 size={12} />}
