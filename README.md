@@ -1,6 +1,10 @@
 
 # ChatEase
 
+<p align="center">
+    <a href="./README_EN.md">English</a> | <b>中文</b>
+</p>
+
 >帮助你更好的管理与ChatGPT的对话
 
 ## 使用前
