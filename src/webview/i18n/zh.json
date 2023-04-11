@@ -87,6 +87,8 @@
     "chat_menu_removeAll": "从Prompt上下文中移除所有信息",
     "chat_menu_recalulator": "重新计算prompt上下文的消息",
     "chat_menu_share": "分享消息记录",
+    "chat_menu_scroll_bottom": "滚动到底部",
+    "chat_menu_scroll_top": "回到顶部",
 
     "chat_settings_title": "会话设置",
     "chat_settings_maxMessages": "最大消息数",

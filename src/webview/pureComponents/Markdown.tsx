@@ -28,7 +28,7 @@ const CodeToolbar = ({
   return (
     <div
       className={
-        "flex justify-between items-center h-6 px-2 font-monaco " +
+        "flex justify-between items-center h-6 px-2 font-greycliff font-bold " +
         (colorScheme === "light"
           ? "bg-gray-300 text-gray-900"
           : "bg-dark-900 text-dark-100")

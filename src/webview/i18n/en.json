@@ -86,6 +86,8 @@
     "chat_menu_removeAll": "Remove all messages from prompt",
     "chat_menu_recalulator": "Recalculate which message in prompt",
     "chat_menu_share": "Share your messages",
+    "chat_menu_scroll_top": "Scroll to the top",
+    "chat_menu_scroll_bottom": "Scroll to the bottom",
 
     "chat_settings_title": "Custom This Chat Settings",
     "chat_settings_maxMessages": "Max messages in prompt",

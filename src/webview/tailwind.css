@@ -289,6 +289,10 @@
   max-height: 16rem;
 }
 
+.max-h-80 {
+  max-height: 20rem;
+}
+
 .w-36 {
   width: 9rem;
 }
@@ -614,6 +618,11 @@
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
+.bg-violet-600 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(124 58 237 / var(--tw-bg-opacity));
+}
+
 .p-1 {
   padding: 0.25rem;
 }
@@ -696,6 +705,10 @@
 
 .pt-4 {
   padding-top: 1rem;
+}
+
+.pl-3 {
+  padding-left: 0.75rem;
 }
 
 .text-center {
@@ -1092,6 +1105,11 @@ element-selector::-webkit-scrollbar {
 .hover\:bg-violet-400:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(167 139 250 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-violet-500:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(139 92 246 / var(--tw-bg-opacity));
 }
 
 .hover\:text-dark-100:hover {

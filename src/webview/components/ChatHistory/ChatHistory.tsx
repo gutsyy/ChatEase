@@ -60,14 +60,14 @@ export const ChatHistory = () => {
   const { render: RenderDate } = renderDate;
 
   return (
-    <div className="w-full h-full flex justify-center p-1">
+    <div className="w-full h-full flex justify-center py-1">
       <div className="flex flex-col justify-between w-full h-full">
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 px-1">
           <div className="flex-1">
             <SearchingInput />
           </div>
           <div
-            className="h-7 w-7 bg-violet-500 flex items-center justify-center rounded text-white hover:cursor-pointer hover:bg-violet-400"
+            className="h-7 w-7 bg-violet-600 flex items-center justify-center rounded text-white hover:cursor-pointer hover:bg-violet-500"
             onClick={() => onNewChat()}
           >
             <IconPlus size="1.25rem" />
