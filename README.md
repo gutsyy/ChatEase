@@ -12,6 +12,10 @@
 
 2. A stable internet connection (so that can manage to keep your account from getting blocked)
 
+## Download and Install
+
+[Release Page](https://github.com/gyuannn/ChatEase/releases/)
+
 ## A bit of knowledge
 
 ### What are prompts and tokens, and how do they influence your conversation with GPT?
@@ -52,7 +56,9 @@ All session are persistent, and you can choose the following:
 
 * Setting the temperature for the session
 
-* Setting the model for the session![chatSettings](./docs/gifs/chatSettings.gif)
+* Setting the model for the session
+
+![chatSettings](./docs/gifs/chatSettings.gif)
 
 ### Controlling whether the conversation is in the prompt
 
@@ -87,9 +93,3 @@ By default, this is automatically calculated based on the order of the conversat
 This repository is a personal platform for learning and practice, and the quality of the code may not be very high (it be a mess) when writing this README. The internal design may not be very reasonable, and the use of many functions may be unnecessary due to GPT's rapid advancement. The purpose of developing this application is to improve coding skills and provide unlimited possibilities in conversations with GPT, and also because the plus version is too expensive.
 
 If you want to contribute to the code, please consider it accordingly.
-
-## Q/A
-
-1. Many the functions used in this application are my own ideas. They may not only be poorly designed but also become unnecessary due to GPT's rapid advancements.
-
-2. The of developing this application is to improve coding skills, provide unlimited possibilities in conversations with GPT, and because the plus is too expensive.
