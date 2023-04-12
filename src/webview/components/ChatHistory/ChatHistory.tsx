@@ -83,7 +83,7 @@ export const ChatHistory = () => {
           className="w-full flex-1 overflow-y-visible overflow-x-hidden my-2 mt-2"
           ref={historyContainerRef}
         >
-          {historyContainerRef.current ? (
+          {historyContainerRef.current && chats.length ? (
             <ScrollableList
               dataList={chats}
               itemHeight={38}
@@ -97,7 +97,16 @@ export const ChatHistory = () => {
                 </>
               )}
             />
-          ) : null}
+          ) : (
+            <div
+              className={clsx(
+                "w-full flex justify-center font-greycliff text-sm h-full items-center pb-36",
+                colorScheme === "dark" ? "text-gray-500" : "text-gray-400"
+              )}
+            >
+              {t("chat_history_noData")}
+            </div>
+          )}
         </div>
         <div>
           <Button
