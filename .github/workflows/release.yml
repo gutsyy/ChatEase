@@ -1,19 +1,23 @@
 name: Publish Release
 
 on:
-  merge_group:
-    types: [checks_requested]
-    
+<<<<<<< HEAD
+  push:
+=======
+  pull_request:
+    types: [closed]
+>>>>>>> parent of a7bf07f (Update release.yml)
     branches:
       - main
 
 jobs:
   build:
+    if: github.event.pull_request.merged == 'true'
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        os: [macOS-latest, windows-latest]
+        os: [macOS-latest, windows-latest, ubuntu-latest]
         node-version: [16.x]
 
     steps:
