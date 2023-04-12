@@ -1,12 +1,7 @@
 name: Publish Release
 
 on:
-<<<<<<< HEAD
   push:
-=======
-  pull_request:
-    types: [closed]
->>>>>>> parent of a7bf07f (Update release.yml)
     branches:
       - main
 
