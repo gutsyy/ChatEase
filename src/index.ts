@@ -16,8 +16,6 @@ if (require("electron-squirrel-startup")) {
   app.quit();
 }
 
-console.log(app.getPath("userData"));
-
 const createBridage = (window: BrowserWindow) => {
   // electron-store
   Store.initRenderer();
@@ -59,8 +57,6 @@ app.on("ready", () => {
   const window = createWindow();
   createBridage(window);
 });
-
-console.log(app.getPath("userData"));
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
