@@ -23,7 +23,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install Dependency
-        run: npm install eslint eslint-import-resolver-typescript eslint-plugin-import
+        run: npm install eslint eslint-import-resolver-typescript eslint-plugin-import fs
 
       - name: ESlint
         run: npm run lint
