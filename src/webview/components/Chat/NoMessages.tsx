@@ -42,7 +42,7 @@ export const NoMessages = () => {
               colorScheme === "dark" ? "text-dark-300" : "text-gray-600"
             )}
           >
-            <div>Making things easy with OpenAI ChatGPT</div>
+            <div>{t("app_intro")}</div>
           </div>
         </div>
         <div className="mt-2">

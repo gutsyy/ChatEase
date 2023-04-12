@@ -110,6 +110,8 @@
     "chat_input_tooltip": "Press Enter to send message, Shift+Enter to new line",
     "chat_history_noData": "No Chat History",
 
+    "app_intro": "Making things easy with OpenAI ChatGPT",
+
     "func_intro_1": "Local conversation history storage.",
     "func_intro_2": "Control over the message in the prompt for freedom.",
     "func_intro_3": "Each chat can be independently configured.",
