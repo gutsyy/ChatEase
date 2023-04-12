@@ -1,6 +1,6 @@
-# ChatEase
-
 ![](./docs/pics/chatEase.png)
+
+# ChatEase
 
 <p align="center">
     <br> English | <a href="./README_ZH.md">中文</a>
