@@ -1,4 +1,4 @@
-import { Button, Text } from "@mantine/core";
+import { Button, Text, clsx, useMantineTheme } from "@mantine/core";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
 import { useEffect, useRef } from "react";
 import { newChat, setChats } from "@/webview/reducers/chatSlice";
@@ -19,6 +19,7 @@ export const ChatHistory = () => {
   const chats = useAppSelector((state) => state.chat.chats);
   const historyContainerRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
+  const { colorScheme } = useMantineTheme();
 
   useEffect(() => {
     window.electronAPI.databaseIpcRenderer.getAllChats().then((chats) => {
@@ -62,7 +63,12 @@ export const ChatHistory = () => {
   return (
     <div className="w-full h-full flex justify-center py-1">
       <div className="flex flex-col justify-between w-full h-full">
-        <div className="flex items-center gap-1 px-1">
+        <div
+          className={clsx(
+            "flex items-center gap-1 px-1 pb-2 border-solid border-0 border-b",
+            colorScheme === "dark" ? "border-dark-600" : "border-gray-200"
+          )}
+        >
           <div className="flex-1">
             <SearchingInput />
           </div>
