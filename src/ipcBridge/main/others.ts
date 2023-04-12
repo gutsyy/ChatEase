@@ -7,8 +7,8 @@ import {
   nativeTheme,
   shell,
 } from "electron";
-import { encode } from "gpt-3-encoder";
 import { ChatGPTMessageType } from "@/webview/services/openAI/apiConfig";
+import { encode } from "gpt-3-encoder";
 import { num_tokens_from_messages } from "./utils/numTokensFromMessages";
 import { db } from "../../database";
 
