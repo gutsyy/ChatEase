@@ -5,8 +5,6 @@ on:
     types: [closed]
     branches:
       - main
-    conditions:
-      - ${{ github.event.pull_request.merged == true }}
 
 jobs:
   build:
