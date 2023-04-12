@@ -1,4 +1,4 @@
-import { Button, Text } from "@mantine/core";
+import { Button, Text, clsx, useMantineTheme } from "@mantine/core";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
 import { useEffect, useRef } from "react";
 import { newChat, setChats } from "@/webview/reducers/chatSlice";
@@ -19,6 +19,7 @@ export const ChatHistory = () => {
   const chats = useAppSelector((state) => state.chat.chats);
   const historyContainerRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
+  const { colorScheme } = useMantineTheme();
 
   useEffect(() => {
     window.electronAPI.databaseIpcRenderer.getAllChats().then((chats) => {
@@ -62,7 +63,12 @@ export const ChatHistory = () => {
   return (
     <div className="w-full h-full flex justify-center py-1">
       <div className="flex flex-col justify-between w-full h-full">
-        <div className="flex items-center gap-1 px-1">
+        <div
+          className={clsx(
+            "flex items-center gap-1 px-1 pb-2 border-solid border-0 border-b",
+            colorScheme === "dark" ? "border-dark-600" : "border-gray-200"
+          )}
+        >
           <div className="flex-1">
             <SearchingInput />
           </div>
@@ -77,7 +83,7 @@ export const ChatHistory = () => {
           className="w-full flex-1 overflow-y-visible overflow-x-hidden my-2 mt-2"
           ref={historyContainerRef}
         >
-          {historyContainerRef.current ? (
+          {historyContainerRef.current && chats.length ? (
             <ScrollableList
               dataList={chats}
               itemHeight={38}
@@ -91,7 +97,16 @@ export const ChatHistory = () => {
                 </>
               )}
             />
-          ) : null}
+          ) : (
+            <div
+              className={clsx(
+                "w-full flex justify-center font-greycliff text-sm h-full items-center pb-36",
+                colorScheme === "dark" ? "text-gray-500" : "text-gray-400"
+              )}
+            >
+              {t("chat_history_noData")}
+            </div>
+          )}
         </div>
         <div>
           <Button

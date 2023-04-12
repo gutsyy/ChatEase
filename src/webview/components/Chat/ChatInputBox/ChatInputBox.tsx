@@ -205,12 +205,12 @@ const ChatInputBox = forwardRef(
               placeholder={
                 textAreaInputWaitingActionResponseState
                   ? "Waiting..."
-                  : t("chat_input_placeholder")
+                  : t("chat_input_tooltip")
               }
               className="flex-1 mr-2"
               autosize
               minRows={1}
-              maxRows={5}
+              maxRows={15}
               rightSection={
                 isPromptResponsing ? (
                   <div className="flex items-end">

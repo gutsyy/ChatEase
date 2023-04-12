@@ -2,8 +2,7 @@ name: Publish Release
 
 on:
   push:
-    branches:
-      - main
+    tags: [v\d+\.\d+\.\d+]
 
 jobs:
   build:
