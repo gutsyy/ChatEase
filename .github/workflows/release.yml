@@ -1,8 +1,9 @@
 name: Publish Release
 
 on:
-  pull_request:
-    types: [closed]
+  merge_group:
+    types: [checks_requested]
+    
     branches:
       - main
 
