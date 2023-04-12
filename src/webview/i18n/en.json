@@ -105,6 +105,8 @@
     "cancel": "Cancel",
     "confirm": "Confirm",
     "expand": "expand",
-    "collapse": "collapse"
+    "collapse": "collapse",
+
+    "chat_input_tooltip": "Press Enter to send message, Shift+Enter to new line"
   }
 }

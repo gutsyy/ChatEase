@@ -107,6 +107,9 @@
     "confirm": "确认",
 
     "expand": "展开",
-    "collapse": "收起"
+    "collapse": "收起",
+
+    "chat_input_tooltip": "按下 Enter 发送消息，Enter+Shift 换行"
+
   }
 }
