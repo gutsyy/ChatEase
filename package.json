@@ -14,7 +14,7 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "preReleaseCheck": "node run preReleaseCheck.js"
+    "preReleaseCheck": "node preReleaseCheck.js"
   },
   "keywords": [],
   "author": {
