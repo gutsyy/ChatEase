@@ -3,6 +3,7 @@ import { IconX, IconArrowBackUp, IconBrandTelegram } from "@tabler/icons-react";
 import {
   forwardRef,
   MutableRefObject,
+  useContext,
   useEffect,
   useMemo,
   useRef,
@@ -29,6 +30,7 @@ import { InputActionBar } from "./InputActionBar";
 import { Prompt } from "@/database/models/Prompt";
 import { useFocusWithin, useMergedRef } from "@mantine/hooks";
 import { useTranslation } from "react-i18next";
+import { ChatContext } from "..";
 
 function getFirstSentence(text: string) {
   let firstSentence = "";
@@ -82,6 +84,18 @@ const ChatInputBox = forwardRef(
         (state.chat.selectedChat && state.chat.selectedChat.tokensLimit) ??
         state.settings.max_tokens
     );
+    const { scrollToBottom } = useContext(ChatContext);
+    const scrollToBottomIntv = useRef<NodeJS.Timer>();
+
+    useEffect(() => {
+      if (isResponsing) {
+        scrollToBottomIntv.current = setInterval(() => {
+          scrollToBottom();
+        }, 800);
+      } else {
+        clearInterval(scrollToBottomIntv.current);
+      }
+    }, [isResponsing]);
 
     useEffect(() => {
       setActionsBarVisible(focused);
@@ -154,7 +168,9 @@ const ChatInputBox = forwardRef(
       );
 
       // Send request to OpenAI
-      requestApi(_chatId, sendMessages);
+      requestApi(_chatId, sendMessages).then(() => {
+        scrollToBottom();
+      });
     };
     const handlePromptAction = (prompt: Prompt): boolean => {
       if (!message || !message.trim()) {
