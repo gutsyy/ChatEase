@@ -9,6 +9,8 @@ import { clsx, useMantineTheme } from "@mantine/core";
 import html2canvas from "html2canvas";
 import { ShareImageDialog } from "./ShareImageDialog";
 import { PinnedMessages } from "./PinnedMessages";
+import { SearchMessagesBox } from "./SearchMessagesBox";
+import { useClickOutside } from "@mantine/hooks";
 
 export const ChatContext = createContext<{
   scrollToBottom: () => void;
@@ -29,6 +31,28 @@ export default function Chat() {
   const [imageCanvas, setImageCanvas] = useState<HTMLCanvasElement | null>(
     null
   );
+  const [searchMessagesBoxState, setSearchMessagesBoxState] = useState(false);
+  const [searchMessageBoxRef, setSearchMessageBoxRef] =
+    useState<HTMLDivElement | null>(null);
+  const [searchResultMenuRef, setSearchResultMenuRef] =
+    useState<HTMLDivElement | null>(null);
+  useClickOutside(() => setSearchMessagesBoxState(false), null, [
+    searchMessageBoxRef,
+    searchResultMenuRef,
+  ]);
+
+  useEffect(() => {
+    // when ctrl + f is pressed, show search box
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "f") {
+        setSearchMessagesBoxState(true);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   useEffect(() => {
     if (messagesContainer.current && shareMessages) {
@@ -100,6 +124,11 @@ export default function Chat() {
         </div>
         <ChatInputBox messages={messages} chatId={chatId} />
       </div>
+      <SearchMessagesBox
+        ref={setSearchMessageBoxRef}
+        menuRef={setSearchResultMenuRef}
+        opened={searchMessagesBoxState}
+      />
     </ChatContext.Provider>
   );
 }

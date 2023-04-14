@@ -445,6 +445,26 @@ const database = () => {
         }
       }
     );
+
+    // search messages by message.text and message.chatId
+    ipcMain.handle(
+      "search-messages",
+      async (_, chatId: number, text: string) => {
+        try {
+          const result = await MessageIns.findAll({
+            where: {
+              text: {
+                [Op.like]: `%${text}%`,
+              },
+              chatId: chatId,
+            },
+          });
+          return result.map((message) => message.dataValues);
+        } catch (err) {
+          throw new Error("failed");
+        }
+      }
+    );
   };
 
   return {

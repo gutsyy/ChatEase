@@ -73,7 +73,11 @@ const MessageItem = ({
   };
 
   return (
-    <div className="relative overflow-visible" ref={containerRef}>
+    <div
+      className="relative overflow-visible"
+      ref={containerRef}
+      id={`message-${msg.id}`}
+    >
       {msg.fixedInPrompt && !onPinnedMessageBox && (
         <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1 z-10 bg-violet-500 rounded-full w-4 h-4 flex justify-center items-center">
           <IconPin size={12} className="text-white" />
