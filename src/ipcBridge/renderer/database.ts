@@ -43,6 +43,7 @@ export interface DatabaseIpcRenderer {
   importAllChats: () => Promise<boolean>;
   importAllPrompts: () => Promise<boolean>;
   updateChatCostTokens: (id: number, costTokens: number) => Promise<null>;
+  searchMessages: (chatId: number, text: string) => Promise<Message[]>;
 }
 
 export const databaseIpcRenderer: DatabaseIpcRenderer = {
@@ -78,4 +79,6 @@ export const databaseIpcRenderer: DatabaseIpcRenderer = {
   importAllPrompts: () => ipcRenderer.invoke("import-all-prompts"),
   updateChatCostTokens: (id, costTokens) =>
     ipcRenderer.invoke("update-chat-costTokens", id, costTokens),
+  searchMessages: (chatId, text) =>
+    ipcRenderer.invoke("search-messages", chatId, text),
 };
