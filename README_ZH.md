@@ -62,6 +62,10 @@ tokens是ChatGPT模型对上下文长度的计算方法，在GPT-3.5中，对tok
 
 ![chatSettings](./docs/gifs/chatSettings.gif)
 
+### 搜索信息内容
+
+![searchMessage](./docs/gifs/searchMessage.gif)
+
 ### 控制对话是否在 prompt 之中
 
 在默认情况下，该状态根据对话的先后顺序和设置限制自动进行计算，你也可以手动进行控制，将对话添加至  `prompt` 或从 `prompt` 中移除
