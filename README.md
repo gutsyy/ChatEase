@@ -62,6 +62,10 @@ All session are persistent, and you can choose the following:
 
 ![chatSettings](./docs/gifs/chatSettings.gif)
 
+### Search Message
+
+![searchMessage](./docs/gifs/searchMessage.gif)
+
 ### Controlling whether the conversation is in the prompt
 
 By default, this is automatically calculated based on the order of the conversation and set limits, but you can also manually control whether the conversation is added to removed from the prompt.
