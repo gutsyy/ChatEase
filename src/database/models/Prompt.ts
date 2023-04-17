@@ -1,4 +1,4 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, Sequelize } from "sequelize";
 
 export interface Prompt {
   id?: number;
@@ -29,5 +29,12 @@ const PromptDefine = {
     },
   },
 };
+
+export function createPromptIns(sequelize: Sequelize) {
+  return sequelize.define(PromptDefine.name, PromptDefine.model, {
+    createdAt: false,
+    updatedAt: false,
+  });
+}
 
 export { PromptDefine };

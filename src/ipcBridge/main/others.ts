@@ -10,7 +10,7 @@ import {
 import { ChatGPTMessageType } from "@/webview/services/openAI/apiConfig";
 import { encode } from "gpt-3-encoder";
 import { num_tokens_from_messages } from "./utils/numTokensFromMessages";
-import { db } from "../../database";
+import { db } from "../../database/electron";
 
 export const othersIpcMain = (window: BrowserWindow) => {
   ipcMain.on("cal-tokens", (event, str: string) => {
