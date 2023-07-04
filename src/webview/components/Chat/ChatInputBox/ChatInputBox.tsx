@@ -1,8 +1,10 @@
 import { Textarea, ActionIcon, clsx, useMantineTheme } from "@mantine/core";
 import { IconX, IconArrowBackUp, IconBrandTelegram } from "@tabler/icons-react";
 import {
+  ChangeEvent,
   forwardRef,
   MutableRefObject,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -31,6 +33,7 @@ import { Prompt } from "@/database/models/Prompt";
 import { useFocusWithin, useMergedRef } from "@mantine/hooks";
 import { useTranslation } from "react-i18next";
 import { ChatContext } from "..";
+import { createDebounce } from "@/webview/utils/debounce";
 
 function getFirstSentence(text: string) {
   let firstSentence = "";
@@ -182,6 +185,13 @@ const ChatInputBox = forwardRef(
       return true;
     };
 
+    const calTokensWhenChange = useCallback(
+      createDebounce((event: ChangeEvent<HTMLTextAreaElement>) => {
+        dispatch(setMessageTokens(event.target.value.trim()));
+      }, 500),
+      []
+    );
+
     return (
       <div ref={inputBoxRef}>
         <InputActionBar
@@ -205,7 +215,7 @@ const ChatInputBox = forwardRef(
               variant="filled"
               onChange={(event) => {
                 setMessage(event.target.value);
-                dispatch(setMessageTokens(event.target.value.trim()));
+                calTokensWhenChange(event);
               }}
               disabled={textAreaInputWaitingActionResponseState}
               onFocus={() => setActionsBarVisible(true)}

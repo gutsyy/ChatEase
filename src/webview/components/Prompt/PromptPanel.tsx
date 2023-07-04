@@ -10,13 +10,21 @@ import {
 import { IconBrandTelegram } from "@tabler/icons-react";
 import { Markdown } from "@/webview/pureComponents";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   calPromptActionMessages,
   requestPromptApi,
 } from "@/webview/services/openAI/apiConfig";
 import { setPromptIsResponsing } from "@/webview/reducers/promptSlice";
 import type { Prompt } from "@/database/models/Prompt";
+import { createDebounce } from "@/webview/utils/debounce";
 
 let isComposing = false;
 
@@ -74,6 +82,21 @@ export const PromptPanel = () => {
     (state) => state.settings.markdown_code_scope
   );
 
+  const [statTokens, setStatTokens] = useState(0);
+
+  const calTokensDebounce = useCallback(
+    createDebounce((event: ChangeEvent<HTMLTextAreaElement>) => {
+      setStatTokens(
+        selectedPrompt
+          ? window.electronAPI.othersIpcRenderer.calMessagesTokens(
+              calPromptActionMessages(selectedPrompt.prompt, event.target.value)
+            )
+          : 0
+      );
+    }, 500),
+    [selectedPrompt]
+  );
+
   return (
     <>
       {selectedPrompt && (
@@ -103,14 +126,15 @@ export const PromptPanel = () => {
               }}
               minRows={6}
               maxRows={20}
-              onChange={(event) => setInputContent(event.currentTarget.value)}
+              onChange={(event) => {
+                setInputContent(event.currentTarget.value);
+                calTokensDebounce(event);
+              }}
             ></Textarea>
             <div className="w-full flex mt-1 justify-end">
               <div className="flex items-center justify-end">
                 <div className="text-sm text-gray-500 mr-2 font-greycliff tracking-wide">
-                  {`${window.electronAPI.othersIpcRenderer.calMessagesTokens(
-                    calPromptActionMessages(selectedPrompt.prompt, inputContent)
-                  )} tokens`}
+                  {`${statTokens} tokens`}
                 </div>
                 <ActionIcon type="submit">
                   <IconBrandTelegram className="text-violet-500" size={18} />
