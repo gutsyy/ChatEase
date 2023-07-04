@@ -65,7 +65,6 @@ export function createChatRepo(
     },
 
     getChatById: async (id: number) => {
-      console.log(typeof id);
       const result = await ChatIns.findByPk(id);
       return result.dataValues;
     },

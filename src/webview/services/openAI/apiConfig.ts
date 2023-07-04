@@ -64,8 +64,6 @@ export const axiosConfigChatGPT = (
     throw new Error("OpenAI API key is not set.");
   }
 
-  console.log(model);
-
   return {
     url: `${origin}`,
     body: {
