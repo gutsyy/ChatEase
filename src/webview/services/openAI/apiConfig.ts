@@ -49,7 +49,8 @@ export interface ChatCompletion {
 export const axiosConfigChatGPT = (
   message: ChatGPTMessageType[],
   // chat: Chat | null
-  temperature?: number
+  temperature?: number,
+  model?: string
 ): PostRequest => {
   const key = appSettings.get("open_api_key");
   const origin = appSettings.get("openai_api_origin") + "v1/chat/completions";
@@ -63,10 +64,12 @@ export const axiosConfigChatGPT = (
     throw new Error("OpenAI API key is not set.");
   }
 
+  console.log(model);
+
   return {
     url: `${origin}`,
     body: {
-      model: "gpt-3.5-turbo",
+      model: model ?? "gpt-3.5-turbo",
       messages: message,
       stream: appSettings.get("stream_enable"),
       temperature: temperature ?? appSettings.get("temperature"),
@@ -165,7 +168,7 @@ export const requestApi = async (chatId: number, messages: Message[]) => {
 
   window.electronAPI.axiosIpcRenderer
     .post(
-      axiosConfigChatGPT(gptMessages, chat.temperature),
+      axiosConfigChatGPT(gptMessages, chat.temperature, chat.model),
       requestId,
       streamEnable
     )
