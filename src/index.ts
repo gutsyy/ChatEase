@@ -8,7 +8,7 @@ declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 import { axiosIpcMain } from "./ipcBridge/main/axios";
 import Store from "electron-store";
 import { settingsIpcMain } from "./ipcBridge/main/settings";
-import { db } from "./database";
+import { db } from "./database/electron";
 import { othersIpcMain } from "./ipcBridge/main/others";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.

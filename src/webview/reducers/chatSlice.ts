@@ -166,8 +166,9 @@ export const ChatSlice = createSlice({
           state.selectedChat.costTokens +
           window.electronAPI.othersIpcRenderer.calTokens(action.payload.text),
       };
-      window.electronAPI.databaseIpcRenderer.updateChatCostTokens(
+      window.electronAPI.databaseIpcRenderer.updateChatFieldById(
         state.selectedChat.id,
+        "costTokens",
         state.selectedChat.costTokens
       );
     },

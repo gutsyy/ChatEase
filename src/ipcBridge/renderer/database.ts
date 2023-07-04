@@ -42,7 +42,6 @@ export interface DatabaseIpcRenderer {
   exportAllPrompts: () => Promise<null>;
   importAllChats: () => Promise<boolean>;
   importAllPrompts: () => Promise<boolean>;
-  updateChatCostTokens: (id: number, costTokens: number) => Promise<null>;
   searchMessages: (chatId: number, text: string) => Promise<Message[]>;
 }
 
@@ -72,13 +71,13 @@ export const databaseIpcRenderer: DatabaseIpcRenderer = {
     ipcRenderer.invoke("update-message-field-by-id", id, field, value),
   getChatFieldById: (id, field) =>
     ipcRenderer.invoke("get-chat-field-by-id", id, field),
-  getChatById: (id) => ipcRenderer.invoke("get-chat-by-id", id),
+  getChatById: (id) => {
+    return ipcRenderer.invoke("get-chat-by-id", id);
+  },
   exportAllChats: () => ipcRenderer.invoke("export-all-chats"),
   exportAllPrompts: () => ipcRenderer.invoke("export-all-prompts"),
   importAllChats: () => ipcRenderer.invoke("import-all-chats"),
   importAllPrompts: () => ipcRenderer.invoke("import-all-prompts"),
-  updateChatCostTokens: (id, costTokens) =>
-    ipcRenderer.invoke("update-chat-costTokens", id, costTokens),
   searchMessages: (chatId, text) =>
     ipcRenderer.invoke("search-messages", chatId, text),
 };

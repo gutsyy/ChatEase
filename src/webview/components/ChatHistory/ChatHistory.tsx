@@ -8,7 +8,7 @@ import SearchingInput from "./SearchingInput";
 import HistoryItem from "./HistoryItem";
 import ScrollableList from "@/webview/pureComponents/ScrollableList";
 import { renderDate } from "./renderDate";
-import { Chat } from "@//database/models/Chat";
+import { Chat } from "@/database/models/Chat";
 import { timestampToDate } from "@/webview/services/utils/DateTimestamp";
 import { openDeleteConfirmModal } from "../modals/customModals";
 import { ModalTitle } from "@/webview/pureComponents/ModalTitle";

@@ -1,4 +1,4 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, Sequelize } from "sequelize";
 import { OpenAIModels } from "@/webview/services/openAI/data";
 
 export interface Chat {
@@ -51,5 +51,12 @@ const ChatDefine = {
     },
   },
 };
+
+export function createChatIns(sequelize: Sequelize) {
+  return sequelize.define(ChatDefine.name, ChatDefine.model, {
+    createdAt: false,
+    updatedAt: false,
+  });
+}
 
 export { ChatDefine };

@@ -1,4 +1,4 @@
-import { DataTypes } from "sequelize";
+import { DataTypes, Sequelize } from "sequelize";
 
 export interface Message {
   id?: number;
@@ -43,4 +43,12 @@ const MessageDefine = {
     },
   },
 };
+
+export function createMessageIns(sequelize: Sequelize) {
+  return sequelize.define(MessageDefine.name, MessageDefine.model, {
+    createdAt: false,
+    updatedAt: false,
+  });
+}
+
 export { MessageDefine };
