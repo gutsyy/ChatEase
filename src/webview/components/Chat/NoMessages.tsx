@@ -25,6 +25,12 @@ export const NoMessages = () => {
   const { t } = useTranslation();
 
   return (
+    <div className="w-full flex h-full justify-center items-center absolute z-50 font-greycliff">
+      No Messages, input something and start...
+    </div>
+  );
+
+  return (
     <div className="w-full flex h-full justify-center items-center absolute z-50">
       <div
         className="flex flex-col justify-center items-start"

@@ -66,6 +66,9 @@ const ChatInputBox = forwardRef(
       (state) => state.prompt.isPromptResponsing
     );
     const isResponsing = useAppSelector((state) => state.chat.isResponsing);
+    const modelSelectBeforeChatCreated = useAppSelector((state) =>
+      state.chat.selectedChat ? state.chat.selectedChat.model : ""
+    );
     const promptTokens = useAppSelector(
       (state) => state.chat.totalPromptTokens
     );
@@ -142,10 +145,18 @@ const ChatInputBox = forwardRef(
       // If it's a new chat, create it.
       let _chatId: number = chatId;
       if (_chatId === -1) {
-        _chatId = await window.electronAPI.databaseIpcRenderer.createChat({
-          name: getFirstSentence(message),
-          timestamp: dateToTimestamp(new Date()),
-        });
+        _chatId = await window.electronAPI.databaseIpcRenderer.createChat(
+          Object.assign(
+            {
+              name: getFirstSentence(message),
+              timestamp: dateToTimestamp(new Date()),
+              model: modelSelectBeforeChatCreated,
+            },
+            modelSelectBeforeChatCreated
+              ? { model: modelSelectBeforeChatCreated }
+              : {}
+          )
+        );
         dispatch(updateChatsAfterCreated(_chatId));
       }
 

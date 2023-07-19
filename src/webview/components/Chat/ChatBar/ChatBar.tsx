@@ -8,6 +8,7 @@ import ChatMenu from "./ChatMenu";
 import ChatSettings from "./ChatSettings";
 import Statistics from "./Statistics";
 import CountUsage from "./CountUsage";
+import { ChatDefaultModelSelectBox } from "./ChatDefaultModelSelectBar";
 
 interface ChatStatisticsProps {
   messagesInPromptsNum: number;
@@ -47,46 +48,51 @@ const ChatBar = ({ messagesInPromptsNum }: ChatStatisticsProps) => {
   return (
     <div
       className={clsx(
-        "absolute w-full bg-transparent flex gap-2 justify-center items-end bottom-2 z-50 transition-all",
-        chatId === -1 ? "max-h-0 overflow-hidden" : "overflow-visible"
+        "absolute w-full bg-transparent flex gap-2 justify-center items-end bottom-2 z-50 transition-all"
       )}
     >
-      <ChatMenu />
-      <div
-        className={clsx(
-          "px-3 py-1 shadow flex items-center overflow-hidden",
-          warningState && "outline outline-2 outline-red-500",
-          opened ? "rounded-lg" : "rounded-full hover:cursor-pointer",
-          colorScheme === "dark"
-            ? "bg-dark-900 text-dark-100"
-            : "bg-white text-gray-900"
-        )}
-        style={{
-          height: opened
-            ? selectedChat && selectedChat.pinnedSetting
-              ? selectedChat &&
-                (selectedChat.pinnedSetting === "messagesLimit" ||
-                  selectedChat.pinnedSetting === "temperature")
-                ? "2.82rem"
-                : "4.625rem"
-              : "15rem"
-            : warningState
-            ? "2.67rem"
-            : "1.67rem",
-          transition: "height 0.2s ease-in-out",
-        }}
-        onClick={openChatSetting}
-      >
-        {opened ? (
-          <ChatSettings chatId={chatId} onClose={close} />
-        ) : (
-          <Statistics
-            messagesInPromptNum={messagesInPromptsNum}
-            warningState={warningState}
-          />
-        )}
-      </div>
-      <CountUsage />
+      {chatId === -1 ? (
+        <ChatDefaultModelSelectBox />
+      ) : (
+        <div className="flex justify-center gap-2 items-end">
+          <ChatMenu />
+          <div
+            className={clsx(
+              "px-3 py-1 shadow flex items-center overflow-hidden",
+              warningState && "outline outline-2 outline-red-500",
+              opened ? "rounded-lg" : "rounded-full hover:cursor-pointer",
+              colorScheme === "dark"
+                ? "bg-dark-900 text-dark-100"
+                : "bg-white text-gray-900"
+            )}
+            style={{
+              height: opened
+                ? selectedChat && selectedChat.pinnedSetting
+                  ? selectedChat &&
+                    (selectedChat.pinnedSetting === "messagesLimit" ||
+                      selectedChat.pinnedSetting === "temperature")
+                    ? "2.82rem"
+                    : "4.625rem"
+                  : "15rem"
+                : warningState
+                ? "2.67rem"
+                : "1.67rem",
+              transition: "height 0.2s ease-in-out",
+            }}
+            onClick={openChatSetting}
+          >
+            {opened ? (
+              <ChatSettings chatId={chatId} onClose={close} />
+            ) : (
+              <Statistics
+                messagesInPromptNum={messagesInPromptsNum}
+                warningState={warningState}
+              />
+            )}
+          </div>
+          <CountUsage />
+        </div>
+      )}
     </div>
   );
 };
