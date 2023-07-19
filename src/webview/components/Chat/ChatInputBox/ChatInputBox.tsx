@@ -205,10 +205,6 @@ const ChatInputBox = forwardRef(
 
     return (
       <div ref={inputBoxRef}>
-        <InputActionBar
-          visible={actionsBarVisible}
-          onClick={(prompt) => handlePromptAction(prompt)}
-        />
         <div
           className={clsx(
             "p-3 flex items-center border-solid border-0 border-t",
