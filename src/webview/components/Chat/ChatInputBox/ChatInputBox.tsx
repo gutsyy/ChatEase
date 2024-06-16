@@ -1,8 +1,10 @@
 import { Textarea, ActionIcon, clsx, useMantineTheme } from "@mantine/core";
 import { IconX, IconArrowBackUp, IconBrandTelegram } from "@tabler/icons-react";
 import {
+  ChangeEvent,
   forwardRef,
   MutableRefObject,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -31,6 +33,7 @@ import { Prompt } from "@/database/models/Prompt";
 import { useFocusWithin, useMergedRef } from "@mantine/hooks";
 import { useTranslation } from "react-i18next";
 import { ChatContext } from "..";
+import { createDebounce } from "@/webview/utils/debounce";
 
 function getFirstSentence(text: string) {
   let firstSentence = "";
@@ -63,6 +66,9 @@ const ChatInputBox = forwardRef(
       (state) => state.prompt.isPromptResponsing
     );
     const isResponsing = useAppSelector((state) => state.chat.isResponsing);
+    const modelSelectBeforeChatCreated = useAppSelector((state) =>
+      state.chat.selectedChat ? state.chat.selectedChat.model : ""
+    );
     const promptTokens = useAppSelector(
       (state) => state.chat.totalPromptTokens
     );
@@ -139,10 +145,18 @@ const ChatInputBox = forwardRef(
       // If it's a new chat, create it.
       let _chatId: number = chatId;
       if (_chatId === -1) {
-        _chatId = await window.electronAPI.databaseIpcRenderer.createChat({
-          name: getFirstSentence(message),
-          timestamp: dateToTimestamp(new Date()),
-        });
+        _chatId = await window.electronAPI.databaseIpcRenderer.createChat(
+          Object.assign(
+            {
+              name: getFirstSentence(message),
+              timestamp: dateToTimestamp(new Date()),
+              model: modelSelectBeforeChatCreated,
+            },
+            modelSelectBeforeChatCreated
+              ? { model: modelSelectBeforeChatCreated }
+              : {}
+          )
+        );
         dispatch(updateChatsAfterCreated(_chatId));
       }
 
@@ -182,12 +196,15 @@ const ChatInputBox = forwardRef(
       return true;
     };
 
+    const calTokensWhenChange = useCallback(
+      createDebounce((event: ChangeEvent<HTMLTextAreaElement>) => {
+        dispatch(setMessageTokens(event.target.value.trim()));
+      }, 500),
+      []
+    );
+
     return (
       <div ref={inputBoxRef}>
-        <InputActionBar
-          visible={actionsBarVisible}
-          onClick={(prompt) => handlePromptAction(prompt)}
-        />
         <div
           className={clsx(
             "p-3 flex items-center border-solid border-0 border-t",
@@ -205,7 +222,7 @@ const ChatInputBox = forwardRef(
               variant="filled"
               onChange={(event) => {
                 setMessage(event.target.value);
-                dispatch(setMessageTokens(event.target.value.trim()));
+                calTokensWhenChange(event);
               }}
               disabled={textAreaInputWaitingActionResponseState}
               onFocus={() => setActionsBarVisible(true)}
