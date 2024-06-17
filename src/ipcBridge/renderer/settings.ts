@@ -25,4 +25,5 @@ export const SettingsIpcRenderer: SettingsIpcRenderer = {
   all() {
     return ipcRenderer.sendSync("electron-store-getall");
   },
+    
 };
