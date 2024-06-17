@@ -3,6 +3,7 @@ import { ipcRenderer } from "electron";
 export interface WindowIpcRenderer {
   setPos: (x: number, y: number) => void;
   getPos: () => { x: number; y: number };
+  setWinFull: () => void;
 }
 
 export const windowIpcRenderer: WindowIpcRenderer = {
@@ -11,5 +12,8 @@ export const windowIpcRenderer: WindowIpcRenderer = {
   },
   getPos() {
     return ipcRenderer.sendSync("get-win-pos");
+  },
+  setWinFull() {
+    ipcRenderer.sendSync("set-win-full");
   },
 };
