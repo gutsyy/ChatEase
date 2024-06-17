@@ -38,6 +38,8 @@ const createWindow = (): BrowserWindow => {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
       spellcheck: false,
     },
+    titleBarStyle: "hiddenInset",
+    backgroundColor: "#000",
   });
 
   // only work on windows

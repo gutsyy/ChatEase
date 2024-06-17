@@ -136,7 +136,13 @@ export const App = () => {
       >
         <Notifications position="top-right" />
         <ModalsProvider>
-          <div className="flex w-full h-full">
+          <div className="h-10 flex justify-center items-center font-bold">
+            ChatEase
+          </div>
+          <div
+            className="flex w-full"
+            style={{ height: "calc(100vh - 2.5rem)" }}
+          >
             <SideNav />
             <SideExtend />
             <MainPanel />
