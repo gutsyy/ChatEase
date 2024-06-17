@@ -7,7 +7,7 @@ import {
 } from "@mantine/core";
 import { closeAllModals, openModal } from "@mantine/modals";
 import { IconPencilMinus, IconTrash } from "@tabler/icons-react";
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import { Chat } from "@/database/models/Chat";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import {
@@ -23,6 +23,7 @@ import { TooltipSetStyles } from "../../pureComponents/TooltipSetStyles";
 import { useTranslation } from "react-i18next";
 
 const HistoryItem = memo(({ name, id }: Chat) => {
+  const [hidden, setHidden] = useState<boolean>(true);
   const dispatch = useAppDispatch();
   const selectedChatId = useAppSelector((state) => state.chat.selectedChatId);
   const { t } = useTranslation();
@@ -38,6 +39,8 @@ const HistoryItem = memo(({ name, id }: Chat) => {
         openDelay={1000}
       >
         <div
+          onMouseEnter={() => setHidden(false)}
+          onMouseLeave={() => setHidden(true)}
           className={clsx(
             "w-full py-2 hover:cursor-pointer",
             id !== selectedChatId && colorScheme === "light" && "text-gray-600",
@@ -53,12 +56,14 @@ const HistoryItem = memo(({ name, id }: Chat) => {
         >
           <div className="w-full h-full flex items-center justify-between pr-1 pl-2 whitespace-nowrap">
             <div
-              className={clsx("text-xs flex-1 text-ellipsis overflow-hidden")}
-              style={{ marginRight: "5px" }}
+              className={clsx(
+                "text-xs flex-1 text-ellipsis overflow-hidden leading-6"
+              )}
+              style={{ marginRight: "8px" }}
             >
               {name}
             </div>
-            <div className="flex gap-1">
+            <div className={clsx("flex gap-1", { hidden: hidden })}>
               <ActionIcon
                 radius="xl"
                 size="sm"

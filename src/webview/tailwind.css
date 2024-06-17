@@ -249,6 +249,14 @@
   display: flex;
 }
 
+.hidden {
+  display: none;
+}
+
+.\!hidden {
+  display: none !important;
+}
+
 .h-0 {
   height: 0px;
 }
@@ -749,6 +757,10 @@
 
 .italic {
   font-style: italic;
+}
+
+.leading-6 {
+  line-height: 1.5rem;
 }
 
 .tracking-wide {

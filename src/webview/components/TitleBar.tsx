@@ -28,9 +28,7 @@ export const TitleBar: React.FC = () => {
 
   return (
     <div className="w-full" ref={ref}>
-      <div className="h-10 flex justify-center items-center text-sm font-semibold select-none pointer-events-none">
-        Chat
-      </div>
+      <div className="h-10 flex justify-center items-center text-sm font-semibold select-none pointer-events-none"></div>
     </div>
   );
 };

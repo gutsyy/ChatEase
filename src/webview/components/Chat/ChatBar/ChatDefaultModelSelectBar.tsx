@@ -8,7 +8,7 @@ export function ChatDefaultModelSelectBox() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(setSelectedChat({ model: "gpt-3.5-turbo-0613", name: "" }));
+    dispatch(setSelectedChat({ model: "gpt-4o-2024-05-13", name: "" }));
   }, []);
 
   const onValueChange = (value: OpenAIModels) => {
