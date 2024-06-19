@@ -233,7 +233,7 @@ export const ChatSlice = createSlice({
       messages[action.payload].inPrompts = !messages[action.payload].inPrompts;
 
       // limitation settings
-      const MessagesLimit =
+      const messageLimit =
         (state.selectedChat && state.selectedChat.messagesLimit) ??
         (appSettings.get("max_messages_num") as number);
       const tokensLimit =
@@ -247,7 +247,10 @@ export const ChatSlice = createSlice({
       const tokensInPrompts = calPromptTokensByMessages(messages);
 
       // Judge limitation
-      if (MessagesLimit !== 0 && messagesInPrompts.length > MessagesLimit) {
+      if (
+        typeof messageLimit === "number" &&
+        messagesInPrompts.length > messageLimit
+      ) {
         state.tokensBoxWarningState = "messages_limit";
       } else if (tokensInPrompts > tokensLimit) {
         state.tokensBoxWarningState = "tokens_limit";
