@@ -100,7 +100,7 @@ export const ChatSlice = createSlice({
     },
 
     setSelectedChat: (state, action: PayloadAction<Chat>) => {
-      state.selectedChat = action.payload;
+      state.selectedChat = { ...state.selectedChat, ...action.payload };
     },
 
     updateSelectedChatCostTokens: (state, action: PayloadAction<number>) => {

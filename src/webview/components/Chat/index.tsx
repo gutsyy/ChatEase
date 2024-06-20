@@ -11,6 +11,7 @@ import { ShareImageDialog } from "./ShareImageDialog";
 import { PinnedMessages } from "./PinnedMessages";
 import { SearchMessagesBox } from "./SearchMessagesBox";
 import { useClickOutside } from "@mantine/hooks";
+import { RetryAction } from "./RetryAction";
 
 export const ChatContext = createContext<{
   scrollToBottom: () => void;
@@ -118,6 +119,7 @@ export default function Chat() {
                 </div>
               ))}
               <WaitingResponse />
+              <RetryAction />
             </div>
           </div>
           <ChatBottomBar messagesInPromptsNum={messagesInPromptsNum} />

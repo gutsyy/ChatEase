@@ -31,8 +31,6 @@ const MessageContent = ({
         "ml-4 mr-2",
         inPrompts &&
           (colorScheme === "light" ? "text-gray-900" : "text-dark-100"),
-        !inPrompts &&
-          (colorScheme === "light" ? "text-gray-500" : "text-dark-400"),
         sender === "user" && "whitespace-pre-wrap"
       )}
     >

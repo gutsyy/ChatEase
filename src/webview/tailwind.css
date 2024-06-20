@@ -253,10 +253,6 @@
   display: none;
 }
 
-.\!hidden {
-  display: none !important;
-}
-
 .h-0 {
   height: 0px;
 }
@@ -383,6 +379,10 @@
 
 .items-center {
   align-items: center;
+}
+
+.items-baseline {
+  align-items: baseline;
 }
 
 .justify-start {
@@ -1104,6 +1104,27 @@ element-selector::-webkit-scrollbar {
 
 .hover\:cursor-pointer:hover {
   cursor: pointer;
+}
+
+.hover\:cursor-none:hover {
+  cursor: none;
+}
+
+.hover\:border-0:hover {
+  border-width: 0px;
+}
+
+.hover\:border-b:hover {
+  border-bottom-width: 1px;
+}
+
+.hover\:border-solid:hover {
+  border-style: solid;
+}
+
+.hover\:border-violet-500:hover {
+  --tw-border-opacity: 1;
+  border-color: rgb(139 92 246 / var(--tw-border-opacity));
 }
 
 .hover\:bg-violet-500:hover {
