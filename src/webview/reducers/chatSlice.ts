@@ -446,6 +446,7 @@ export const setStreamGPTMessageDone = (): ThunkAction<
   AnyAction
 > => {
   return async (dispatch, getState) => {
+    if (!getState().chat.isResponsing) return;
     dispatch(setIsResponsing(false));
     const messages = getState().chat.messages;
     const newMessage = Object.assign({}, messages[messages.length - 1]);
