@@ -7,6 +7,9 @@ const CountUsage = () => {
   const selectedChat = useAppSelector((state) => state.chat.selectedChat);
   const { colorScheme } = useMantineTheme();
 
+  // TODO: 金额计算模型需要重新调整
+  return null;
+
   return (
     <div
       className={clsx(

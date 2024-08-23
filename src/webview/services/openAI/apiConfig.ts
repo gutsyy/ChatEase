@@ -172,9 +172,8 @@ export const requestApi = async (chatId: number, messages: Message[]) => {
     )
     .then((res) => {
       if (!res) {
-        store.dispatch(
-          setNewGPTMessage(createNewGPTMessage("Network Error !!!", chatId))
-        );
+        store.dispatch(setIsResponsing(false));
+        store.dispatch(setIsWaitingRes(false));
         return;
       }
 
@@ -200,8 +199,8 @@ export const requestApi = async (chatId: number, messages: Message[]) => {
         store.dispatch(setSelectedChat);
         window.electronAPI.databaseIpcRenderer
           .createMessage(responseMessage)
-          .then((message) => {
-            store.dispatch(setNewGPTMessage(message));
+          .then((msg) => {
+            store.dispatch(setNewGPTMessage(msg));
           });
       }
     });

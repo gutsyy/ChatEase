@@ -54,4 +54,12 @@ const handleNotis = (notiMessage: NotiMessage) => {
   }
 };
 
+export const notis = {
+  show,
+  success,
+  warning,
+  error,
+  handleNotis,
+};
+
 export { show, success, warning, error, handleNotis };

@@ -183,6 +183,7 @@ const ChatInputBox = forwardRef(
 
       // Send request to OpenAI
       requestApi(_chatId, sendMessages).then(() => {
+        setMessage("");
         scrollToBottom();
       });
     };

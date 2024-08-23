@@ -19,6 +19,8 @@ import { openApiKeysSetupModal } from "./components/modals/openApiKeysSetUpModal
 
 import "./i18n/i18n";
 import { useAppSelector } from "./hooks/redux";
+import { TitleBar } from "./components/TitleBar";
+import { WindowIpcRenderer } from "@/ipcBridge/renderer/window";
 
 declare global {
   interface Window {
@@ -29,6 +31,7 @@ declare global {
       settingsIpcRenderer: SettingsIpcRenderer;
       databaseIpcRenderer: DatabaseIpcRenderer;
       othersIpcRenderer: OthersIpcRenderer;
+      windowIpcRenderer: WindowIpcRenderer;
     };
   }
 }
@@ -136,7 +139,11 @@ export const App = () => {
       >
         <Notifications position="top-right" />
         <ModalsProvider>
-          <div className="flex w-full h-full">
+          <TitleBar />
+          <div
+            className="flex w-full"
+            style={{ height: "calc(100vh - 2.5rem)" }}
+          >
             <SideNav />
             <SideExtend />
             <MainPanel />

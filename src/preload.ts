@@ -7,6 +7,7 @@ import { notificationIpcRenderer } from "./ipcBridge/renderer/notification";
 import { SettingsIpcRenderer } from "./ipcBridge/renderer/settings";
 import { v2rayIpcRenderer } from "./ipcBridge/renderer/v2ray";
 import { databaseIpcRenderer } from "./ipcBridge/renderer/database";
+import { windowIpcRenderer } from "./ipcBridge/renderer/window";
 import { othersIpcRenderer } from "./ipcBridge/renderer/others";
 
 contextBridge.exposeInMainWorld("electronAPI", {
@@ -16,4 +17,5 @@ contextBridge.exposeInMainWorld("electronAPI", {
   v2rayIpcRenderer,
   databaseIpcRenderer,
   othersIpcRenderer,
+  windowIpcRenderer,
 });

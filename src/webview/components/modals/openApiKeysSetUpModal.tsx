@@ -1,5 +1,5 @@
 import { SettingsKey } from "@/settings/settingsModel";
-import { useAppDispatch, useAppSelector } from "@/webview/hooks/redux";
+import { useAppDispatch } from "@/webview/hooks/redux";
 import { setApiKey } from "@/webview/reducers/settingSlice";
 import { Button, TextInput, Text } from "@mantine/core";
 import { openModal } from "@mantine/modals";
@@ -15,11 +15,9 @@ interface FormProps {
 const Form = ({
   explanation,
   buttonName,
-  setupKey,
   submitted = () => null,
 }: FormProps) => {
   const dispatch = useAppDispatch();
-  const value = useAppSelector((state) => state.settings[setupKey]);
   const [error, setError] = useState<string | null>(null);
   const ref = useRef<HTMLInputElement>();
 
@@ -43,7 +41,6 @@ const Form = ({
         <TextInput
           ref={ref}
           error={error}
-          value={value as string}
           variant="filled"
           size="xs"
         ></TextInput>

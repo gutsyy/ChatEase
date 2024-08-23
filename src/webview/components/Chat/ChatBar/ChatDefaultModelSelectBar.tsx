@@ -17,7 +17,7 @@ export function ChatDefaultModelSelectBox() {
 
   return (
     <SegmentedControl
-      defaultValue="gpt-4o-2024-05-13"
+      defaultValue="gpt-3.5-turbo-0613"
       data={[
         { label: "GPT-4o", value: "gpt-4o-2024-05-13" },
         { label: "GPT-3", value: "gpt-3.5-turbo-0613" },

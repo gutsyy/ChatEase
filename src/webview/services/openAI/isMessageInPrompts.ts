@@ -23,7 +23,7 @@ export const isMessageInPrompts = (
     (appSettings.get("max_tokens") as number);
 
   const maxMessageBoolean = (n: number) => {
-    if (messagesLimit) {
+    if (typeof messagesLimit === "number") {
       return n > messagesLimit;
     }
     return false;
