@@ -71,12 +71,15 @@ const GeneralSettings = () => {
       },
       moreinfo: (
         <>
-          <a
-            className="ml-1"
-            href="https://github.com/noobnooc/noobnooc/discussions/9"
-          >
-            {t("settings_general_host_help")}
-          </a>
+          <div className="flex">
+            <a className="ml-1" href="https://aihubmix.com/">个人使用 AIHubMix 购买</a>
+            <a
+              className="ml-1"
+              href="https://github.com/noobnooc/noobnooc/discussions/9"
+            >
+              {t("settings_general_host_help")}
+            </a>
+          </div>
         </>
       ),
     },
