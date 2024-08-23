@@ -18,6 +18,13 @@
 
 [Release Page](https://github.com/gyuannn/ChatEase/releases/)
 
+MacOS 打开显示文件损坏，使用命令行执行;
+
+
+```
+xattr -d com.apple.quarantine /Applications/ChatEase.app 
+```
+
 ## 一点小知识
 
 ### 什么是prompt？什么是tokens？他们如何影响你与GPT的对话？
