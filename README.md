@@ -18,6 +18,12 @@
 
 [Release Page](https://github.com/gyuannn/ChatEase/releases/)
 
+MacOS fixed damaged problem
+
+```
+xattr -d com.apple.quarantine /Applications/ChatEase.app 
+```
+
 ## A bit of knowledge
 
 ### What are prompts and tokens, and how do they influence your conversation with GPT?
