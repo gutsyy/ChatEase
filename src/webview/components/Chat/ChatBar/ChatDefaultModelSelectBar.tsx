@@ -5,8 +5,8 @@ import { useEffect } from "react";
 import { OpenAIModels } from "@/webview/services/openAI/data";
 
 interface IData {
-  label: OpenAIModels,
-  value: string
+  label: string,
+  value: OpenAIModels
 }
 
 export function ChatDefaultModelSelectBox() {
@@ -22,10 +22,11 @@ export function ChatDefaultModelSelectBox() {
 
   return (
     <SegmentedControl
+      radius={999}
       defaultValue="gpt-3.5-turbo-0613"
       data={[
-        { label: 'gpt-4o-mini-2024-07-18', value: 'gpt-4o-mini' },
-        { label: 'claude-3-5-sonnet-20240620', value: "claude-35-sonnet" },
+        { label: 'GPT-4o-mini', value: 'gpt-4o-mini-2024-07-18' },
+        { label: 'Claude-35-sonnet', value: 'claude-3-5-sonnet-20240620' },
       ] as IData[]}
       onChange={onValueChange}
     ></SegmentedControl>
