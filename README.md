@@ -18,7 +18,7 @@
 
 [Release Page](https://github.com/gyuannn/ChatEase/releases/)
 
-MacOS fixed damaged problem
+MacOS fixed damaged problem: 
 
 ```
 xattr -d com.apple.quarantine /Applications/ChatEase.app 
