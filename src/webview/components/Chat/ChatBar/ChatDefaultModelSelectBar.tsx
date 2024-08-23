@@ -4,11 +4,16 @@ import { setSelectedChat } from "@/webview/reducers/chatSlice";
 import { useEffect } from "react";
 import { OpenAIModels } from "@/webview/services/openAI/data";
 
+interface IData {
+  label: OpenAIModels,
+  value: string
+}
+
 export function ChatDefaultModelSelectBox() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(setSelectedChat({ model: "gpt-3.5-turbo-0613", name: "" }));
+    dispatch(setSelectedChat({ model: "gpt-4o-mini-2024-07-18", name: "" }));
   }, []);
 
   const onValueChange = (value: OpenAIModels) => {
@@ -19,9 +24,9 @@ export function ChatDefaultModelSelectBox() {
     <SegmentedControl
       defaultValue="gpt-3.5-turbo-0613"
       data={[
-        { label: "GPT-4o", value: "gpt-4o-2024-05-13" },
-        { label: "GPT-3", value: "gpt-3.5-turbo-0613" },
-      ]}
+        { label: 'gpt-4o-mini-2024-07-18', value: 'gpt-4o-mini' },
+        { label: 'claude-3-5-sonnet-20240620', value: "claude-35-sonnet" },
+      ] as IData[]}
       onChange={onValueChange}
     ></SegmentedControl>
   );
