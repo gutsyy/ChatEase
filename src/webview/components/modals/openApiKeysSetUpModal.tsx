@@ -2,9 +2,9 @@ import { SettingsKey } from "@/settings/settingsModel";
 import { setApiKey, setOpenaiApiOrigin } from "@/webview/reducers/settingSlice";
 import store from "@/webview/store";
 import { Button, TextInput, Text } from "@mantine/core";
-import { closeAllModals, closeModal, openModal } from "@mantine/modals";
+import { closeModal, openModal } from "@mantine/modals";
 import { t } from "i18next";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 interface FormProps {
   explanation: string;
@@ -17,7 +17,6 @@ const Form = ({
   buttonName,
   submitted = () => null,
 }: FormProps) => {
-  const [error, setError] = useState<string | null>(null);
   const ref = useRef<HTMLInputElement>();
 
   // clear value
@@ -34,16 +33,11 @@ const Form = ({
         className="mt-2"
         onSubmit={(e) => {
           e.preventDefault();
-          if (ref.current.value) {
-            submitted(ref.current.value)
-          } else {
-            setError("");
-          }
+          submitted(ref.current.value);
         }}
       >
         <TextInput
           ref={ref}
-          error={error}
           variant="filled"
           size="xs"
         ></TextInput>
