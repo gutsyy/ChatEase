@@ -1,25 +1,29 @@
 import { SettingsKey } from "@/settings/settingsModel";
-import { useAppDispatch } from "@/webview/hooks/redux";
-import { setApiKey } from "@/webview/reducers/settingSlice";
+import { setApiKey, setOpenaiApiOrigin } from "@/webview/reducers/settingSlice";
+import store from "@/webview/store";
 import { Button, TextInput, Text } from "@mantine/core";
-import { openModal } from "@mantine/modals";
+import { closeAllModals, closeModal, openModal } from "@mantine/modals";
 import { t } from "i18next";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface FormProps {
   explanation: string;
   buttonName: string;
   setupKey: SettingsKey;
-  submitted?: () => void;
+  submitted?: (value: string) => void;
 }
 const Form = ({
   explanation,
   buttonName,
   submitted = () => null,
 }: FormProps) => {
-  const dispatch = useAppDispatch();
   const [error, setError] = useState<string | null>(null);
   const ref = useRef<HTMLInputElement>();
+
+  // clear value
+  useEffect(() => {
+    ref.current.value = '';
+  }, [setApiKey])
 
   return (
     <>
@@ -31,8 +35,7 @@ const Form = ({
         onSubmit={(e) => {
           e.preventDefault();
           if (ref.current.value) {
-            dispatch(setApiKey(ref.current.value.trim()));
-            submitted();
+            submitted(ref.current.value)
           } else {
             setError("");
           }
@@ -60,7 +63,17 @@ const Form = ({
 };
 
 const openSetHostModal = () => {
+  const modalId = 'host-modal';
+
+  const handleSubmit = (value: string) => {
+    if (value) {
+      store.dispatch(setOpenaiApiOrigin(value));
+    }
+    closeModal(modalId);
+  }
+
   openModal({
+    modalId,
     size: 600,
     title: (
       <div className="font-greycliff font-bold text-gray-800">
@@ -71,16 +84,28 @@ const openSetHostModal = () => {
     withCloseButton: false,
     children: (
       <Form
+        key={modalId}
         setupKey="openai_api_origin"
         buttonName={t("setup_modal_setHost_button")}
         explanation={t("setup_modal_setHost_help")}
+        submitted={handleSubmit}
       />
     ),
   });
 };
 
-export const openApiKeysSetupModal = () =>
+export const openApiKeysSetupModal = () => {
+
+  const modalId = 'set-open-api-modal';
+
+  const handleSumit = (value: string) => {
+    store.dispatch(setApiKey(value));
+    closeModal(modalId)
+    openSetHostModal();
+  }
+
   openModal({
+    modalId,
     size: 600,
     title: (
       <div className="font-greycliff font-bold text-gray-800">
@@ -91,10 +116,12 @@ export const openApiKeysSetupModal = () =>
     withCloseButton: false,
     children: (
       <Form
+        key={modalId}
         buttonName={t("setup_modal_setKey_button")}
         setupKey="open_api_key"
         explanation={t("setup_modal_setKey_help")}
-        submitted={() => openSetHostModal()}
+        submitted={handleSumit}
       />
     ),
-  });
+  })
+};

@@ -91,7 +91,7 @@ const ChatInputBox = forwardRef(
         state.settings.max_tokens
     );
     const { scrollToBottom } = useContext(ChatContext);
-    const scrollToBottomIntv = useRef<NodeJS.Timer>();
+    const scrollToBottomIntv = useRef<NodeJS.Timer | number>();
 
     useEffect(() => {
       if (isResponsing) {
@@ -99,7 +99,7 @@ const ChatInputBox = forwardRef(
           scrollToBottom();
         }, 800);
       } else {
-        clearInterval(scrollToBottomIntv.current);
+        clearInterval(scrollToBottomIntv.current as number);
       }
     }, [isResponsing]);
 

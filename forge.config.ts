@@ -25,6 +25,7 @@ const config: ForgeConfig = {
   ],
 
   packagerConfig: {
+    osxSign: {},
     icon: "./appIcon/ChatEase",
   },
 

@@ -73,10 +73,10 @@ export const ChatHistory = () => {
             <SearchingInput />
           </div>
           <div
-            className="h-7 w-7 bg-violet-600 flex items-center justify-center rounded text-white hover:cursor-pointer hover:bg-violet-500"
+            className="h-7 w-7 bg-violet-600 flex items-center justify-center rounded-full text-white hover:cursor-pointer hover:bg-violet-500"
             onClick={() => onNewChat()}
           >
-            <IconPlus size="1.25rem" />
+            <IconPlus size="1rem" />
           </div>
         </div>
         <div

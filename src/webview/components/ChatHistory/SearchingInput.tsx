@@ -17,6 +17,7 @@ const SearchingInput = () => {
   return (
     <TextInput
       size="xs"
+      radius={999}
       variant="filled"
       placeholder={t("sideExtend_chat_searching")}
       rightSection={
