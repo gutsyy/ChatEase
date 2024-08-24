@@ -47,9 +47,8 @@ export const App = () => {
       handleNotis(data);
     });
 
-    document.getElementsByTagName("title")[0].innerText = `${
-      document.getElementsByTagName("title")[0].innerText
-    } v${window.electronAPI.othersIpcRenderer.getAppVersion()}`;
+    document.getElementsByTagName("title")[0].innerText = `${document.getElementsByTagName("title")[0].innerText
+      } v${window.electronAPI.othersIpcRenderer.getAppVersion()}`;
 
     document.addEventListener("click", (e) => {
       if (e.target instanceof HTMLAnchorElement) {
@@ -113,17 +112,17 @@ export const App = () => {
           blue:
             theme === "light"
               ? [
-                  "#f5f3ff",
-                  "#ede9fe",
-                  "#ddd6fe",
-                  "#c4b5fd",
-                  "#a78bfa",
-                  "#8b5cf6",
-                  "#7c3aed",
-                  "#6d28d9",
-                  "#5b21b6",
-                  "#4c1d95",
-                ]
+                "#f5f3ff",
+                "#ede9fe",
+                "#ddd6fe",
+                "#c4b5fd",
+                "#a78bfa",
+                "#8b5cf6",
+                "#7c3aed",
+                "#6d28d9",
+                "#5b21b6",
+                "#4c1d95",
+              ]
               : [],
         },
       }}
