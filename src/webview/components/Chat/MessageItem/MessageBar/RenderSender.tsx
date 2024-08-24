@@ -1,6 +1,7 @@
 import { Message } from "@/database/models/Message";
+import { useAppSelector } from "@/webview/hooks/redux";
 import { clsx, useMantineTheme, Text } from "@mantine/core";
-import { IconBrandOpenai, IconUserCircle } from "@tabler/icons-react";
+import { IconSend, IconSparkles } from "@tabler/icons-react";
 import { memo } from "react";
 
 type RenderSenderProps = Pick<Message, "sender" | "inPrompts">;
@@ -9,29 +10,31 @@ const RenderSender = (msg: RenderSenderProps) => {
   const { colorScheme } = useMantineTheme();
   const dark = colorScheme === "dark";
 
+  const modelName = useAppSelector((state) => state.chat.selectedChat.model)
+
   return (
     <div className="flex justify-start items-center">
       {msg.sender === "assistant" ? (
-        <IconBrandOpenai
+        <IconSparkles
           className={clsx(
-            "mr-1",
+            "mr-2",
             !msg.inPrompts && (dark ? "text-dark-400" : "text-gray-300"),
             msg.inPrompts && "text-violet-500"
           )}
-          size={12}
+          size={14}
         />
       ) : (
-        <IconUserCircle
+        <IconSend
           size={13}
           className={clsx(
-            "mr-1",
+            "mr-2",
             !dark
               ? msg.inPrompts
                 ? "text-gray-500"
                 : "text-gray-300"
               : msg.inPrompts
-              ? "text-dark-100"
-              : "text-dark-400"
+                ? "text-dark-100"
+                : "text-dark-400"
           )}
         />
       )}
@@ -45,7 +48,7 @@ const RenderSender = (msg: RenderSenderProps) => {
             dark && (msg.inPrompts ? "text-dark-100" : "text-dark-400")
           )}
         >
-          {msg.sender === "user" ? "You" : "ChatGPT"}
+          {msg.sender === "user" ? "You" : modelName.toUpperCase()}
         </span>
       </Text>
     </div>

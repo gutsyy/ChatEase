@@ -220,6 +220,7 @@ const ChatInputBox = forwardRef(
             <Textarea
               ref={_textAreaRef}
               value={message}
+              radius={999}
               variant="filled"
               onChange={(event) => {
                 setMessage(event.target.value);

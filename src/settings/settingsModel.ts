@@ -40,7 +40,7 @@ const defaultSettings: Settings = {
   chat_input_toolbar_items: [],
   message_toolbar_items: [],
   temperature: 1,
-  theme: "light",
+  theme: "dark",
   fontSize: "18",
 };
 
