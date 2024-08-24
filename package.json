@@ -1,7 +1,7 @@
 {
   "name": "chatease",
   "productName": "ChatEase",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "main": ".webpack/main",
   "licenses": "GPL-3.0",
   "description": "ChatEase Desktop App",
