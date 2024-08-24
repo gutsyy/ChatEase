@@ -59,18 +59,18 @@ let historyMessage = "";
 const ChatInputBox = forwardRef(
   (
     { messages, chatId }: ChatInputBoxProps,
-    ref: MutableRefObject<HTMLTextAreaElement>
+    ref: MutableRefObject<HTMLTextAreaElement>,
   ) => {
     const dispatch = useAppDispatch();
     const isPromptResponsing = useAppSelector(
-      (state) => state.prompt.isPromptResponsing
+      (state) => state.prompt.isPromptResponsing,
     );
     const isResponsing = useAppSelector((state) => state.chat.isResponsing);
     const modelSelectBeforeChatCreated = useAppSelector((state) =>
-      state.chat.selectedChat ? state.chat.selectedChat.model : ""
+      state.chat.selectedChat ? state.chat.selectedChat.model : "",
     );
     const promptTokens = useAppSelector(
-      (state) => state.chat.totalPromptTokens
+      (state) => state.chat.totalPromptTokens,
     );
     const runningActionId = useAppSelector((state) => state.prompt.actionId);
     const answerContent = useAppSelector((state) => state.prompt.answerContent);
@@ -78,7 +78,7 @@ const ChatInputBox = forwardRef(
     const [actionsBarVisible, setActionsBarVisible] = useState<boolean>(false);
     const textAreaInputWaitingActionResponseState = useMemo(
       () => isPromptResponsing && runningActionId === "chat-action",
-      [isPromptResponsing, runningActionId]
+      [isPromptResponsing, runningActionId],
     );
     const { ref: inputBoxRef, focused } = useFocusWithin();
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -88,7 +88,7 @@ const ChatInputBox = forwardRef(
     const tokensLimit = useAppSelector(
       (state) =>
         (state.chat.selectedChat && state.chat.selectedChat.tokensLimit) ??
-        state.settings.max_tokens
+        state.settings.max_tokens,
     );
     const { scrollToBottom } = useContext(ChatContext);
     const scrollToBottomIntv = useRef<NodeJS.Timer | number>();
@@ -123,7 +123,7 @@ const ChatInputBox = forwardRef(
         e.preventDefault();
         e.stopPropagation();
         target.form.dispatchEvent(
-          new Event("submit", { cancelable: true, bubbles: true })
+          new Event("submit", { cancelable: true, bubbles: true }),
         );
       }
     };
@@ -154,8 +154,8 @@ const ChatInputBox = forwardRef(
             },
             modelSelectBeforeChatCreated
               ? { model: modelSelectBeforeChatCreated }
-              : {}
-          )
+              : {},
+          ),
         );
         dispatch(updateChatsAfterCreated(_chatId));
       }
@@ -178,7 +178,7 @@ const ChatInputBox = forwardRef(
 
       // Filter out the messages that should be in prompt
       const sendMessages: Message[] = [...messages, newMessage].filter(
-        (msg) => msg.inPrompts
+        (msg) => msg.inPrompts,
       );
 
       // Send request to OpenAI
@@ -201,7 +201,7 @@ const ChatInputBox = forwardRef(
       createDebounce((event: ChangeEvent<HTMLTextAreaElement>) => {
         dispatch(setMessageTokens(event.target.value.trim()));
       }, 500),
-      []
+      [],
     );
 
     return (
@@ -210,7 +210,7 @@ const ChatInputBox = forwardRef(
           className={clsx(
             "p-3 flex items-center border-solid border-0 border-t",
             colorScheme === "dark" && "bg-dark-900 border-dark-900",
-            colorScheme === "light" && "bg-white border-gray-200"
+            colorScheme === "light" && "bg-white border-gray-200",
           )}
         >
           <form
@@ -220,7 +220,7 @@ const ChatInputBox = forwardRef(
             <Textarea
               ref={_textAreaRef}
               value={message}
-              radius={999}
+              radius={25}
               variant="filled"
               onChange={(event) => {
                 setMessage(event.target.value);
@@ -290,7 +290,7 @@ const ChatInputBox = forwardRef(
         </div>
       </div>
     );
-  }
+  },
 );
 
 export default ChatInputBox;
