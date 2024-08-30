@@ -1,11 +1,24 @@
 {
   "name": "chatease",
   "productName": "ChatEase",
-  "version": "0.1.7",
+  "version": "0.1.15",
   "main": ".webpack/main",
   "licenses": "GPL-3.0",
   "description": "ChatEase Desktop App",
-  "repository": "https://github.com/gyuannn/ChatEase",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gyuannn/ChatEase"
+  },
+  "build": {
+    "appId": "com.gutsyy.chatease",
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "gutsyy",
+        "repo": "ChatEase"
+      }
+    ]
+  },
   "scripts": {
     "start": "electron-forge start",
     "tailwindcss": "tailwindcss -i ./src/webview/index.css -o ./src/webview/tailwind.css --watch",
@@ -79,6 +92,7 @@
     "electron-log": "^5.0.0-beta.16",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.1.0",
+    "electron-updater": "^6.2.1",
     "eventsource": "^2.0.2",
     "gpt-3-encoder": "^1.1.4",
     "highlight.js": "^11.7.0",

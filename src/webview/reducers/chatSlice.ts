@@ -54,7 +54,7 @@ const calPromptTokensByMessages = (messages: Message[]) => {
           role: msg.sender,
           content: msg.text,
         };
-      })
+      }),
   );
 };
 
@@ -72,7 +72,7 @@ export const ChatSlice = createSlice({
 
     setTokensBoxWarningState: (
       state,
-      action: PayloadAction<"" | "tokens_limit" | "messages_limit">
+      action: PayloadAction<"" | "tokens_limit" | "messages_limit">,
     ) => {
       state.tokensBoxWarningState = action.payload;
     },
@@ -87,7 +87,7 @@ export const ChatSlice = createSlice({
         state.inputBoxTokens =
           window.electronAPI.othersIpcRenderer.calMessagesTokens(
             [{ role: "user", content: action.payload }],
-            true
+            true,
           );
       } else {
         state.inputBoxTokens = 0;
@@ -113,7 +113,7 @@ export const ChatSlice = createSlice({
       window.electronAPI.databaseIpcRenderer.updateChatFieldById(
         state.selectedChat.id,
         "costTokens",
-        newV
+        newV,
       );
     },
 
@@ -126,7 +126,7 @@ export const ChatSlice = createSlice({
       window.electronAPI.databaseIpcRenderer.updateChatFieldById(
         state.selectedChat.id,
         "pinnedSetting",
-        state.selectedChat.pinnedSetting
+        state.selectedChat.pinnedSetting,
       );
     },
 
@@ -134,7 +134,7 @@ export const ChatSlice = createSlice({
     setMessages: (state, action: PayloadAction<Message[]>) => {
       state.messages = isMessageInPrompts(
         [...action.payload],
-        state.selectedChat
+        state.selectedChat,
       );
       state.totalPromptTokens = calPromptTokensByMessages(state.messages);
     },
@@ -143,7 +143,7 @@ export const ChatSlice = createSlice({
       state.messages = isMessageInPrompts(
         [...state.messages],
         state.selectedChat,
-        true
+        true,
       );
       state.totalPromptTokens = calPromptTokensByMessages(state.messages);
     },
@@ -155,7 +155,7 @@ export const ChatSlice = createSlice({
     setNewGPTMessage: (state, action: PayloadAction<Message>) => {
       state.messages = isMessageInPrompts(
         [...state.messages, action.payload],
-        state.selectedChat
+        state.selectedChat,
       );
       state.totalPromptTokens = calPromptTokensByMessages([...state.messages]);
 
@@ -169,7 +169,7 @@ export const ChatSlice = createSlice({
       window.electronAPI.databaseIpcRenderer.updateChatFieldById(
         state.selectedChat.id,
         "costTokens",
-        state.selectedChat.costTokens
+        state.selectedChat.costTokens,
       );
     },
 
@@ -181,7 +181,7 @@ export const ChatSlice = createSlice({
     /** Continuous update of Message.text while Stream is in progress. */
     setStreamGPTMessage: (
       state,
-      action: PayloadAction<{ chatId: number; text: string }>
+      action: PayloadAction<{ chatId: number; text: string }>,
     ) => {
       if (
         state.messages.length > 0 &&
@@ -194,7 +194,7 @@ export const ChatSlice = createSlice({
     setNewUserMessage: (state, action: PayloadAction<Message>) => {
       state.messages = isMessageInPrompts(
         [...state.messages, action.payload],
-        state.selectedChat
+        state.selectedChat,
       );
       state.totalPromptTokens = calPromptTokensByMessages([...state.messages]);
       state.inputBoxTokens = 0;
@@ -242,7 +242,7 @@ export const ChatSlice = createSlice({
 
       // current tokens in limitation
       const messagesInPrompts = messages.filter(
-        (msg) => msg.inPrompts || msg.fixedInPrompt
+        (msg) => msg.inPrompts || msg.fixedInPrompt,
       );
       const tokensInPrompts = calPromptTokensByMessages(messages);
 
@@ -263,7 +263,7 @@ export const ChatSlice = createSlice({
 
     toggleMesageFixedInPrompt: (
       state,
-      aciton: PayloadAction<{ index: number; id: number }>
+      aciton: PayloadAction<{ index: number; id: number }>,
     ) => {
       // Clone, and toggle
       const messages: Message[] = JSON.parse(JSON.stringify(state.messages));
@@ -292,7 +292,7 @@ export const ChatSlice = createSlice({
         window.electronAPI.databaseIpcRenderer.updateMessageFieldById(
           aciton.payload.id,
           "fixedInPrompt",
-          messages[aciton.payload.index].fixedInPrompt
+          messages[aciton.payload.index].fixedInPrompt,
         );
 
         // Recal limitation
@@ -314,7 +314,7 @@ export const ChatSlice = createSlice({
 
     setTokensBoxWarningStateTo: (
       state,
-      action: PayloadAction<"" | "tokens_limit" | "messages_limit">
+      action: PayloadAction<"" | "tokens_limit" | "messages_limit">,
     ) => {
       state.tokensBoxWarningState = action.payload;
     },
@@ -325,7 +325,7 @@ export const ChatSlice = createSlice({
 
     setMessageActionResultByIndex: (
       state,
-      action: PayloadAction<{ index: number; text: string }>
+      action: PayloadAction<{ index: number; text: string }>,
     ) => {
       const { index, text } = action.payload;
       state.messages[index].actionResult = text;
@@ -347,7 +347,7 @@ export const ChatSlice = createSlice({
           window.electronAPI.databaseIpcRenderer.updateMessageFieldById(
             msg.id,
             "collapse",
-            msg.collapse
+            msg.collapse,
           );
         }
         return msg;
@@ -390,7 +390,7 @@ export const {
 
 /** Update chats history after created a new chat */
 export const updateChatsAfterCreated = (
-  chatId: number
+  chatId: number,
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch) => {
     window.electronAPI.databaseIpcRenderer.getChatById(chatId).then((chat) => {
@@ -406,7 +406,7 @@ export const updateChatsAfterCreated = (
 
 /** Switching chat session */
 export const switchingChatSession = (
-  chatId: number
+  chatId: number,
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch: Dispatch<AnyAction>, getState) => {
     if (getState().chat.isResponsing || getState().chat.isWaitingRes) {
@@ -427,7 +427,7 @@ export const switchingChatSession = (
 
 /** Update Messages */
 export const updateMessages = (
-  chatId: number
+  chatId: number,
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return async (dispatch) => {
     return window.electronAPI.databaseIpcRenderer
@@ -455,12 +455,12 @@ export const setStreamGPTMessageDone = (): ThunkAction<
       .createMessage(newMessage)
       .then((message) => {
         dispatch(
-          setMessages([...messages.slice(0, messages.length - 1), message])
+          setMessages([...messages.slice(0, messages.length - 1), message]),
         );
         dispatch(
           updateSelectedChatCostTokens(
-            window.electronAPI.othersIpcRenderer.calTokens(message.text)
-          )
+            window.electronAPI.othersIpcRenderer.calTokens(message.text),
+          ),
         );
       });
   };

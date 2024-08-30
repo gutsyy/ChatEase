@@ -42,15 +42,15 @@ const HistoryItem = memo(({ name, id }: Chat) => {
           onMouseEnter={() => setHidden(false)}
           onMouseLeave={() => setHidden(true)}
           className={clsx(
-            "w-full py-2 hover:cursor-pointer",
+            "py-1 px-2 hover:cursor-pointer mx-1 rounded-full mb-1",
             id !== selectedChatId && colorScheme === "light" && "text-gray-600",
             id !== selectedChatId && colorScheme === "dark" && "text-dark-300",
             id === selectedChatId &&
-              colorScheme === "light" &&
-              "bg-gray-200 text-gray-700",
+            colorScheme === "light" &&
+            "bg-gray-200 text-gray-700",
             id === selectedChatId &&
-              colorScheme === "dark" &&
-              "bg-dark-500 text-white"
+            colorScheme === "dark" &&
+            "bg-dark-500 text-white"
           )}
           onClick={() => dispatch(switchingChatSession(id))}
         >

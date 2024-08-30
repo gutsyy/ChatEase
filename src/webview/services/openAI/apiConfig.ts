@@ -112,6 +112,9 @@ export const calPromptActionMessages = (
 export const requestApi = async (chatId: number, messages: Message[]) => {
   const requestId = UUIDV4();
 
+  // 标记是否已经创建新会话
+  let created = false
+
   store.dispatch(setIsResponsing(true));
   // const dispatch = useAppDispatch();
   const streamEnable = appSettings.get("stream_enable") as boolean;
@@ -135,8 +138,11 @@ export const requestApi = async (chatId: number, messages: Message[]) => {
       window.electronAPI.othersIpcRenderer.removeAllListeners(`axios-stream`);
       return;
     }
-    if (data.choices[0].delta.role) {
+
+    if (data.choices[0].delta.role && !created) {
       store.dispatch(setStreamGPTMessageStart(createNewGPTMessage("", chatId)));
+      // 标记已创建新会话
+      created = true;
       return;
     }
     if (data.choices[0].delta.content) {

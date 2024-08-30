@@ -83,11 +83,11 @@ const MessageBar = ({
       {
         icon: expanded
           ? withIconStyle(IconArrowBarUp, {
-              className: "text-gray-400",
-            })
+            className: "text-gray-400",
+          })
           : withIconStyle(IconArrowBarDown, {
-              className: iconThemeColor,
-            }),
+            className: iconThemeColor,
+          }),
         onClick: () => onToggleExpanded(),
         tooltip: expanded ? t("collapse") : t("expand"),
       },
@@ -105,17 +105,16 @@ const MessageBar = ({
         disabled: msg.fixedInPrompt,
         icon: msg.inPrompts
           ? withIconStyle(IconCloud, {
-              className: msg.fixedInPrompt ? "text-gray-400" : iconThemeColor,
-            })
+            className: msg.fixedInPrompt ? "text-gray-400" : iconThemeColor,
+          })
           : withIconStyle(IconCloudOff, { className: "text-gray-400" }),
         onClick: () => dispatch(toggleMessagePrompt(index)),
         tooltip: msg.fixedInPrompt
           ? t("message_actions_promptToggleButtonDisable")
-          : `${
-              msg.inPrompts
-                ? t("message_actions_removePrompt")
-                : t("message_actions_addPrompt")
-            }`,
+          : `${msg.inPrompts
+            ? t("message_actions_removePrompt")
+            : t("message_actions_addPrompt")
+          }`,
       },
       {
         icon: withIconStyle(IconTrash, { className: "text-red-400" }),
