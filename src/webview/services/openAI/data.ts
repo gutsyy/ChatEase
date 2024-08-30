@@ -5,10 +5,10 @@ export const openAIPricing = {
   "claude-3-haiku-20240307": 0,
 };
 
-export const Default = {
-  model: "gpt-4o-mini-2024-07-18",
-};
-
 export type OpenAIModels = keyof typeof openAIPricing;
+
+export const Default = {
+  model: "gpt-4o-mini-2024-07-18" as OpenAIModels,
+};
 
 export const openAIModels = Object.keys(openAIPricing) as OpenAIModels[];
