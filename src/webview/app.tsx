@@ -1,4 +1,4 @@
-import { MantineProvider } from "@mantine/core";
+import { clsx, MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { MainPanel, SideExtend, SideNav } from "./components";
 import { useEffect, useState } from "react";
@@ -47,8 +47,9 @@ export const App = () => {
       handleNotis(data);
     });
 
-    document.getElementsByTagName("title")[0].innerText = `${document.getElementsByTagName("title")[0].innerText
-      } v${window.electronAPI.othersIpcRenderer.getAppVersion()}`;
+    document.getElementsByTagName("title")[0].innerText = `${
+      document.getElementsByTagName("title")[0].innerText
+    } v${window.electronAPI.othersIpcRenderer.getAppVersion()}`;
 
     document.addEventListener("click", (e) => {
       if (e.target instanceof HTMLAnchorElement) {
@@ -95,12 +96,10 @@ export const App = () => {
             store.dispatch(setMode("action"));
             store.dispatch(setSelectedPromptId(prompt.id));
           },
-        }))
+        })),
       );
     });
   }, []);
-
-  // const selectedMode = useAppSelector((state) => state.app.selectedMode);
 
   return (
     <MantineProvider
@@ -112,17 +111,17 @@ export const App = () => {
           blue:
             theme === "light"
               ? [
-                "#f5f3ff",
-                "#ede9fe",
-                "#ddd6fe",
-                "#c4b5fd",
-                "#a78bfa",
-                "#8b5cf6",
-                "#7c3aed",
-                "#6d28d9",
-                "#5b21b6",
-                "#4c1d95",
-              ]
+                  "#f5f3ff",
+                  "#ede9fe",
+                  "#ddd6fe",
+                  "#c4b5fd",
+                  "#a78bfa",
+                  "#8b5cf6",
+                  "#7c3aed",
+                  "#6d28d9",
+                  "#5b21b6",
+                  "#4c1d95",
+                ]
               : [],
         },
       }}
@@ -140,7 +139,7 @@ export const App = () => {
         <ModalsProvider>
           <TitleBar />
           <div
-            className="flex w-full"
+            className={`flex w-full border-0 border-solid border-t ${theme === "light" ? "border-gray-200" : "border-dark-800"}`}
             style={{ height: "calc(100vh - 2.5rem)" }}
           >
             <SideNav />

@@ -10,7 +10,9 @@ const RenderSender = (msg: RenderSenderProps) => {
   const { colorScheme } = useMantineTheme();
   const dark = colorScheme === "dark";
 
-  const modelName = useAppSelector((state) => state.chat.selectedChat.model)
+  const modelName = useAppSelector(
+    (state) => state.chat.selectedChat?.model ?? "",
+  );
 
   return (
     <div className="flex justify-start items-center">
@@ -19,7 +21,7 @@ const RenderSender = (msg: RenderSenderProps) => {
           className={clsx(
             "mr-2",
             !msg.inPrompts && (dark ? "text-dark-400" : "text-gray-300"),
-            msg.inPrompts && "text-violet-500"
+            msg.inPrompts && "text-violet-500",
           )}
           size={14}
         />
@@ -34,7 +36,7 @@ const RenderSender = (msg: RenderSenderProps) => {
                 : "text-gray-300"
               : msg.inPrompts
                 ? "text-dark-100"
-                : "text-dark-400"
+                : "text-dark-400",
           )}
         />
       )}
@@ -45,7 +47,7 @@ const RenderSender = (msg: RenderSenderProps) => {
       >
         <span
           className={clsx(
-            dark && (msg.inPrompts ? "text-dark-100" : "text-dark-400")
+            dark && (msg.inPrompts ? "text-dark-100" : "text-dark-400"),
           )}
         >
           {msg.sender === "user" ? "You" : modelName.toUpperCase()}

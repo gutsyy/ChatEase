@@ -28,12 +28,12 @@ import {
   setActionId,
   setPromptIsResponsing,
 } from "@/webview/reducers/promptSlice";
-import { InputActionBar } from "./InputActionBar";
 import { Prompt } from "@/database/models/Prompt";
 import { useFocusWithin, useMergedRef } from "@mantine/hooks";
 import { useTranslation } from "react-i18next";
 import { ChatContext } from "..";
 import { createDebounce } from "@/webview/utils/debounce";
+import { Default } from "@/webview/services/openAI/data";
 
 function getFirstSentence(text: string) {
   let firstSentence = "";
@@ -67,7 +67,7 @@ const ChatInputBox = forwardRef(
     );
     const isResponsing = useAppSelector((state) => state.chat.isResponsing);
     const modelSelectBeforeChatCreated = useAppSelector((state) =>
-      state.chat.selectedChat ? state.chat.selectedChat.model : "",
+      state.chat.selectedChat ? state.chat.selectedChat.model : Default.model,
     );
     const promptTokens = useAppSelector(
       (state) => state.chat.totalPromptTokens,
